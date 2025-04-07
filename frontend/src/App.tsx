@@ -7,6 +7,9 @@ import Movies from './views/movies';
 import Privacy from './views/privacy';
 import ProductDetailPage from './views/productDetails';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import HomePage from './pages/homePage.tsx'
+import LoginPage from './pages/LoginPage.tsx'
+import RegisterPage from './pages/RegisterPage.tsx'
 
 // Protected route component for admin-only access
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
@@ -40,6 +43,8 @@ function App() {
                     <Route path="/privacy" element={<Privacy />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/movie/:id" element={<ProductDetailPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
                     <Route
                         path="/dashboard"
                         element={
