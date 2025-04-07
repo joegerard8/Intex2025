@@ -1,12 +1,7 @@
 // src/components/Header.tsx
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
-import logo from '../assets/images/logo.png';
 
 const Header: React.FC = () => {
-    const { isAuthenticated, user } = useContext(AuthContext);
-
     return (
         <header className="bg-white py-4 px-6 flex justify-between items-center shadow-sm">
             <Link to="/" className="flex items-center">
@@ -23,32 +18,20 @@ const Header: React.FC = () => {
                     Privacy
                 </Link>
 
-                {isAuthenticated ? (
-                    <div className="flex items-center space-x-4">
-                        <span className="text-gray-700">Welcome, {user?.name}</span>
-                        <Link
-                            to="/profile"
-                            className="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
-                        >
-                            Sign in
-                        </Link>
-                    </div>
-                ) : (
-                    <div className="flex items-center space-x-4">
-                        <Link
-                            to="/signin"
-                            className="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
-                        >
-                            Sign in
-                        </Link>
-                        <Link
-                            to="/register"
-                            className="bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700"
-                        >
-                            Register
-                        </Link>
-                    </div>
-                )}
+                <div className="flex items-center space-x-4">
+                    <Link
+                        to="/signin"
+                        className="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
+                    >
+                        Sign in
+                    </Link>
+                    <Link
+                        to="/register"
+                        className="bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700"
+                    >
+                        Register
+                    </Link>
+                </div>
             </nav>
         </header>
     );
