@@ -8,38 +8,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 0.2pxrem;
 }
 
-.barcode-logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 1rem;
+.main-logo {
+    max-width: 80%; /* Adjust as needed */
+    width: 800px; /* Or set a specific large width */
+    margin: 0 auto;
 }
 
-.barcode-image {
-    max-width: 600px;
-    margin-bottom: 0.5rem;
-}
-
-.barcode-image img {
+.huge-centered-logo {
     width: 100%;
     height: auto;
-}
-
-.brand-name {
-    font-size: 1.5rem;
-    letter-spacing: 4px;
-    font-weight: 500;
-}
-
-.tagline {
-    max-width: 600px;
-    text-align: center;
-    color: #ccc;
-    font-size: 0.9rem;
-    line-height: 1.4;
+    object-fit: contain;
 }
 
 .auth-buttons {
@@ -88,7 +69,12 @@
 }
 
 .movies-section {
-    margin-top: 2rem;
+    margin-top: 0.5rem; /* Reduced from 2rem to 0.5rem */
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #333;
 }
 
 .movies-section h2 {
@@ -143,5 +129,10 @@
 @media (max-width: 768px) {
     .movie-grid {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .main-logo {
+        max-width: 90%;
+        width: 100%;
     }
 }

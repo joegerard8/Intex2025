@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
 import './HomePage.css';
+import HomePageLogo from '../assets/HomePageLogo.png'; // Import the logo
 
 interface Movie {
     id: string;
@@ -47,15 +48,9 @@ const HomePage: React.FC = () => {
         <Layout>
             <div className="home-page">
                 <div className="logo-banner">
-                    <div className="barcode-logo">
-                        <div className="barcode-image">
-                            <img src="/barcode.png" alt="CineNiche" />
-                        </div>
-                        <div className="brand-name">CineNiche</div>
+                    <div className="main-logo">
+                        <img src={HomePageLogo} alt="CineNiche Logo" className="huge-centered-logo" />
                     </div>
-                    <p className="tagline">
-                        Discover the films mainstream platforms don't offer. CineNiche curates cult classics, international gems, and indie treasures for true film enthusiasts.
-                    </p>
                 </div>
 
                 {!user ? (

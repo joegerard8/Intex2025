@@ -17,57 +17,30 @@
 }
 
 .barcode-image {
-    width: 100%;
-    max-width: 1800px; /* Extremely wide, near full screen */
+    max-width: 80%; /* Adjust as needed */
+    width: 800px; /* Or set a specific large width */
     margin: 0 auto;
 }
 
 .barcode-image img {
     width: 100%;
-    max-height: 100vh; /* Take up to half the viewport height */
+    height: auto;
     object-fit: contain;
 }
 
 /* Responsive adjustments */
 @media (max-width: 1800px) {
     .barcode-image {
-        max-width: 95%;
+        max-width: 90%;
     }
 }
 
 @media (max-width: 768px) {
-    .barcode-image img {
-        max-height: 30vh;
+    .barcode-image {
+        max-width: 95%;
+        width: 100%;
     }
 }
-
-/*.barcode-logo {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    align-items: center;*/
-/*    justify-content: center;*/
-/*    width: 100%;*/
-/*    max-width: 100%;*/
-/*    margin-bottom: 2rem;*/
-/*}*/
-
-/*.barcode-image {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    width: 100%;*/
-/*    text-align: center;*/
-/*}*/
-
-/*.barcode-image img {*/
-/*    max-width: 100%;*/
-/*    width: auto;*/
-/*    height: auto;*/
-/*    object-fit: contain;*/
-/*    transform: scale(1.5);*/
-/*    transform-origin: center;*/
-/*    margin: 0 auto;*/
-/*}*/
 
 .search-container {
     display: flex;
@@ -75,7 +48,6 @@
     width: 100%;
     max-width: 800px;
 }
-
 
 .search-input {
     flex: 1;
@@ -174,7 +146,6 @@
     color: #aaa;
     font-style: italic;
 }
-
 
 .movies-grid {
     display: grid;
