@@ -13,21 +13,32 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Remove specific link colors */
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  text-decoration: none;
 }
+
+/* Ensure links are white in dark mode context */
+body {
+  color: white;
+}
+
+a {
+  color: white;
+}
+
 a:hover {
-  color: #535bf2;
+  color: #cccccc;
 }
 
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  min-width: 100%;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -54,13 +65,44 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Added for full-width layout */
+html, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Ensure the container elements use full width */
+.container,
+.content-container,
+.page-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
   }
+  a {
+    color: #213547;
+  }
   a:hover {
-    color: #747bff;
+    color: #000000;
   }
   button {
     background-color: #f9f9f9;
