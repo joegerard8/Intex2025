@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using backend.Models; // assuming ApplicationUser is in this namespace
 
 namespace backend.Controllers;
 
@@ -10,14 +11,14 @@ namespace backend.Controllers;
 public class RoleController : Controller
 {
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public RoleController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+    public RoleController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
     {
         _roleManager = roleManager;
         _userManager = userManager;
     }
-    
+
     [HttpPost("AddRole")]
     public async Task<IActionResult> AddRole(string roleName)
     {
@@ -49,7 +50,7 @@ public class RoleController : Controller
             return BadRequest("User email and role name are required.");
         }
 
-        var user = await _userManager.FindByEmailAsync(userEmail);
+        var user = await _userManager.FindByEmailAsync(userEmail); // returns ApplicationUser
         if (user == null)
         {
             return NotFound("User not found.");
