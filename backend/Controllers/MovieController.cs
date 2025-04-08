@@ -86,18 +86,20 @@ namespace backend.Controllers
         //     return Ok(existingBook); // Return 204 No Content
         // }
 
-        // [HttpDelete("DeleteBook/{BookId}")] // route to delete a book. 
-        // public IActionResult DeleteBook(int BookId)
-        // {
-        //     var book = _dbContext.Books.Find(BookId);
-        //     if (book == null)
-        //     {
-        //         return NotFound("Book not found.");
-        //     }
+        // DELETE: api/Movie/DeleteMovie/{showId}
+            [HttpDelete("DeleteMovie/{showId}")]
+            public IActionResult DeleteMovie(string showId)
+            {
+                var movie = _dbContext.MoviesTitles.Find(showId);
+                if (movie == null)
+                {
+                    return NotFound("Movie not found.");
+                }
 
-        //     _dbContext.Books.Remove(book); // Remove the book from the DbSet
-        //     _dbContext.SaveChanges(); // Save changes to the database
+                _dbContext.MoviesTitles.Remove(movie);
+                _dbContext.SaveChanges();
 
-        //     return NoContent(); // Return 204 No Content
-    }
+                return NoContent(); // 204 No Content
+            }
+            }
 }
