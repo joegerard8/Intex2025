@@ -26,9 +26,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_OCEAN_085838B1E }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
-          app_location: "/frontend"
-          api_location: "api"
-          output_location: "frontend/dist"
+          app_location: "frontend"
+          output_location: "dist"
+          api_location: ""  # or remove
 
   deploy_backend:
     name: Deploy .NET Backend to Azure App Service
