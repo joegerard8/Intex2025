@@ -80,21 +80,18 @@ namespace backend.Controllers
 
             return CreatedAtAction(nameof(GetMovies), new { id = newMovie.ShowId }, newMovie);
         }
-    }
-}
-
         // method to updated a current movie
         // [HttpPut("Updatemovie/{MovieId}")]
         // PUT: Update an existing movie
         [HttpPut("UpdateMovie/{MovieId}")]
-        public IActionResult UpdateMovie(int MovieId, [FromBody] Movie updatedMovie)
+        public IActionResult UpdateMovie(string MovieId, [FromBody] MoviesTitle updatedMovie)
         {
-            if (updatedMovie == null || updatedMovie.MovieId != MovieId)
+            if (updatedMovie == null || updatedMovie.ShowId != MovieId)
             {
                 return BadRequest("Movie data is null or MovieId mismatch.");
             }
 
-            var existingMovie = _dbContext.Movies.Find(MovieId);
+            var existingMovie = _dbContext.MoviesTitles.Find(MovieId);
             if (existingMovie == null)
             {
                 return NotFound("Movie not found.");
@@ -103,12 +100,11 @@ namespace backend.Controllers
             // Update the existing movie's properties
             existingMovie.Title = updatedMovie.Title;
             existingMovie.Director = updatedMovie.Director;
-            existingMovie.Genre = updatedMovie.Genre;
             existingMovie.ReleaseYear = updatedMovie.ReleaseYear;
             existingMovie.Rating = updatedMovie.Rating;
             existingMovie.Description = updatedMovie.Description;
 
-            _dbContext.Movies.Update(existingMovie);
+            _dbContext.MoviesTitles.Update(existingMovie);
             _dbContext.SaveChanges();
 
             return Ok(existingMovie);
@@ -163,22 +159,20 @@ namespace backend.Controllers
         // }
 
         // DELETE: api/Movie/DeleteMovie/{showId}
-            [HttpDelete("DeleteMovie/{showId}")]
-            public IActionResult DeleteMovie(string showId)
+        [HttpDelete("DeleteMovie/{showId}")]
+        public IActionResult DeleteMovie(string showId)
+        {
+            var movie = _dbContext.MoviesTitles.Find(showId);
+            if (movie == null)
             {
-                var movie = _dbContext.MoviesTitles.Find(showId);
-                if (movie == null)
-                {
-                    return NotFound("Movie not found.");
-                }
-
-                _dbContext.MoviesTitles.Remove(movie);
-                _dbContext.SaveChanges();
-
-                return NoContent(); // 204 No Content
-            }
+                return NotFound("Movie not found.");
             }
 
+            _dbContext.MoviesTitles.Remove(movie);
+            _dbContext.SaveChanges();
 
+            return NoContent(); // 204 No Content
+        }
     }
 }
+
