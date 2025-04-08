@@ -28,7 +28,7 @@ jobs:
           action: "upload"
           app_location: "/frontend"
           api_location: "api"
-          output_location: "dist"
+          output_location: "frontend/dist"
 
   deploy_backend:
     name: Deploy .NET Backend to Azure App Service
