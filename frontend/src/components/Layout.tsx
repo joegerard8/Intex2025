@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "../AuthorizeView"; // Adjust if path is different
+import { UserContext } from "../AuthorizeView"; // Update path if needed
 import Logout from "../Logout";
 import "./Layout.css";
 
@@ -9,7 +9,8 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
+const isAdmin = user?.roles?.includes("Administrator") ?? false;
 
   return (
     <div className="layout">
@@ -20,14 +21,30 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Link>
         </div>
         <nav className="nav">
-          <Link to="/movies" className="nav-link">
-            My Movies
-          </Link>
+          {/* Always visible */}
           <Link to="/privacy" className="nav-link">
             Privacy
           </Link>
 
-          {!user ? (
+          {/* Logged-in users */}
+          {user && (
+            <>
+              <Link to="/movies" className="nav-link">
+                My Movies
+              </Link>
+              {isAdmin && (
+                <Link to="/managemovies" className="nav-link">
+                  Manage Movies
+                </Link>
+              )}
+              <Logout>
+                <button className="nav-link sign-out">Sign Out</button>
+              </Logout>
+            </>
+          )}
+
+          {/* Logged-out users */}
+          {!user && (
             <>
               <Link to="/login" className="nav-link sign-in">
                 Sign In
@@ -35,17 +52,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Link to="/register" className="nav-link register">
                 Register
               </Link>
-            </>
-          ) : (
-            <>
-              {user.roles.includes("Administrator") && (
-                <Link to="/manage-movies" className="nav-link">
-                  Manage Movies
-                </Link>
-              )}
-              <Logout>
-                <button className="nav-link sign-out">Sign Out</button>
-              </Logout>
             </>
           )}
         </nav>

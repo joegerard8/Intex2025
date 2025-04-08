@@ -6,66 +6,75 @@ import ManageMovies from './views/manageMovies';
 import Movies from './views/movies.tsx';
 import Privacy from './views/privacy';
 import ProductDetailPage from './views/productDetails';
-import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage.tsx'
 import RegisterPage from './pages/RegisterPage.tsx'
 import Unauthorized from './pages/Unauthorized.tsx';
+import AuthorizeView, { RequireAuth, RequireRole } from './AuthorizeView.tsx';
+import Layout from './components/Layout.tsx';
 
-// Protected route component for admin-only access
-const AdminRoute = ({ children }: { children: React.ReactNode }) => {
-    const { user } = useAuth();
-
-    if (!user || !user.isAdmin) {
-        return <Navigate to="/" />;
-    }
-
-    return <>{children}</>;
-};
-
-// Protected route component for authenticated users
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-    const { user } = useAuth();
-
-    if (!user) {
-        return <Navigate to="/signin" />;
-    }
-
-    return <>{children}</>;
-};
 
 function App() {
-    return (
-      <AuthProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/unauthorized" element={<Unauthorized />} />
-            <Route path="/movies" element={<Movies />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/movie/:id" element={<ProductDetailPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/managemovies"
-              element={
-                <AdminRoute>
+  return (
+    <Router>
+      <AuthorizeView>
+        <Routes>
+          {/* Public */}
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <HomePage />
+              </Layout>
+            }
+          />
+          <Route
+            path="/privacy"
+            element={
+              <Layout>
+                <Privacy />
+              </Layout>
+            }
+          />
+          <Route path="/movie/:id" element={<ProductDetailPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+
+          {/* Authenticated-only */}
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth>
+                <DashboardPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/movies"
+            element={
+              <RequireAuth>
+                <Layout>
+                  <Movies />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+
+          {/* Admin-only */}
+          <Route
+            path="/managemovies"
+            element={
+              <RequireRole role="Administrator">
+                <Layout>
                   <ManageMovies />
-                </AdminRoute>
-              }
-            />
-          </Routes>
-        </Router>
-      </AuthProvider>
-    );
+                </Layout>
+              </RequireRole>
+            }
+          />
+        </Routes>
+      </AuthorizeView>
+    </Router>
+  );
 }
 
 export default App;
