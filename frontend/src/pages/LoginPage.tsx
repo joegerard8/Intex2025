@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../AuthorizeView";
 import "./identity.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 function LoginPage() {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [rememberme, setRememberme] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberme, setRememberme] = useState(false);
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
+  const { refreshUser } = useContext(UserContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
@@ -21,13 +24,8 @@ function LoginPage() {
     }
   };
 
-  const handleRegisterClick = () => {
-    navigate("/register");
-  };
-
-  const handleGoHomeClick = () => {
-    navigate("/");
-  };
+  const handleRegisterClick = () => navigate("/register");
+  const handleGoHomeClick = () => navigate("/");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,6 +58,7 @@ function LoginPage() {
         throw new Error(data?.message || "Invalid email or password.");
       }
 
+      await refreshUser(); // 👈 Refresh user context immediately
       navigate("/movies");
     } catch (error: any) {
       setError(error.message || "Error logging in.");
@@ -103,7 +102,6 @@ function LoginPage() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  value=""
                   id="rememberme"
                   name="rememberme"
                   checked={rememberme}
@@ -115,16 +113,13 @@ function LoginPage() {
               </div>
 
               <div className="d-grid mb-2">
-                <button
-                  className="btn btn-primary btn-login text-uppercase fw-bold"
-                  type="submit"
-                >
+                <button className="btn btn-primary fw-bold" type="submit">
                   Sign in
                 </button>
               </div>
               <div className="d-grid mb-2">
                 <button
-                  className="btn btn-primary btn-login text-uppercase fw-bold"
+                  className="btn btn-secondary fw-bold"
                   type="button"
                   onClick={handleRegisterClick}
                 >
@@ -134,15 +129,15 @@ function LoginPage() {
               <hr className="my-4" />
               <div className="d-grid mb-2">
                 <button
-                  className="btn btn-primary btn-login text-uppercase fw-bold"
+                  className="btn btn-outline-primary fw-bold"
                   type="button"
                   onClick={handleGoHomeClick}
                 >
                   Home Page
                 </button>
               </div>
+              {error && <p className="error text-danger mt-3">{error}</p>}
             </form>
-            {error && <p className="error">{error}</p>}
           </div>
         </div>
       </div>

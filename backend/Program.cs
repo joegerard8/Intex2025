@@ -3,45 +3,35 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using backend.Data;
 using backend.Services;
-using System;
+using backend.Models; // assuming ApplicationUser is in Models
 
 var builder = WebApplication.CreateBuilder(args);
-
-//builder.Services.AddDbContext<AppDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>  
-    options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-
-//below is if you dont have roles
-//builder.Services.AddIdentityApiEndpoints<IdentityUser>()  
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
-    options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email; // Ensure email is stored in claims
+    options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email;
 });
-
-builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.None; // change after adding https for production
+    options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.Name = ".AspNetCore.Identity.Application";
     options.LoginPath = "/login";
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
@@ -52,14 +42,18 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000") // Replace with your frontend URL
-                .AllowCredentials() // Required to allow cookies
-                .AllowAnyMethod()
-                .AllowAnyHeader();
+            policy.WithOrigins(
+                "http://localhost:3000",
+                "https://gentle-ocean-085838b1e.6.azurestaticapps.net/"
+            )
+            .AllowCredentials()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
         });
 });
 
-builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<IdentityUser>>();
+// ✅ Update email sender to use ApplicationUser
+builder.Services.AddSingleton<IEmailSender<ApplicationUser>, NoOpEmailSender<ApplicationUser>>();
 
 var app = builder.Build();
 
@@ -77,16 +71,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapIdentityApi<IdentityUser>();
 
-app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> signInManager) =>
+// ✅ Use ApplicationUser for Identity API
+app.MapIdentityApi<ApplicationUser>();
+
+app.MapPost("/logout", async (HttpContext context, SignInManager<ApplicationUser> signInManager) =>
 {
     await signInManager.SignOutAsync();
-    
-    // Ensure authentication cookie is removed
+
     context.Response.Cookies.Delete(".AspNetCore.Identity.Application", new CookieOptions
     {
-        Path= "/",
+        Path = "/",
         HttpOnly = true,
         Secure = true,
         SameSite = SameSiteMode.None
@@ -95,8 +90,7 @@ app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> s
     return Results.Ok(new { message = "Logout successful" });
 }).RequireAuthorization();
 
-
-app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<IdentityUser> userManager) =>
+app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<ApplicationUser> userManager) =>
 {
     if (!user.Identity?.IsAuthenticated ?? false)
     {
@@ -112,12 +106,11 @@ app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<IdentityUser> u
     var roles = await userManager.GetRolesAsync(identityUser);
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
 
-    return Results.Json(new 
-    { 
+    return Results.Json(new
+    {
         email = email,
-        roles = roles // add this!
+        roles = roles
     });
 }).RequireAuthorization();
-
 
 app.Run();
