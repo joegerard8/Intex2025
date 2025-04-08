@@ -15,6 +15,48 @@ interface FetchMovieResponse {
 // Function to fetch movies from the API
 export const API_URL = "https://localhost:5000/api/Movie";
 
+export const addMovie = async (newMovie: MoviesTitle): Promise<MoviesTitle> => {
+  try {
+    const response = await fetch(`${API_URL}/AddMovie`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newMovie),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add movie");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding movie:", error);
+    throw error;
+  }
+};
+
+export const updateMovie = async (showId: string, updatedMovie: MoviesTitle): Promise<MoviesTitle> => {
+  try {
+    const response = await fetch(`${API_URL}/UpdateMovie/${showId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedMovie),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update movie");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating movie:", error);
+    throw error;
+  }
+};
+
 export const deleteMovie = async (showId: string): Promise<void> => {
   try {
     const response = await fetch(`${API_URL}/DeleteMovie/${showId}`, {
