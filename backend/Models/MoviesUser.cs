@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models;
 
-public partial class MoviesUser
+public class MoviesUser
 {
+    [Key]
+    [Required]
     public byte UserId { get; set; }
 
     public string Name { get; set; } = null!;

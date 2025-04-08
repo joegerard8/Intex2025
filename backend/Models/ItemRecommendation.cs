@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models;
 
-public partial class ItemRecommendation
+public class ItemRecommendation
 {
-    public string ShowId { get; set; } = null!;
+    [Key]
+    [Required]
+    public string ShowId { get; set; } 
 
     public string Movie { get; set; } = null!;
 

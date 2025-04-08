@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models;
 
-public partial class MoviesTitle
+public class MoviesTitle
 {
-    public string ShowId { get; set; } = null!;
+    [Key]
+    [Required]
+    public string ShowId { get; set; }
 
     public string Type { get; set; } = null!;
 
