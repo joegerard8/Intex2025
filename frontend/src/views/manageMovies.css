@@ -137,3 +137,90 @@
 .error-message {
     color: #e50914;
 }
+
+/* New Styles for Modals and Controls */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    padding: 20px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    color: #ddd;
+}
+
+.delete-confirm-modal {
+    width: 400px;
+}
+
+.modal h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #ddd;
+    font-weight: 500;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    background-color: #222;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #ddd;
+    font-size: 16px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.page-size-control {
+    display: flex;
+    align-items: center;
+    color: #ddd;
+}
+
+.page-size-control label {
+    margin-right: 10px;
+}
+
+.page-size-control select {
+    padding: 5px;
+    background-color: #222;
+    border: 1px solid #333;
+    color: #ddd;
+    border-radius: 4px;
+}
+
+.admin-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
