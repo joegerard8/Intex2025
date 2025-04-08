@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
-import './ProductDetails.css';
+import './productDetails.css';
+import logoForMovies from './logoForMovies.png';
 
 interface Movie {
     id: string;
@@ -123,7 +124,7 @@ const ProductDetailPage: React.FC = () => {
             <div className="movie-detail-page">
                 <div className="barcode-logo">
                     <div className="barcode-image">
-                        <img src="/logoForMovies.png" alt="CineNiche" />
+                        <img src={logoForMovies} alt="CineNiche" />
                     </div>
                     <div className="brand-name">CineNiche</div>
                 </div>
