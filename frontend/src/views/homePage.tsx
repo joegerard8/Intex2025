@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext'; 
 import logoForMovies from '../assets/logoForMovies.png';
-import './HomePage.css';
+import './homePage.css';
 
 
 interface Movie {
