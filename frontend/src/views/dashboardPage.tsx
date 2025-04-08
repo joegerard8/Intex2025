@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
-import './DashboardPage.css';
+import './dashboardPage.css';
 
 interface Movie {
     id: string;

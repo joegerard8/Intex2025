@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
-import './ProductDetails.css';
+import './productDetails.css';
 
 interface Movie {
     id: string;

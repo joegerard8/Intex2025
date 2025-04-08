@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
-import './ManageMovies.css';
+import './manageMovies.css';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 
