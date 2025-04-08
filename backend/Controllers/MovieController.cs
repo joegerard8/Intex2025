@@ -18,26 +18,47 @@ namespace backend.Controllers
         }
 
         [HttpGet("Movies")]
-        // setting the parameters, as well as their default values if nothing is passed. 
-        // was having touble getting the query string, so I passed the fromquery to the categories to help it
-        public IActionResult GetMovies()
+        public IActionResult GetMovies(
+            [FromQuery] string? search = null,  // Optional search by title
+            [FromQuery] int skip = 0,           // Optional pagination start
+            [FromQuery] int take = 20)          // Optional pagination amount
         {
-            // Initialize the queryable object from the DbSet
-            var movies = _dbContext.MoviesTitles.AsQueryable();
+            try
+            {
+            // Start the query from the database
+            var query = _dbContext.MoviesTitles.AsQueryable();
 
-            // Get the total count of books after filtering
-            var totalCount = movies.Count();
+            // If the user typed something into search, filter by title
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(m => m.Title.Contains(search));
+            }
 
-            // Create the response object
+            // Count total after filtering
+            var totalCount = query.Count();
+
+            // Apply pagination
+            var movies = query.Skip(skip).Take(take).ToList();
+
+            // Build the response object
             var response = new
             {
                 Movies = movies,
                 Count = totalCount
             };
 
-            // Return the response with a 200 OK status
-            return Ok(response);
+            return Ok(response); // return 200 + the data
         }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                message = "An error occurred while retrieving movies.",
+                error = ex.Message
+            });
+        }
+    }
+
         
         [HttpPost("AddMovie")]
         public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
