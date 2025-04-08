@@ -10,6 +10,7 @@ public class ItemRecommendation
 {
     [Key]
     [Required]
+    [Column("show_id")]
     public string ShowId { get; set; } 
 
     public string Movie { get; set; } = null!;
