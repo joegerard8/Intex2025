@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
-import './Movies.css';
+import './movies.css';
 import logoForMovies from '../assets/logoForMovies.png';
 
 interface Movie {
