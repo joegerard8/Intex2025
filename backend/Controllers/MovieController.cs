@@ -115,5 +115,70 @@ namespace backend.Controllers
         }
 
 
+        // [HttpPost("AddBook")]
+        // // creating a new book. 
+        // public IActionResult AddBook([FromBody] Book newBook)
+        // {
+        //     if (newBook == null)
+        //     {
+        //         return BadRequest("Book data is null.");
+        //     }
+
+        //     // Add the new book to the database
+        //     _dbContext.Books.Add(newBook);
+        //     _dbContext.SaveChanges(); // Save changes to the database
+
+        //     return CreatedAtAction(nameof(Get), new { id = newBook.BookId }, newBook); // Return 201 Created with the new book details
+        // } // end of AddBook method
+
+        // method to updated a current book
+        // [HttpPut("UpdateBook/{BookId}")]
+        // public IActionResult UpdateBook(int BookId, [FromBody] Book updatedBook)
+        // {
+        //     if (updatedBook == null || updatedBook.BookId != BookId)
+        //     {
+        //         return BadRequest("Book data is null or BookId mismatch.");
+        //     }
+
+        //     var existingBook = _dbContext.Books.Find(BookId);
+        //     if (existingBook == null)
+        //     {
+        //         return NotFound("Book not found.");
+        //     }
+
+        //     // Update the existing book's properties
+        //     existingBook.Title = updatedBook.Title;
+        //     existingBook.Author = updatedBook.Author;
+        //     existingBook.Publisher = updatedBook.Publisher;
+        //     existingBook.Isbn = updatedBook.Isbn;
+        //     existingBook.Classification = updatedBook.Classification;
+        //     existingBook.Category = updatedBook.Category;
+        //     existingBook.PageCount = updatedBook.PageCount;
+        //     existingBook.Price = updatedBook.Price;
+
+        //     _dbContext.Books.Update(existingBook); // Mark the existing book as modified
+        //     _dbContext.SaveChanges(); // Save changes to the database
+
+        //     return Ok(existingBook); // Return 204 No Content
+        // }
+
+        // DELETE: api/Movie/DeleteMovie/{showId}
+            [HttpDelete("DeleteMovie/{showId}")]
+            public IActionResult DeleteMovie(string showId)
+            {
+                var movie = _dbContext.MoviesTitles.Find(showId);
+                if (movie == null)
+                {
+                    return NotFound("Movie not found.");
+                }
+
+                _dbContext.MoviesTitles.Remove(movie);
+                _dbContext.SaveChanges();
+
+                return NoContent(); // 204 No Content
+            }
+            }
+
+
     }
 }
