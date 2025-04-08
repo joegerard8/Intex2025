@@ -61,8 +61,6 @@ const Movies: React.FC = () => {
     );
 
     return (
-      <AuthorizeView>
-        <Layout>
           <div className="movies-page">
             <div className="barcode-logo">
               <div className="barcode-image">
@@ -131,8 +129,6 @@ const Movies: React.FC = () => {
               </>
             )}
           </div>
-        </Layout>
-      </AuthorizeView>
     );
 };
 

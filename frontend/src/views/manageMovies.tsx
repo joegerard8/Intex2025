@@ -144,7 +144,6 @@ const ManageMovies: React.FC = () => {
     };
 
     return (
-        <Layout>
             <div className="manage-movies-page">
                 <div className="barcode-logo">
                     <div className="barcode-image">
@@ -212,7 +211,6 @@ const ManageMovies: React.FC = () => {
                     </div>
                 )}
             </div>
-        </Layout>
     );
 };
 

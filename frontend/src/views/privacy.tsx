@@ -4,7 +4,6 @@ import './privacy.css';
 
 const Privacy: React.FC = () => {
     return (
-        <Layout>
             <div className="privacy-page">
                 <div className="barcode-logo">
                     <div className="barcode-image">
@@ -73,7 +72,6 @@ const Privacy: React.FC = () => {
                     </p>
                 </div>
             </div>
-        </Layout>
     );
 };
 
