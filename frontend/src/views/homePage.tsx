@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
-
-import 'homePage.css';
+import './homePage.css';
 import HomePageLogo from '../assets/HomePageLogo.png'; // Import the logo
 import { UserContext } from '../AuthorizeView'; // ✅ use the correct context
 
