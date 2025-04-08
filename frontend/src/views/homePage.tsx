@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext';
 import logoForMovies from '../assets/logoForMovies.png';
 import './homePage.css';
 
-
 interface Movie {
     id: string;
     title: string;

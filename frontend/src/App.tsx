@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import HomePage from './views/homePage';
+import HomePage from './views/homePage.tsx';
 import DashboardPage from './views/dashboardPage';
 import ManageMovies from './views/manageMovies';
 import Movies from './views/movies';
