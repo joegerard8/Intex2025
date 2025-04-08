@@ -14,6 +14,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<MoviesRating> MoviesRatings { get; set; } = null!;
     public DbSet<ItemRecommendation> ItemRecommendations { get; set; } = null!;
     public DbSet<MoviesUser> MoviesUsers { get; set; } = null!;
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; } = null!;
+    public DbSet<HomeRecommendation> HomeRecommendations { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     
