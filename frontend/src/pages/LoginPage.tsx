@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../AuthorizeView";
 import "./identity.css";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -11,7 +11,10 @@ function LoginPage() {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
   const { refreshUser } = useContext(UserContext);
+
+  const message = location.state?.message || "";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
@@ -74,6 +77,11 @@ function LoginPage() {
             <h5 className="card-title text-center mb-5 fw-light fs-5">
               Sign In
             </h5>
+            {message && (
+              <div className="alert alert-success text-center" role="alert">
+                {message}
+              </div>
+            )}
             <form onSubmit={handleSubmit}>
               <div className="form-floating mb-3">
                 <input

@@ -59,66 +59,61 @@ namespace backend.Controllers
         }
     }
 
+        
+        [HttpPost("AddMovie")]
+        public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
+        {
+            if (newMovie == null)
+            {
+                return BadRequest("Movie data is null.");
+            }
 
-        // [HttpPost("AddBook")]
-        // // creating a new book. 
-        // public IActionResult AddBook([FromBody] Book newBook)
-        // {
-        //     if (newBook == null)
-        //     {
-        //         return BadRequest("Book data is null.");
-        //     }
+            // Optionally: Check if ShowId already exists
+            var existing = _dbContext.MoviesTitles.Find(newMovie.ShowId);
+            if (existing != null)
+            {
+                return Conflict("A movie with the same ShowId already exists.");
+            }
 
-        //     // Add the new book to the database
-        //     _dbContext.Books.Add(newBook);
-        //     _dbContext.SaveChanges(); // Save changes to the database
+            _dbContext.MoviesTitles.Add(newMovie);
+            _dbContext.SaveChanges();
 
-        //     return CreatedAtAction(nameof(Get), new { id = newBook.BookId }, newBook); // Return 201 Created with the new book details
-        // } // end of AddBook method
+            return CreatedAtAction(nameof(GetMovies), new { id = newMovie.ShowId }, newMovie);
+        }
+    }
+}
 
-        // method to updated a current book
-        // [HttpPut("UpdateBook/{BookId}")]
-        // public IActionResult UpdateBook(int BookId, [FromBody] Book updatedBook)
-        // {
-        //     if (updatedBook == null || updatedBook.BookId != BookId)
-        //     {
-        //         return BadRequest("Book data is null or BookId mismatch.");
-        //     }
+        // method to updated a current movie
+        // [HttpPut("Updatemovie/{MovieId}")]
+        // PUT: Update an existing movie
+        [HttpPut("UpdateMovie/{MovieId}")]
+        public IActionResult UpdateMovie(int MovieId, [FromBody] Movie updatedMovie)
+        {
+            if (updatedMovie == null || updatedMovie.MovieId != MovieId)
+            {
+                return BadRequest("Movie data is null or MovieId mismatch.");
+            }
 
-        //     var existingBook = _dbContext.Books.Find(BookId);
-        //     if (existingBook == null)
-        //     {
-        //         return NotFound("Book not found.");
-        //     }
+            var existingMovie = _dbContext.Movies.Find(MovieId);
+            if (existingMovie == null)
+            {
+                return NotFound("Movie not found.");
+            }
 
-        //     // Update the existing book's properties
-        //     existingBook.Title = updatedBook.Title;
-        //     existingBook.Author = updatedBook.Author;
-        //     existingBook.Publisher = updatedBook.Publisher;
-        //     existingBook.Isbn = updatedBook.Isbn;
-        //     existingBook.Classification = updatedBook.Classification;
-        //     existingBook.Category = updatedBook.Category;
-        //     existingBook.PageCount = updatedBook.PageCount;
-        //     existingBook.Price = updatedBook.Price;
+            // Update the existing movie's properties
+            existingMovie.Title = updatedMovie.Title;
+            existingMovie.Director = updatedMovie.Director;
+            existingMovie.Genre = updatedMovie.Genre;
+            existingMovie.ReleaseYear = updatedMovie.ReleaseYear;
+            existingMovie.Rating = updatedMovie.Rating;
+            existingMovie.Description = updatedMovie.Description;
 
-        //     _dbContext.Books.Update(existingBook); // Mark the existing book as modified
-        //     _dbContext.SaveChanges(); // Save changes to the database
+            _dbContext.Movies.Update(existingMovie);
+            _dbContext.SaveChanges();
 
-        //     return Ok(existingBook); // Return 204 No Content
-        // }
+            return Ok(existingMovie);
+        }
 
-        // [HttpDelete("DeleteBook/{BookId}")] // route to delete a book. 
-        // public IActionResult DeleteBook(int BookId)
-        // {
-        //     var book = _dbContext.Books.Find(BookId);
-        //     if (book == null)
-        //     {
-        //         return NotFound("Book not found.");
-        //     }
 
-        //     _dbContext.Books.Remove(book); // Remove the book from the DbSet
-        //     _dbContext.SaveChanges(); // Save changes to the database
-
-        //     return NoContent(); // Return 204 No Content
     }
 }
