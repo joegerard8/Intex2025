@@ -7,7 +7,6 @@ import Movies from './views/movies';
 import Privacy from './views/privacy';
 import ProductDetailPage from './views/productDetails';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import HomePage from './pages/homePage.tsx'
 import LoginPage from './pages/LoginPage.tsx'
 import RegisterPage from './pages/RegisterPage.tsx'
 

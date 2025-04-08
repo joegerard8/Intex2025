@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext'; 
+import logoForMovies from '../assets/logoForMovies.png';
 import './HomePage.css';
-import HomePageLogo from '../assets/HomePageLogo.png'; // Import the logo
+
 
 interface Movie {
     id: string;
@@ -49,7 +50,7 @@ const HomePage: React.FC = () => {
             <div className="home-page">
                 <div className="logo-banner">
                     <div className="main-logo">
-                        <img src={HomePageLogo} alt="CineNiche Logo" className="huge-centered-logo" />
+                        <img src={logoForMovies} alt="CineNiche Logo" className="huge-centered-logo" />
                     </div>
                 </div>
 

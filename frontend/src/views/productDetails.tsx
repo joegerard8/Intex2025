@@ -123,7 +123,7 @@ const ProductDetailPage: React.FC = () => {
             <div className="movie-detail-page">
                 <div className="barcode-logo">
                     <div className="barcode-image">
-                        <img src="/barcode.png" alt="CineNiche" />
+                        <img src="/logoForMovies.png" alt="CineNiche" />
                     </div>
                     <div className="brand-name">CineNiche</div>
                 </div>
