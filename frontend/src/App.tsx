@@ -1,13 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import HomePage from './views/homePage';
+import HomePage from './views/homePage.tsx';
 import DashboardPage from './views/dashboardPage';
 import ManageMovies from './views/manageMovies';
 import Movies from './views/movies';
 import Privacy from './views/privacy';
 import ProductDetailPage from './views/productDetails';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import HomePage from './pages/homePage.tsx'
 import LoginPage from './pages/LoginPage.tsx'
 import RegisterPage from './pages/RegisterPage.tsx'
 
