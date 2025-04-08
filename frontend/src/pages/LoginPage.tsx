@@ -1,71 +1,69 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Identity.css';
-import '@fortawesome/fontawesome-free/css/all.css';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./identity.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 function LoginPage() {
-  // state variables for email and passwords
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [rememberme, setRememberme] = useState<boolean>(false);
-
-  // state variable for error messages
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
-  // handle change events for input fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
-    if (type === 'checkbox') {
+    if (type === "checkbox") {
       setRememberme(checked);
-    } else if (name === 'email') {
+    } else if (name === "email") {
       setEmail(value);
-    } else if (name === 'password') {
+    } else if (name === "password") {
       setPassword(value);
     }
   };
 
   const handleRegisterClick = () => {
-    navigate('/register');
+    navigate("/register");
   };
 
-  // handle submit event for the form
+  const handleGoHomeClick = () => {
+    navigate("/");
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(''); // Clear any previous errors
+    setError("");
 
     if (!email || !password) {
-      setError('Please fill in all fields.');
+      setError("Please fill in all fields.");
       return;
     }
 
     const loginUrl = rememberme
-      ? 'https://localhost:5000/login?useCookies=true'
-      : 'https://localhost:5000/login?useSessionCookies=true';
+      ? "https://localhost:5000/login?useCookies=true"
+      : "https://localhost:5000/login?useSessionCookies=true";
 
     try {
       const response = await fetch(loginUrl, {
-        method: 'POST',
-        credentials: 'include', // ✅ Ensures cookies are sent & received
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
-      // Ensure we only parse JSON if there is content
       let data = null;
-      const contentLength = response.headers.get('content-length');
+      const contentLength = response.headers.get("content-length");
       if (contentLength && parseInt(contentLength, 10) > 0) {
         data = await response.json();
       }
 
       if (!response.ok) {
-        throw new Error(data?.message || 'Invalid email or password.');
+        throw new Error(data?.message || "Invalid email or password.");
       }
 
-      navigate('/');
+      navigate("/movies");
     } catch (error: any) {
-      setError(error.message || 'Error logging in.');
-      console.error('Fetch attempt failed:', error);
+      setError(error.message || "Error logging in.");
+      console.error("Fetch attempt failed:", error);
     }
   };
 
@@ -115,6 +113,7 @@ function LoginPage() {
                   Remember password
                 </label>
               </div>
+
               <div className="d-grid mb-2">
                 <button
                   className="btn btn-primary btn-login text-uppercase fw-bold"
@@ -126,6 +125,7 @@ function LoginPage() {
               <div className="d-grid mb-2">
                 <button
                   className="btn btn-primary btn-login text-uppercase fw-bold"
+                  type="button"
                   onClick={handleRegisterClick}
                 >
                   Register
@@ -134,20 +134,11 @@ function LoginPage() {
               <hr className="my-4" />
               <div className="d-grid mb-2">
                 <button
-                  className="btn btn-google btn-login text-uppercase fw-bold"
+                  className="btn btn-primary btn-login text-uppercase fw-bold"
                   type="button"
+                  onClick={handleGoHomeClick}
                 >
-                  <i className="fa-brands fa-google me-2"></i> Sign in with
-                  Google
-                </button>
-              </div>
-              <div className="d-grid mb-2">
-                <button
-                  className="btn btn-facebook btn-login text-uppercase fw-bold"
-                  type="button"
-                >
-                  <i className="fa-brands fa-facebook-f me-2"></i> Sign in with
-                  Facebook
+                  Home Page
                 </button>
               </div>
             </form>

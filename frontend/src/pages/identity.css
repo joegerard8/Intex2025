@@ -1,12 +1,18 @@
 body {
-  background: #007bff;
-  background: linear-gradient(to right, #0062e6, #33aeff);
+  background: linear-gradient(to right, #000, #444) !important;
+  color: white;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 }
 
 .btn-login {
   font-size: 0.9rem;
   letter-spacing: 0.05rem;
   padding: 0.75rem 1rem;
+  background-color: black !important;
+  color: white !important;
+  border: none;
 }
 
 .btn-google {

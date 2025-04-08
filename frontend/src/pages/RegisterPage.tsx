@@ -15,6 +15,9 @@ function Register() {
     navigate('/login');
   };
 
+    const handleGoHomeClick = () => {
+      navigate("/");
+    };
   // handle change events for input fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -119,6 +122,15 @@ function Register() {
                   onClick={handleLoginClick}
                 >
                   Go to Login
+                </button>
+              </div>
+              <div className="d-grid mb-2">
+                <button
+                  className="btn btn-primary btn-login text-uppercase fw-bold"
+                  type="button"
+                  onClick={handleGoHomeClick}
+                >
+                  Home Page
                 </button>
               </div>
             </form>

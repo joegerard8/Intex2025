@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import './Movies.css';
 import logoForMovies from '../assets/logoForMovies.png';
+import AuthorizeView from '../AuthorizeView';
 
 interface Movie {
     id: string;
@@ -60,60 +61,78 @@ const Movies: React.FC = () => {
     );
 
     return (
+      <AuthorizeView>
         <Layout>
-            <div className="movies-page">
-                <div className="barcode-logo">
-                    <div className="barcode-image">
-                        <img src={logoForMovies} alt="CineNiche Logo" />
-                    </div>
-                    {/* Removed brand name text */}
-                </div>
-
-                <div className="search-container">
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
-                    />
-                    <button className="search-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </button>
-                </div>
-
-                {loading ? (
-                    <div className="loading">Loading...</div>
-                ) : error ? (
-                    <div className="error-message">{error}</div>
-                ) : (
-                    <>
-                        <h1 className="section-title">Top Films</h1>
-
-                        <div className="movies-grid">
-                            {filteredMovies.map(movie => (
-                                <Link key={movie.id} to={`/movie/${movie.id}`} className="movie-card">
-                                    <div className="movie-poster-container">
-                                        <div className="movie-poster-placeholder">
-                                            <span className="movie-title-placeholder">{movie.title}</span>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-
-                        {filteredMovies.length === 0 && (
-                            <div className="no-results">
-                                No movies found matching "{searchTerm}"
-                            </div>
-                        )}
-                    </>
-                )}
+          <div className="movies-page">
+            <div className="barcode-logo">
+              <div className="barcode-image">
+                <img src={logoForMovies} alt="CineNiche Logo" />
+              </div>
+              {/* Removed brand name text */}
             </div>
+
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+              <button className="search-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </button>
+            </div>
+
+            {loading ? (
+              <div className="loading">Loading...</div>
+            ) : error ? (
+              <div className="error-message">{error}</div>
+            ) : (
+              <>
+                <h1 className="section-title">Top Films</h1>
+
+                <div className="movies-grid">
+                  {filteredMovies.map((movie) => (
+                    <Link
+                      key={movie.id}
+                      to={`/movie/${movie.id}`}
+                      className="movie-card"
+                    >
+                      <div className="movie-poster-container">
+                        <div className="movie-poster-placeholder">
+                          <span className="movie-title-placeholder">
+                            {movie.title}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {filteredMovies.length === 0 && (
+                  <div className="no-results">
+                    No movies found matching "{searchTerm}"
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </Layout>
+      </AuthorizeView>
     );
 };
 

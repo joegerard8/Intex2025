@@ -1,40 +1,37 @@
-import React, { useState, useEffect, createContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useState, useEffect, createContext, useContext } from "react";
+import { Navigate } from "react-router-dom";
 
-const UserContext = createContext<User | null>(null);
-
-interface User {
+export interface User {
   email: string;
+  roles: string[];
 }
+
+export const UserContext = createContext<User | null>(null);
 
 function AuthorizeView(props: { children: React.ReactNode }) {
   const [authorized, setAuthorized] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true); // add a loading state
-  //const navigate = useNavigate();
-  let emptyuser: User = { email: '' };
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const [user, setUser] = useState(emptyuser);
+  const emptyUser: User = { email: "", roles: [] };
+  const [user, setUser] = useState(emptyUser);
 
   useEffect(() => {
     async function fetchWithRetry(url: string, options: any) {
       try {
         const response = await fetch(url, options);
-        //console.log('AuthorizeView: Raw Response:', response);
 
-        const contentType = response.headers.get('content-type');
-
-        // Ensure response is JSON before parsing
-        if (!contentType || !contentType.includes('application/json')) {
-          throw new Error('Invalid response format from server');
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Invalid response format from server");
         }
 
         const data = await response.json();
 
-        if (data.email) {
-          setUser({ email: data.email });
+        if (data.email && data.roles) {
+          setUser({ email: data.email, roles: data.roles });
           setAuthorized(true);
         } else {
-          throw new Error('Invalid user session');
+          throw new Error("Invalid user session");
         }
       } catch (error) {
         setAuthorized(false);
@@ -43,9 +40,9 @@ function AuthorizeView(props: { children: React.ReactNode }) {
       }
     }
 
-    fetchWithRetry('https://localhost:5000/pingauth', {
-      method: 'GET',
-      credentials: 'include',
+    fetchWithRetry("https://localhost:5000/pingauth", {
+      method: "GET",
+      credentials: "include",
     });
   }, []);
 
@@ -63,11 +60,24 @@ function AuthorizeView(props: { children: React.ReactNode }) {
 }
 
 export function AuthorizedUser(props: { value: string }) {
-  const user = React.useContext(UserContext);
+  const user = useContext(UserContext);
 
-  if (!user) return null; // Prevents errors if context is null
+  if (!user) return null;
 
-  return props.value === 'email' ? <>{user.email}</> : null;
+  return props.value === "email" ? <>{user.email}</> : null;
+}
+
+// 🛡️ Role-based component wrapper
+export function RequireRole(props: {
+  role: string;
+  children: React.ReactNode;
+}) {
+  const user = useContext(UserContext);
+
+  if (!user) return <Navigate to="/login" />;
+  if (!user.roles.includes(props.role)) return <Navigate to="/unauthorized" />;
+
+  return <>{props.children}</>;
 }
 
 export default AuthorizeView;

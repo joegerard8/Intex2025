@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import HomePage from './views/homePage.tsx';
 import DashboardPage from './views/dashboardPage';
 import ManageMovies from './views/manageMovies';
-import Movies from './views/movies';
+import Movies from './views/movies.tsx';
 import Privacy from './views/privacy';
 import ProductDetailPage from './views/productDetails';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage.tsx'
 import RegisterPage from './pages/RegisterPage.tsx'
+import Unauthorized from './pages/Unauthorized.tsx';
 
 // Protected route component for admin-only access
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
@@ -34,35 +35,36 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 function App() {
     return (
-        <AuthProvider>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/movies" element={<Movies />} />
-                    <Route path="/privacy" element={<Privacy />} />
-                    <Route path="/dashboard" element={<DashboardPage />} />
-                    <Route path="/movie/:id" element={<ProductDetailPage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
-                    <Route
-                        path="/dashboard"
-                        element={
-                            <ProtectedRoute>
-                                <DashboardPage />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/managemovies"
-                        element={
-                            <AdminRoute>
-                                <ManageMovies />
-                            </AdminRoute>
-                        }
-                    />
-                </Routes>
-            </Router>
-        </AuthProvider>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="/movies" element={<Movies />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/movie/:id" element={<ProductDetailPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/managemovies"
+              element={
+                <AdminRoute>
+                  <ManageMovies />
+                </AdminRoute>
+              }
+            />
+          </Routes>
+        </Router>
+      </AuthProvider>
     );
 }
 
