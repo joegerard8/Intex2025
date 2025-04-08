@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import './productDetails.css';
-import logoForMovies from '../assets/logoForMovies.png';
+import logoForMovies from "../assets/logoForMovies.png"; // adjust if needed
+
 
 interface Movie {
     id: string;
