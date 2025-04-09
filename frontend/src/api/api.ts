@@ -5,6 +5,16 @@ interface FetchMoviesResponse {
   totalNumMovies: number;
 }
 
+interface UserRecommendedResponse {
+  user_id: number;
+  collaborative: string;
+  content: string;
+  hybrid: string;
+  comedy_recs: string;
+  action_recs: string;
+  family_recs: string;
+}
+
 interface SimilarMoviesResponse {
   title: string;
   recommendation1: string;
@@ -26,6 +36,7 @@ export const API_URL = "https://localhost:5000/api/Movie";
 export const getSimilarMovies = async (showId: string): Promise<SimilarMoviesResponse> => {
   try {
     const response = await fetch(`${API_URL}/GetSimilarMovies/${showId}`);
+    console.log(response);
     if (!response.ok) {
       throw new Error("Failed to fetch similar movies");
     }
@@ -67,6 +78,36 @@ export const fetchMovies = async (
     throw error;
   }
 };
+
+//getting movies recommended to a specific user
+export const getUserRecommendedMovies = async (userId: number): Promise<UserRecommendedResponse[]> => {
+  try {
+    const response = await fetch(`${API_URL}/GetUserRecommendedMovies/${userId}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch user recommended movies");
+    }
+    return await response.json();
+  }
+  catch (error) {
+    console.error("Error fetching user recommended movies:", error);
+    throw error;
+  }
+}
+
+// getting the user id
+export const getUserId = async (email: string): Promise<number | null> => {
+  try {
+    const response = await fetch(`${API_URL}/GetUserId?email=${encodeURIComponent(email)}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch user ID");
+    }
+    const data = await response.json();
+    return data.userId || null;
+  } catch (error) {
+    console.error("Error fetching user ID:", error);
+    throw error;
+  }
+}
 
 // Fetch one specific movie by showId
 export const fetchMovieById = async (
