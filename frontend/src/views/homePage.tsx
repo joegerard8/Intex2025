@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import "./homePage.css";
 import HomePageLogo from "../assets/HomePageLogo.png";
 import { UserContext } from "../AuthorizeView";
-import { getUserRecommendedMovies, getUserId, fetchSimilarMoviesDetails } from "../api/api.ts";
+import {
+  getUserRecommendedMovies,
+  getUserId,
+  fetchSimilarMoviesDetails,
+} from "../api/api.ts";
 import MovieCarousel from "../components/MovieCarousel.tsx";
 import { Movie } from "@mui/icons-material";
 
@@ -15,21 +19,22 @@ interface Movie {
 
 const HomePage: React.FC = () => {
   const { user } = useContext(UserContext);
-  const [topMovies, setTopMovies] = useState<Movie[]>([]);
   const [recommendedMovies, setRecommendedMovies] = useState<Movie[]>([]);
+  const [actionRecommendations, setActionRecommendations] = useState<Movie[]>(
+    []
+  );
+  const [comedyRecommendations, setComedyRecommendations] = useState<Movie[]>(
+    []
+  );
+  const [familyRecommendations, setFamilyRecommendations] = useState<Movie[]>(
+    []
+  );
   const [userId, setUserId] = useState<number | null>(null);
-  // different types of recommendations
-  const [actionRecommendations, setActionRecommendations] = useState<Movie[]>([]);
-  const [comedyRecommendations, setComedyRecommendations] = useState<Movie[]>([]);
-  const [familyRecommendations, setFamilyRecommendations] = useState<Movie[]>([]);
 
-
-  // getting the user id to then get their curated list of recommended movies
   const fetchUserId = async () => {
     try {
       if (user) {
         const response = await getUserId(user.email);
-        console.log(response);
         setUserId(response);
       }
       return userId;
@@ -37,9 +42,8 @@ const HomePage: React.FC = () => {
       console.error("Error fetching user ID:", error);
       return null;
     }
-  }
+  };
 
-  //getting the recommended movies for the user
   const fetchUserRecommendedMovies = async () => {
     try {
       if (userId) {
@@ -55,7 +59,7 @@ const HomePage: React.FC = () => {
           getRecommendedMoviesDetails(movieIds, setRecommendedMovies),
           getRecommendedMoviesDetails(actionIds, setActionRecommendations),
           getRecommendedMoviesDetails(comedyIds, setComedyRecommendations),
-          getRecommendedMoviesDetails(familyIds, setFamilyRecommendations)
+          getRecommendedMoviesDetails(familyIds, setFamilyRecommendations),
         ]);
       }
     } catch (error) {
@@ -63,7 +67,6 @@ const HomePage: React.FC = () => {
     }
   };
 
-  //getting the details and setting the movies using the recommended details
   const getRecommendedMoviesDetails = async (
     recommendations: string[],
     setState: React.Dispatch<React.SetStateAction<Movie[]>>
@@ -73,7 +76,7 @@ const HomePage: React.FC = () => {
       const recommendedMoviesData = movies.map((movieData: any) => ({
         id: movieData.movies[0].showId,
         title: movieData.movies[0].title,
-        posterUrl: movieData.movies[0].image_url
+        posterUrl: movieData.movies[0].image_url,
       }));
       setState(recommendedMoviesData);
     } catch (err) {
@@ -81,39 +84,109 @@ const HomePage: React.FC = () => {
     }
   };
 
-  // use effect to get their recommended movies
   useEffect(() => {
     const getData = async () => {
       await fetchUserId();
       await fetchUserRecommendedMovies();
-    }
+    };
     getData();
   }, [userId, user]);
 
   return (
     <>
-    <div className="home-page">
-      <div className="logo-banner">
-        <div className="main-logo">
-          <img
-            src={HomePageLogo}
-            alt="CineNiche Logo"
-            className="huge-centered-logo"
-          />
-        </div>
+      <div className={`home-page ${!user ? "logged-out" : ""}`}>
+        {user && (
+          <div className="logo-banner">
+            <div className="main-logo">
+              <img
+                src={HomePageLogo}
+                alt="CineNiche Logo"
+                className="huge-centered-logo"
+              />
+            </div>
+          </div>
+        )}
+
+        {!user && (
+          <div className="landing-actions">
+            <h1 className="landing-heading">
+              For those who crave more than the mainstream.
+            </h1>
+            <div className="auth-buttons-large">
+              <Link to="/login" className="login-btn large">
+                Sign In
+              </Link>
+              <Link to="/register" className="register-btn large">
+                Register
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {user && (
+          <div className="welcome-section">
+            <h1>Welcome, {user.email}</h1>
+          </div>
+        )}
       </div>
 
-      {/* Welcome message if logged in */}
+      {/* Movie carousels only shown to logged-in users */}
       {user && (
-        <div className="welcome-section">
-          <h1>Welcome, {user.email}</h1>
-        </div>
+        <>
+          <MovieCarousel movies={recommendedMovies} title="Your Top Picks" />
+          <MovieCarousel
+            movies={actionRecommendations}
+            title="High-Octane Hits"
+          />
+          <MovieCarousel movies={comedyRecommendations} title="Need a Laugh?" />
+          <MovieCarousel
+            movies={familyRecommendations}
+            title="Fun for the Whole Family"
+          />
+        </>
       )}
-    </div>
-    <MovieCarousel movies={recommendedMovies} title="Your Top Picks" />
-    <MovieCarousel movies={actionRecommendations} title="High-Octane Hits" />
-    <MovieCarousel movies={comedyRecommendations} title="Need a Laugh?" />
-    <MovieCarousel movies={familyRecommendations} title="Fun for the Whole Family" />
+
+      {/* Public content section below the background image */}
+      {!user && (
+        <>
+          <div className="cineniche-section">
+            <div className="cineniche-card">
+              <p>
+                You have stumbled upon the gateway to all of our creative
+                endeavors. CineNiche specializes in horror as an art form.
+                Sometimes we criticize, while other times we are creating works
+                based on our favorite films.
+              </p>
+            </div>
+            <div className="cineniche-card">
+              <p>
+                You can check out our Etsy shop, where we create personalized
+                stencils for any occasion or film lover.
+              </p>
+            </div>
+            <div className="cineniche-card">
+              <p>
+                You can also take a look at a Halloween themed children's book
+                we recently published on Amazon titled{" "}
+                <em>THE MANY MASKS OF EDGAR SAM</em>. As always, you can read
+                our reviews and articles that appear on various websites. Have a
+                look around and see everything we have to offer.
+              </p>
+            </div>
+          </div>
+
+          <div className="learn-more-container">
+            <a
+              href="https://cineniche.blogspot.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="learn-more-btn"
+            >
+              Learn More About CineNiche
+            </a>
+          </div>
+        </>
+      )}
     </>
   );
 };

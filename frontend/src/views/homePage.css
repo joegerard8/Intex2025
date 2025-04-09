@@ -1,140 +1,256 @@
 .home-page {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
+/* Background image only (no dark overlay) */
+.home-page.logged-out {
+  background-image: url("../assets/homeBackground.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 40px;
+  min-height: 100vh;
+  padding-top: 250px;
+  padding-bottom: 200px; /* this gives scroll room before cards */
+}
+
+/* Landing content */
+.landing-actions {
+  text-align: center;
+  padding: 0 1rem 4rem;
+  color: #fff;
+  margin-top: 180px;
+}
+
+.landing-heading {
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #fff;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.auth-buttons-large {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.auth-buttons-large .login-btn.large,
+.auth-buttons-large .register-btn.large {
+  font-size: 1.2rem;
+  padding: 1rem 2.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: black;
+  color: white;
+  border: 2px solid black;
+}
+
+.auth-buttons-large .login-btn.large:hover,
+.auth-buttons-large .register-btn.large:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid white;
+}
+
+/* Logo & Movie layout (unchanged) */
 .logo-banner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 62px; /* Add this to push below the fixed header */
-    margin-bottom: 0.2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 62px;
+  margin-bottom: 0.2px;
 }
 
 .main-logo {
-    max-width: 80%; /* Adjust as needed */
-    width: 800px; /* Or set a specific large width */
-    margin: 0 auto;
-} 
-
+  max-width: 80%;
+  width: 800px;
+  margin: 0 auto;
+}
 
 .huge-centered-logo {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .auth-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
 }
 
 .auth-button {
-    padding: 0.75rem 2rem;
-    border-radius: 4px;
-    font-weight: 500;
-    text-align: center;
-    transition: all 0.3s ease;
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
 .register-btn {
-    background-color: transparent;
-    color: #fff;
-    border: 1px solid #555;
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #555;
 }
 
 .register-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .login-btn {
-    background-color: #333;
-    color: #fff;
+  background-color: #333;
+  color: #fff;
 }
 
 .login-btn:hover {
-    background-color: #444;
+  background-color: #444;
 }
 
 .welcome-section {
-    text-align: center;
-    margin-bottom: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .welcome-section h1 {
-    font-size: 2rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
 }
 
 .movies-section {
-    margin-top: 0.5rem; /* Reduced from 2rem to 0.5rem */
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #333;
+  margin-top: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #333;
 }
 
 .movies-section h2 {
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #333;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #333;
 }
 
 .movie-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
 }
 
 .movie-card {
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    aspect-ratio: 2/3;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  aspect-ratio: 2/3;
 }
 
 .movie-card:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .movie-poster {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .movie-poster-placeholder {
-    width: 100%;
-    height: 100%;
-    background-color: #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    text-align: center;
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
 }
 
 .movie-title-placeholder {
-    font-size: 0.8rem;
-    color: #aaa;
-    line-height: 1.2;
+  font-size: 0.8rem;
+  color: #aaa;
+  line-height: 1.2;
+}
+
+/* === CineNiche Cards Section === */
+.cineniche-section {
+  background-color: #000;
+  padding: 8rem 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.cineniche-card {
+  background-color: #1a1a1a;
+  padding: 2rem;
+  flex: 1 1 300px;
+  max-width: 350px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  text-align: left;
+}
+
+.cineniche-card em {
+  font-style: italic;
+  color: #ffcc70;
+}
+
+@media (max-width: 1024px) {
+  .cineniche-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cineniche-card {
+    max-width: 90%;
+  }
 }
 
 @media (max-width: 768px) {
-    .movie-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    }
+  .movie-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
 
-    .main-logo {
-        max-width: 90%;
-        width: 100%;
-    }
+  .main-logo {
+    max-width: 90%;
+    width: 100%;
+  }
+}
+.learn-more-container {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.learn-more-btn {
+  font-size: 1rem;
+  padding: 0.75rem 2.5rem;
+  border: 2px solid white;
+  color: white;
+  background-color: transparent;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.learn-more-btn:hover {
+  background-color: white;
+  color: black;
 }
