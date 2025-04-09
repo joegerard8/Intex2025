@@ -4,7 +4,6 @@ import { UserContext } from "../AuthorizeView";
 import Layout from "../components/Layout";
 import "./identity.css";
 import "@fortawesome/fontawesome-free/css/all.css";
-import logo from "../assets/HomePageLogo.png"; 
 import movieCollage from "../assets/movieCollage.png"; // Placeholder for the gray image
 
 function LoginPage() {
@@ -75,10 +74,7 @@ function LoginPage() {
   return (
       <Layout>
         <div className="login-page">
-          {/* Logo center top */}
-          <div className="logo-header">
-            <img src={logo} alt="CineNiche" className="logo-img" />
-          </div>
+          
 
           {/* Two-column layout */}
           <div className="two-column-container">
@@ -108,7 +104,7 @@ function LoginPage() {
                         name="email"
                         value={email}
                         onChange={handleChange}
-                        placeholder="hudson@test.com"
+                        placeholder="Email address"
                     />
                   </div>
 
@@ -120,7 +116,7 @@ function LoginPage() {
                         name="password"
                         value={password}
                         onChange={handleChange}
-                        placeholder="•••••••••••••"
+                        placeholder="Password"
                     />
                   </div>
 
