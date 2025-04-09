@@ -65,7 +65,7 @@ function App() {
           />
 
           {/* Admin-only */}
-          {/* <Route ADD THIS BACK LATER
+           <Route 
             path="/managemovies"
             element={
               <RequireRole role="Administrator">
@@ -74,12 +74,7 @@ function App() {
                 </Layout>
               </RequireRole>
             }
-          /> */}
-          <Route
-          path="/managemovies"
-          element={<ManageMovies />}>
-            
-          </Route>
+          /> 
         </Routes>
       </AuthorizeView>
     </Router>
