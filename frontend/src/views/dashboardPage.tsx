@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
-import './dashboardPage.css';
+import './dashboardPage.css'; 
+import HomePageLogo from '../assets/HomePageLogo.png';
 
 interface Movie {
     id: string;
@@ -110,7 +111,7 @@ const DashboardPage: React.FC = () => {
             <div className="dashboard-page">
                 <div className="barcode-logo">
                     <div className="barcode-image">
-                        <img src="/barcode.png" alt="CineNiche" />
+                        <img src={HomePageLogo} alt="CineNiche" />
                     </div>
                     <div className="brand-name">CineNiche</div>
                 </div>

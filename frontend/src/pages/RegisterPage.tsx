@@ -1,18 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "../components/Layout"; // Import the Layout component
-import "./identity.css"; 
-import logo from "../assets/logoForMovies.png"; // Import the logo image
+import Layout from "../components/Layout";
+import "./identity.css";
+import logo from "../assets/HomePageLogo.png";
+import movieCollage from "../assets/movieCollage.png";
 
-// We'll remove the SimpleHeader since we now have the Layout with Header
 function Register() {
-  // State variables for email and passwords
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  // State variable for error messages
   const [error, setError] = useState("");
 
   const handleLoginClick = () => {
@@ -23,7 +21,6 @@ function Register() {
     navigate("/");
   };
 
-  // Handle change events for input fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "email") setEmail(value);
@@ -31,10 +28,9 @@ function Register() {
     if (name === "confirmPassword") setConfirmPassword(value);
   };
 
-  // Handle submit event for the form 39-Kate
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Validate email and passwords
+
     if (!email || !password || !confirmPassword) {
       setError("Please fill in all fields.");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -44,9 +40,8 @@ function Register() {
     } else if (password.length < 12) {
       setError("Password must be at least 12 characters.");
     } else {
-      // Clear error message
       setError("");
-      // Post data to the /register api
+
       fetch("https://localhost:5000/register", {
         method: "POST",
         headers: {
@@ -73,35 +68,27 @@ function Register() {
     }
   };
 
-  // Wrap the existing content with the Layout component
-  // and remove the SimpleHeader since it's redundant
   return (
       <Layout>
-        <div className="register-page">
-          <div className="content-container">
-            <div className="logo-container">
-              <img src={logo} alt="Logo" className="logo-img" />
+        <div className="login-page">
+          {/* Logo center top */}
+          <div className="logo-header">
+            <img src={logo} alt="CineNiche" className="logo-img" />
+          </div>
+
+          {/* Two-column layout */}
+          <div className="two-column-container">
+            {/* Left column - Gray placeholder */}
+            <div className="left-column">
+              <img src={movieCollage} alt="Featured movies" className="featured-image" />
             </div>
 
-            <div className="image-gallery">
-              <div className="image-placeholder"></div>
-              <div className="image-placeholder"></div>
-              <div className="image-placeholder"></div>
-              <div className="image-placeholder"></div>
-              <div className="image-placeholder"></div>
-            </div>
+            {/* Right column - Registration form */}
+            <div className="right-column">
+              <div className="signin-section">
+                <h2 className="signin-title">Register</h2>
 
-            <div className="tagline">
-              Discover the films mainstream platforms don't offer. CineNiche
-              curates cult classics, international gems, and indie treasures for
-              true film enthusiasts.
-            </div>
-
-            <div className="register-container">
-              <div className="register-card">
-                <h2 className="register-title">Register</h2>
-
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="auth-form">
                   <div className="form-group">
                     <input
                         className="form-input"
@@ -142,12 +129,12 @@ function Register() {
                   </div>
 
                   <div className="button-group">
-                    <button className="register-button" type="submit">
+                    <button className="signin-button" type="submit">
                       REGISTER
                     </button>
 
                     <button
-                        className="login-button"
+                        className="register-button"
                         type="button"
                         onClick={handleLoginClick}
                     >
@@ -162,9 +149,9 @@ function Register() {
                       HOME PAGE
                     </button>
                   </div>
-                </form>
 
-                {error && <p className="error-message">{error}</p>}
+                  {error && <p className="error-message">{error}</p>}
+                </form>
               </div>
             </div>
           </div>
