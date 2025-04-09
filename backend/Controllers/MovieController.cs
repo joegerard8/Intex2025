@@ -3,6 +3,7 @@ using backend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 
 namespace backend.Controllers
@@ -26,87 +27,99 @@ namespace backend.Controllers
             [FromQuery] string? search = null,
             [FromQuery] string? showId = null)
         {
-        IQueryable<MoviesTitle> query = _dbContext.MoviesTitles.AsQueryable();
-
-    // Return one specific movie if showId is provided
-        if (!string.IsNullOrEmpty(showId))
-        {
-            var movie = query.FirstOrDefault(m => m.ShowId == showId);
-            if (movie == null)
+            try
             {
-                return NotFound(new { message = "Movie not found." });
-            }
+                IQueryable<MoviesTitle> query = _dbContext.MoviesTitles.AsQueryable();
 
-            return Ok(new
-            {
-                Movies = new List<MoviesTitle> { movie },
-                TotalNumMovies = 1
-            });
-        }
-
-        // Optional title search
-        if (!string.IsNullOrEmpty(search))
-        {
-            query = query.Where(m => m.Title.Contains(search));
-        }
-
-        // Optional genre filtering
-        if (genres != null && genres.Any())
-        {
-            foreach (var genre in genres)
-            {
-                switch (genre)
+                // Return one specific movie if showId is provided
+                if (!string.IsNullOrEmpty(showId))
                 {
-                    case "Action": query = query.Where(m => m.Action); break;
-                    case "Adventure": query = query.Where(m => m.Adventure); break;
-                    case "AnimeSeriesInternationalTvShows": query = query.Where(m => m.AnimeSeriesInternationalTvShows); break;
-                    case "BritishTvShowsDocuseriesInternationalTvShows": query = query.Where(m => m.BritishTvShowsDocuseriesInternationalTvShows); break;
-                    case "Children": query = query.Where(m => m.Children); break;
-                    case "Comedies": query = query.Where(m => m.Comedies); break;
-                    case "ComediesDramasInternationalMovies": query = query.Where(m => m.ComediesDramasInternationalMovies); break;
-                    case "ComediesInternationalMovies": query = query.Where(m => m.ComediesInternationalMovies); break;
-                    case "ComediesRomanticMovies": query = query.Where(m => m.ComediesRomanticMovies); break;
-                    case "CrimeTvShowsDocuseries": query = query.Where(m => m.CrimeTvShowsDocuseries); break;
-                    case "Documentaries": query = query.Where(m => m.Documentaries); break;
-                    case "DocumentariesInternationalMovies": query = query.Where(m => m.DocumentariesInternationalMovies); break;
-                    case "Docuseries": query = query.Where(m => m.Docuseries); break;
-                    case "Dramas": query = query.Where(m => m.Dramas); break;
-                    case "DramasInternationalMovies": query = query.Where(m => m.DramasInternationalMovies); break;
-                    case "DramasRomanticMovies": query = query.Where(m => m.DramasRomanticMovies); break;
-                    case "FamilyMovies": query = query.Where(m => m.FamilyMovies); break;
-                    case "Fantasy": query = query.Where(m => m.Fantasy); break;
-                    case "HorrorMovies": query = query.Where(m => m.HorrorMovies); break;
-                    case "InternationalMoviesThrillers": query = query.Where(m => m.InternationalMoviesThrillers); break;
-                    case "InternationalTvShowsRomanticTvShowsTvDramas": query = query.Where(m => m.InternationalTvShowsRomanticTvShowsTvDramas); break;
-                    case "KidsTv": query = query.Where(m => m.KidsTv); break;
-                    case "LanguageTvShows": query = query.Where(m => m.LanguageTvShows); break;
-                    case "Musicals": query = query.Where(m => m.Musicals); break;
-                    case "NatureTv": query = query.Where(m => m.NatureTv); break;
-                    case "RealityTv": query = query.Where(m => m.RealityTv); break;
-                    case "Spirituality": query = query.Where(m => m.Spirituality); break;
-                    case "TvAction": query = query.Where(m => m.TvAction); break;
-                    case "TvComedies": query = query.Where(m => m.TvComedies); break;
-                    case "TvDramas": query = query.Where(m => m.TvDramas); break;
-                    case "Thrillers": query = query.Where(m => m.Thrillers); break;
+                    var movie = query.FirstOrDefault(m => m.ShowId == showId);
+                    if (movie == null)
+                    {
+                        return NotFound(new { message = "Movie not found." });
+                    }
+
+                    return Ok(new
+                    {
+                        Movies = new List<MoviesTitle> { movie },
+                        TotalNumMovies = 1
+                    });
                 }
+
+                // Optional title search
+                if (!string.IsNullOrEmpty(search))
+                {
+                    query = query.Where(m => m.Title.Contains(search));
+                }
+
+                // Optional genre filtering
+                if (genres != null && genres.Any())
+                {
+                    foreach (var genre in genres)
+                    {
+                        switch (genre)
+                        {
+                            case "Action": query = query.Where(m => m.Action); break;
+                            case "Adventure": query = query.Where(m => m.Adventure); break;
+                            case "AnimeSeriesInternationalTvShows": query = query.Where(m => m.AnimeSeriesInternationalTvShows); break;
+                            case "BritishTvShowsDocuseriesInternationalTvShows": query = query.Where(m => m.BritishTvShowsDocuseriesInternationalTvShows); break;
+                            case "Children": query = query.Where(m => m.Children); break;
+                            case "Comedies": query = query.Where(m => m.Comedies); break;
+                            case "ComediesDramasInternationalMovies": query = query.Where(m => m.ComediesDramasInternationalMovies); break;
+                            case "ComediesInternationalMovies": query = query.Where(m => m.ComediesInternationalMovies); break;
+                            case "ComediesRomanticMovies": query = query.Where(m => m.ComediesRomanticMovies); break;
+                            case "CrimeTvShowsDocuseries": query = query.Where(m => m.CrimeTvShowsDocuseries); break;
+                            case "Documentaries": query = query.Where(m => m.Documentaries); break;
+                            case "DocumentariesInternationalMovies": query = query.Where(m => m.DocumentariesInternationalMovies); break;
+                            case "Docuseries": query = query.Where(m => m.Docuseries); break;
+                            case "Dramas": query = query.Where(m => m.Dramas); break;
+                            case "DramasInternationalMovies": query = query.Where(m => m.DramasInternationalMovies); break;
+                            case "DramasRomanticMovies": query = query.Where(m => m.DramasRomanticMovies); break;
+                            case "FamilyMovies": query = query.Where(m => m.FamilyMovies); break;
+                            case "Fantasy": query = query.Where(m => m.Fantasy); break;
+                            case "HorrorMovies": query = query.Where(m => m.HorrorMovies); break;
+                            case "InternationalMoviesThrillers": query = query.Where(m => m.InternationalMoviesThrillers); break;
+                            case "InternationalTvShowsRomanticTvShowsTvDramas": query = query.Where(m => m.InternationalTvShowsRomanticTvShowsTvDramas); break;
+                            case "KidsTv": query = query.Where(m => m.KidsTv); break;
+                            case "LanguageTvShows": query = query.Where(m => m.LanguageTvShows); break;
+                            case "Musicals": query = query.Where(m => m.Musicals); break;
+                            case "NatureTv": query = query.Where(m => m.NatureTv); break;
+                            case "RealityTv": query = query.Where(m => m.RealityTv); break;
+                            case "Spirituality": query = query.Where(m => m.Spirituality); break;
+                            case "TvAction": query = query.Where(m => m.TvAction); break;
+                            case "TvComedies": query = query.Where(m => m.TvComedies); break;
+                            case "TvDramas": query = query.Where(m => m.TvDramas); break;
+                            case "Thrillers": query = query.Where(m => m.Thrillers); break;
+                        }
+                    }
+                }
+
+                var totalNumMovies = query.Count();
+
+                var movies = query
+                    .Skip((pageNum - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                var result = new
+                {
+                    Movies = movies,
+                    TotalNumMovies = totalNumMovies
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "An error occurred while fetching movies.",
+                    error = ex.Message,
+                    stackTrace = ex.StackTrace // optionally remove for production
+                });
             }
         }
-
-        var totalNumMovies = query.Count();
-
-        var movies = query
-            .Skip((pageNum - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-
-        var result = new
-        {
-            Movies = movies,
-            TotalNumMovies = totalNumMovies
-        };
-
-        return Ok(result);
-    }
 
       // getting the similar movies to then pull all of the information we need.
         [HttpGet("GetSimilarMovies/{showId}")]
@@ -123,7 +136,34 @@ namespace backend.Controllers
 
         return Ok(recommendation);
         }
+    
+    // getting movies recommended to a specific user
+        [HttpGet("GetUserRecommendedMovies/{userId}")]
+        public IActionResult GetUserRecommendedMovies(byte userId) 
+        {
+            var recommendations = _dbContext.HomeRecommendations
+                .Where(r => r.user_id == userId)
+                .ToList();
 
+            if (recommendations == null || !recommendations.Any())
+            {
+                return NotFound(new { message = "No recommendations found for this user." });
+            }
+
+            return Ok(recommendations);
+        }
+
+        // getting the users id to get their unique recommendations
+        [HttpGet("GetUserId")]
+        public IActionResult GetUserId(string email)
+        {
+            var user = _dbContext.ApplicationUsers.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+            return Ok(new { userId = user.UserId });
+        }
 
         [HttpPost("AddMovie")]
         [Authorize(Roles = "Administrator")]

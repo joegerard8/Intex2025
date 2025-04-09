@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import "./homePage.css";
 import HomePageLogo from "../assets/HomePageLogo.png";
 import { UserContext } from "../AuthorizeView";
+import { getUserRecommendedMovies, getUserId, fetchSimilarMoviesDetails } from "../api/api.ts";
+import MovieCarousel from "../components/MovieCarousel.tsx";
+import { Movie } from "@mui/icons-material";
 
 interface Movie {
   id: string;
@@ -14,34 +17,81 @@ const HomePage: React.FC = () => {
   const { user } = useContext(UserContext);
   const [topMovies, setTopMovies] = useState<Movie[]>([]);
   const [recommendedMovies, setRecommendedMovies] = useState<Movie[]>([]);
+  const [userId, setUserId] = useState<number | null>(null);
+  // different types of recommendations
+  const [actionRecommendations, setActionRecommendations] = useState<Movie[]>([]);
+  const [comedyRecommendations, setComedyRecommendations] = useState<Movie[]>([]);
+  const [familyRecommendations, setFamilyRecommendations] = useState<Movie[]>([]);
 
+
+  // getting the user id to then get their curated list of recommended movies
+  const fetchUserId = async () => {
+    try {
+      if (user) {
+        const response = await getUserId(user.email);
+        console.log(response);
+        setUserId(response);
+      }
+      return userId;
+    } catch (error) {
+      console.error("Error fetching user ID:", error);
+      return null;
+    }
+  }
+
+  //getting the recommended movies for the user
+  const fetchUserRecommendedMovies = async () => {
+    try {
+      if (userId) {
+        const response = await getUserRecommendedMovies(userId);
+        const rec = response[0];
+
+        const movieIds = rec.hybrid.split(", ");
+        const actionIds = rec.action_recs.split(", ");
+        const comedyIds = rec.comedy_recs.split(", ");
+        const familyIds = rec.family_recs.split(", ");
+
+        await Promise.all([
+          getRecommendedMoviesDetails(movieIds, setRecommendedMovies),
+          getRecommendedMoviesDetails(actionIds, setActionRecommendations),
+          getRecommendedMoviesDetails(comedyIds, setComedyRecommendations),
+          getRecommendedMoviesDetails(familyIds, setFamilyRecommendations)
+        ]);
+      }
+    } catch (error) {
+      console.error("Error fetching user recommended movies:", error);
+    }
+  };
+
+  //getting the details and setting the movies using the recommended details
+  const getRecommendedMoviesDetails = async (
+    recommendations: string[],
+    setState: React.Dispatch<React.SetStateAction<Movie[]>>
+  ) => {
+    try {
+      const movies = await fetchSimilarMoviesDetails(recommendations);
+      const recommendedMoviesData = movies.map((movieData: any) => ({
+        id: movieData.movies[0].showId,
+        title: movieData.movies[0].title,
+        posterUrl: movieData.movies[0].image_url
+      }));
+      setState(recommendedMoviesData);
+    } catch (err) {
+      console.error("Failed to load similar movie details", err);
+    }
+  };
+
+  // use effect to get their recommended movies
   useEffect(() => {
-    const mockTopMovies = [
-      { id: "1", title: "Extraordinary Stories", posterUrl: "" },
-      { id: "2", title: "1 Mile To You", posterUrl: "" },
-      { id: "3", title: "TBR", posterUrl: "" },
-      { id: "4", title: "1st Summoning", posterUrl: "" },
-      { id: "5", title: "30% Skill", posterUrl: "" },
-    ];
-
-    const mockRecommendedMovies = [
-      { id: "6", title: "4th Man Out", posterUrl: "" },
-      { id: "7", title: "3 Turken & 1 Baby", posterUrl: "" },
-      { id: "8", title: "5x7", posterUrl: "" },
-      { id: "9", title: "6 cm", posterUrl: "" },
-      { id: "10", title: "Khon Maat", posterUrl: "" },
-      { id: "11", title: "10 Days In City", posterUrl: "" },
-      { id: "12", title: "10 Jours En Or", posterUrl: "" },
-      { id: "13", title: "24 Hours", posterUrl: "" },
-      { id: "14", title: "50 Kills", posterUrl: "" },
-      { id: "15", title: "6-5=2", posterUrl: "" },
-    ];
-
-    setTopMovies(mockTopMovies);
-    setRecommendedMovies(mockRecommendedMovies);
-  }, []);
+    const getData = async () => {
+      await fetchUserId();
+      await fetchUserRecommendedMovies();
+    }
+    getData();
+  }, [userId, user]);
 
   return (
+    <>
     <div className="home-page">
       <div className="logo-banner">
         <div className="main-logo">
@@ -59,24 +109,12 @@ const HomePage: React.FC = () => {
           <h1>Welcome, {user.email}</h1>
         </div>
       )}
-
-      <div className="movies-section">
-        <h2>{!user ? "Top Films" : "Recommended for you"}</h2>
-        <div className="movie-grid">
-          {(!user ? topMovies : recommendedMovies).map((movie) => (
-            <Link
-              to={`/movie/${movie.id}`}
-              key={movie.id}
-              className="movie-card"
-            >
-              <div className="movie-poster-placeholder">
-                <span className="movie-title-placeholder">{movie.title}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
     </div>
+    <MovieCarousel movies={recommendedMovies} title="Your Top Picks" />
+    <MovieCarousel movies={actionRecommendations} title="High-Octane Hits" />
+    <MovieCarousel movies={comedyRecommendations} title="Need a Laugh?" />
+    <MovieCarousel movies={familyRecommendations} title="Fun for the Whole Family" />
+    </>
   );
 };
 

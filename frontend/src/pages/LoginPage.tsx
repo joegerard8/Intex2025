@@ -1,10 +1,11 @@
 import { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../AuthorizeView";
-import Layout from "../components/Layout"; // Import the Layout component
+import Layout from "../components/Layout";
 import "./identity.css";
 import "@fortawesome/fontawesome-free/css/all.css";
-import logo from "../assets/logoForMovies.png"; // Import the logo image
+import logo from "../assets/HomePageLogo.png"; 
+import movieCollage from "../assets/movieCollage.png"; // Placeholder for the gray image
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -63,7 +64,7 @@ function LoginPage() {
         throw new Error(data?.message || "Invalid email or password.");
       }
 
-      await refreshUser(); // 👈 Refresh user context immediately
+      await refreshUser();
       navigate("/movies");
     } catch (error: any) {
       setError(error.message || "Error logging in.");
@@ -71,38 +72,34 @@ function LoginPage() {
     }
   };
 
-  // Wrap the existing content with the Layout component
   return (
       <Layout>
-        <div className="register-page">
-          <div className="content-container">
-            <div className="logo-container">
-              <img src={logo} alt="Logo" className="logo-img" />
+        <div className="login-page">
+          {/* Logo center top */}
+          <div className="logo-header">
+            <img src={logo} alt="CineNiche" className="logo-img" />
+          </div>
+
+          {/* Two-column layout */}
+          <div className="two-column-container">
+            {/* Left column - Gray placeholder */}
+            <div className="left-column">
+              <img src={movieCollage} alt="Featured movies" className="featured-image" />
             </div>
 
-            <div className="image-gallery">
-              <div className="image-placeholder"></div>
-              <div className="image-placeholder"></div>
-              <div className="image-placeholder"></div>
-              <div className="image-placeholder"></div>
-              <div className="image-placeholder"></div>
-            </div>
+            {/* Right column - Login form */}
+            <div className="right-column">
 
-            <div className="tagline">
-              Discover the films mainstream platforms don't offer. CineNiche curates cult classics, international gems, and indie treasures for true film enthusiasts.
-            </div>
-
-            <div className="register-container">
-              <div className="register-card">
-                <h2 className="register-title">Sign In</h2>
+              <div className="signin-section">
+                <h2 className="signin-title">Sign In</h2>
 
                 {message && (
-                    <div className="alert alert-success text-center" role="alert">
+                    <div className="alert alert-success" role="alert">
                       {message}
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="auth-form">
                   <div className="form-group">
                     <input
                         className="form-input"
@@ -111,7 +108,7 @@ function LoginPage() {
                         name="email"
                         value={email}
                         onChange={handleChange}
-                        placeholder="your@email.com"
+                        placeholder="hudson@test.com"
                     />
                   </div>
 
@@ -127,27 +124,27 @@ function LoginPage() {
                     />
                   </div>
 
-                  <div className="form-check mb-3">
+                  <div className="remember-me">
                     <input
-                        className="form-check-input"
+                        className="remember-checkbox"
                         type="checkbox"
                         id="rememberme"
                         name="rememberme"
                         checked={rememberme}
                         onChange={handleChange}
                     />
-                    <label className="form-check-label" htmlFor="rememberme">
+                    <label className="remember-label" htmlFor="rememberme">
                       Remember me
                     </label>
                   </div>
 
                   <div className="button-group">
-                    <button className="register-button" type="submit">
+                    <button className="signin-button" type="submit">
                       SIGN IN
                     </button>
 
                     <button
-                        className="login-button"
+                        className="register-button"
                         type="button"
                         onClick={handleRegisterClick}
                     >
@@ -164,13 +161,16 @@ function LoginPage() {
                   </div>
 
                   {error && <p className="error-message">{error}</p>}
+
+                  <div className="forgot-password">
+                    <a href="/forgot-password">Forgot password?</a>
+                  </div>
                 </form>
               </div>
             </div>
           </div>
         </div>
       </Layout>
-
   );
 }
 
