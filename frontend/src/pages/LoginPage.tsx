@@ -65,7 +65,7 @@ function LoginPage() {
       }
 
       await refreshUser();
-      navigate("/movies");
+      navigate("/");
     } catch (error: any) {
       setError(error.message || "Error logging in.");
       console.error("Fetch attempt failed:", error);

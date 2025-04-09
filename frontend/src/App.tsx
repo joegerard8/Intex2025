@@ -13,6 +13,7 @@ import AuthorizeView, { RequireAuth, RequireRole } from './AuthorizeView.tsx';
 import Layout from './components/Layout.tsx';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import CookieConsentBanner from './components/CookieConsentBanner.tsx';
 
 
 
@@ -20,6 +21,7 @@ function App() {
   return (
     <Router>
       <AuthorizeView>
+        <CookieConsentBanner />
         <Routes>
           {/* Public */}
           <Route
@@ -65,7 +67,7 @@ function App() {
           />
 
           {/* Admin-only */}
-           <Route 
+          <Route
             path="/managemovies"
             element={
               <RequireRole role="Administrator">
@@ -74,7 +76,7 @@ function App() {
                 </Layout>
               </RequireRole>
             }
-          /> 
+          />
         </Routes>
       </AuthorizeView>
     </Router>
