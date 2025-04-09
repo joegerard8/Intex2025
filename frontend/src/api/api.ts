@@ -1,20 +1,62 @@
-const devUrl: string = "https://localhost:5000/api/";
-const prodUrl: string = "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/api/";
-
-
-import { MoviesRating } from "../types/rating";
 import { MoviesTitle } from "../types/movie";
-import { ItemRecommendation } from "../types/recommendation";
-import { MoviesUser } from "../types/user";
 
-interface FetchMovieResponse {
+interface FetchMoviesResponse {
   movies: MoviesTitle[];
-  totalNumBooks: number;
+  totalNumMovies: number;
 }
 
-// Function to fetch movies from the API
-export const API_URL = "https://localhost:5000/api/Movie";
+const API_URL = "https://localhost:5000/api/Movie"; // Swap this out with prodUrl when deploying
 
+// Fetch movies (with pagination, genre filtering, and optional search)
+export const fetchMovies = async (
+  pageSize: number,
+  pageNum: number,
+  selectedGenres: string[],
+  search?: string
+): Promise<FetchMoviesResponse> => {
+  try {
+    const genreParams = selectedGenres
+      .map((g) => `genres=${encodeURIComponent(g)}`)
+      .join("&");
+
+    const searchParam = search ? `&search=${encodeURIComponent(search)}` : "";
+
+    const response = await fetch(
+      `${API_URL}/GetMovies?pageSize=${pageSize}&pageNum=${pageNum}${
+        genreParams ? `&${genreParams}` : ""
+      }${searchParam}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch movies");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    throw error;
+  }
+};
+
+// Fetch one specific movie by showId
+export const fetchMovieById = async (
+  showId: string
+): Promise<MoviesTitle | null> => {
+  try {
+    const response = await fetch(`${API_URL}/GetMovies?showId=${showId}`);
+    if (!response.ok) {
+      if (response.status === 404) return null;
+      throw new Error("Failed to fetch movie");
+    }
+    const data = await response.json();
+    return data.movies?.[0] ?? null;
+  } catch (error) {
+    console.error("Error fetching movie by ID:", error);
+    throw error;
+  }
+};
+
+// Add a new movie
 export const addMovie = async (newMovie: MoviesTitle): Promise<MoviesTitle> => {
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
@@ -36,7 +78,11 @@ export const addMovie = async (newMovie: MoviesTitle): Promise<MoviesTitle> => {
   }
 };
 
-export const updateMovie = async (showId: string, updatedMovie: MoviesTitle): Promise<MoviesTitle> => {
+// Update a movie
+export const updateMovie = async (
+  showId: string,
+  updatedMovie: MoviesTitle
+): Promise<MoviesTitle> => {
   try {
     const response = await fetch(`${API_URL}/UpdateMovie/${showId}`, {
       method: "PUT",
@@ -57,6 +103,7 @@ export const updateMovie = async (showId: string, updatedMovie: MoviesTitle): Pr
   }
 };
 
+// Delete a movie
 export const deleteMovie = async (showId: string): Promise<void> => {
   try {
     const response = await fetch(`${API_URL}/DeleteMovie/${showId}`, {
@@ -72,5 +119,17 @@ export const deleteMovie = async (showId: string): Promise<void> => {
   }
 };
 
+// Get genres list (like GetBookCategories)
+export const fetchGenres = async (): Promise<string[]> => {
+  try {
+    const response = await fetch(`${API_URL}/GetGenres`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch genres");
+    }
 
-
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching genres:", error);
+    throw error;
+  }
+};
