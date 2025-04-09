@@ -13,9 +13,9 @@ public class MoviesTitle
     [Column("show_id")]
     public string ShowId { get; set; }
 
-    public string Type { get; set; } = null!;
+    public string? Type { get; set; } = null!;
 
-    public string Title { get; set; } = null!;
+    public string? Title { get; set; } = null!;
 
     public string? Director { get; set; }
 
@@ -30,10 +30,10 @@ public class MoviesTitle
 
     public string? Duration { get; set; }
 
-    public string Description { get; set; } = null!;
+    public string? Description { get; set; } = null!;
 
     [Column("image_url")]
-    public string image_url { get; set; } = null!;
+    public string? image_url { get; set; } = null!;
 
     [Column("Action")]
     public bool Action { get; set; }
