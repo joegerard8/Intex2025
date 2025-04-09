@@ -300,3 +300,20 @@ body {
     font-size: 14px;
   }
 }
+
+/* Header link styles - specifically for Sign In and Register links */
+.header .nav-link.sign-in,
+.header .nav-link.register,
+.header a,
+.auth-links a {
+  color: #fff !important; /* Force white color */
+  text-decoration: none;
+}
+
+.header .nav-link.sign-in:hover,
+.header .nav-link.register:hover,
+.header a:hover,
+.auth-links a:hover {
+  color: #ccc !important; /* Slightly different color on hover */
+  text-decoration: none;
+}
