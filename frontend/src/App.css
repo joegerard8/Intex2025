@@ -91,3 +91,21 @@ html, body {
     padding: 0;
   }
 }
+
+.header {
+  display: flex !important ;
+  align-items: center;
+  justify-content: space-between !important;
+  padding: 1rem 2rem;
+  background-color: #f8f8f8; /* optional: just for visual clarity */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.logo-icon {
+  max-height: 30px;
+}
