@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import './productDetails.css';
-import { getMovies, getSimilarMovies, fetchSimilarMoviesDetails } from '../api/api.ts';
+import { fetchMovieById, getSimilarMovies, fetchSimilarMoviesDetails } from '../api/api.ts';
 import { MoviesTitle } from '../types/movie.ts';
 import MovieCard from '../components/MovieCard.tsx';   
 import MovieCarousel from '../components/MovieCarousel.tsx';
@@ -56,9 +56,11 @@ const ProductDetailPage: React.FC = () => {
         setLoading(true);
         const fetchMovie = async () => {
             try {
-                const response = await getMovies(showId);
-                console.log(response.movies[0])
-                setMovie(response.movies[0] || null);
+                const response = await fetchMovieById(showId);
+                console.log(response)
+                if (response) {
+                    setMovie(response.movies[0]);
+                }
             } catch (err) {
                 setError('Failed to load movie details');
             }

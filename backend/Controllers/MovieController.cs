@@ -107,19 +107,20 @@ namespace backend.Controllers
     }
 
       // getting the similar movies to then pull all of the information we need.
-      [HttpGet("GetSimilarMovies/{showId}")]
-      public IActionResult GetSimilarMovies(string showId)
-      {
-      // Assuming 'show_id' is the primary key or matches exactly in ItemRecommendations
-      var recommendation = _dbContext.ItemRecommendations
-          .FirstOrDefault(r => r.ShowId == showId);
+        [HttpGet("GetSimilarMovies/{showId}")]
+        public IActionResult GetSimilarMovies(string showId)
+        {
+        // Assuming 'show_id' is the primary key or matches exactly in ItemRecommendations
+        var recommendation = _dbContext.ItemRecommendations
+            .FirstOrDefault(r => r.ShowId == showId);
 
-      if (recommendation == null)
-      {
-          return NotFound("Recommendation not found.");
-      }
+        if (recommendation == null)
+        {
+            return NotFound("Recommendation not found.");
+        }
 
-      return Ok(recommendation);
+        return Ok(recommendation);
+        }
 
 
         [HttpPost("AddMovie")]

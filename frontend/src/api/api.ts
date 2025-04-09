@@ -42,7 +42,7 @@ export const fetchMovies = async (
   pageSize: number,
   pageNum: number,
   selectedGenres: string[],
-  search?: string
+  search?: string,
 ): Promise<FetchMoviesResponse> => {
   try {
     const genreParams = selectedGenres
@@ -71,7 +71,7 @@ export const fetchMovies = async (
 // Fetch one specific movie by showId
 export const fetchMovieById = async (
   showId: string
-): Promise<MoviesTitle | null> => {
+): Promise<FetchMoviesResponse | null> => {
   try {
     const response = await fetch(`${API_URL}/GetMovies?showId=${showId}`);
     if (!response.ok) {
@@ -79,7 +79,7 @@ export const fetchMovieById = async (
       throw new Error("Failed to fetch movie");
     }
     const data = await response.json();
-    return data.movies?.[0] ?? null;
+    return data || null;
   } catch (error) {
     console.error("Error fetching movie by ID:", error);
     throw error;
@@ -89,7 +89,7 @@ export const fetchMovieById = async (
 export const fetchSimilarMoviesDetails = async (recommendations: string[]) => {
   try {
     const promises = recommendations.map((id) =>
-      fetch(`${API_URL}/fetchMovieById?showId=${id}`).then(res => res.json())
+      fetch(`${API_URL}/GetMovies?showId=${id}`).then(res => res.json())
     );
     const movies = await Promise.all(promises);
     return movies;
