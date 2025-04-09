@@ -8,14 +8,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 0.2pxrem;
+    margin-top: 62px; /* Add this to push below the fixed header */
+    margin-bottom: 0.2px;
 }
 
 .main-logo {
     max-width: 80%; /* Adjust as needed */
     width: 800px; /* Or set a specific large width */
     margin: 0 auto;
-}
+} 
+
 
 .huge-centered-logo {
     width: 100%;

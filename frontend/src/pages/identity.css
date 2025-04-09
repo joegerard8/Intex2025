@@ -1,5 +1,5 @@
 body {
-  background-color: #222;
+  background-color: #111;
   color: #fff;
   margin: 0;
   padding: 0;
@@ -7,211 +7,296 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
 }
 
-.register-page {
+/* Login page container */
+.login-page {
   width: 100%;
-  padding-top: 70px; /* Adjusted to account for your existing header */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 70px);
+  min-height: 100vh;
+  background-color: #111;
+  padding-top: 70px; /* For fixed header */
+  padding-bottom: 20px;
 }
 
-.content-container {
-  width: 100%;
-  max-width: 800px;
+/* Logo header - Centered over the image */
+.logo-header {
+  position: absolute;
+  top: 175px; /* Current vertical position - you can adjust as needed */
+  left:28%; /* Increase this from 25% to move it more to the right */
+  transform: translateX(-50%);
+  z-index: 10;
+  width: auto;
+}
+
+.logo-img {
+  max-width: 400px; /* Adjust as needed */
+  height: auto;
+}
+
+/* Two-column layout */
+.two-column-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 500px;
+  position: relative; /* For absolute positioning of children */
+}
+
+/* Left column - Gray placeholder */
+.left-column {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   padding: 20px;
+  position: relative; /* For absolute positioning of children */
 }
 
-/* Logo */
-.logo-container {
+.gray-placeholder {
   width: 100%;
+  height: 100%;
+  min-height: 400px;
+  background-color: #333;
+  border-radius: 8px;
+}
+
+/* Right column - Form */
+.right-column {
+  flex: 1;
   display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
+  flex-direction: column;
+  padding: 20px;
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
 }
 
-.logo-box {
-  width: 150px;
-  height: 150px;
-  background-color: #000;
-  border-radius: 5px;
-}
-
-/* Image gallery */
-.image-gallery {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  gap: 15px;
-  margin-bottom: 30px;
-}
-
-.image-placeholder {
-  width: 130px;
-  height: 90px;
-  background-color: #444;
-  border-radius: 5px;
-}
-
+/* Tagline */
 .tagline {
   font-size: 16px;
-  color: #ccc;
+  color: #fff;
   text-align: center;
-  margin-bottom: 50px;
-  max-width: 750px;
+  margin-bottom: 30px;
   line-height: 1.5;
 }
 
-/* Registration form */
-.register-container {
+/* Sign in section */
+.signin-section {
   width: 100%;
-  max-width: 550px;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the content in the sign-in section */
 }
 
-.register-card {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 35px;
-  width: 100%;
-  box-sizing: border-box;
-  color: #333;
-}
-
-.register-title {
+.signin-title {
+  font-size: 28px;
+  font-weight: normal;
+  margin-bottom: 25px;
+  color: #fff;
   text-align: center;
-  margin-bottom: 30px;
-  font-weight: 400;
-  font-size: 32px;
-  color: #333;
+}
+
+/* Auth form */
+.auth-form {
+  width: 100%;
 }
 
 .form-group {
-  margin-bottom: 20px;
   width: 100%;
-}
-
-.password-label {
-  font-size: 14px;
-  color: #777;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
 }
 
 .form-input {
   width: 100%;
   padding: 15px;
   font-size: 16px;
-  border-radius: 5px;
+  border-radius: 4px;
   border: none;
-  background-color: #333;
+  background-color: #222;
   color: #fff;
   box-sizing: border-box;
 }
 
 .form-input::placeholder {
-  color: #aaa;
+  color: #999;
 }
 
 .form-input:focus {
   outline: none;
 }
 
+/* Password label */
+.password-label {
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 8px;
+}
+
+/* Remember me checkbox */
+.remember-me {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.remember-checkbox {
+  margin-right: 10px;
+}
+
+.remember-label {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* Button group */
 .button-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 25px;
   width: 100%;
+  margin-top: 20px;
+  margin-bottom: 15px;
 }
 
-.register-button {
+.signin-button, .register-button, .home-button {
   width: 100%;
   padding: 15px;
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
-  border-radius: 5px;
+  border-radius: 4px;
   border: none;
   cursor: pointer;
   letter-spacing: 1px;
-  background-color: #000;
-  color: #fff;
+  transition: background-color 0.2s;
 }
 
-.login-button, .home-button {
-  width: 100%;
-  padding: 15px;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  cursor: pointer;
-  letter-spacing: 1px;
+.signin-button {
   background-color: #fff;
-  color: #333;
+  color: #111;
 }
 
+.register-button {
+  background-color: #fff;
+  color: #111;
+}
+
+.home-button {
+  background-color: #fff;
+  color: #111;
+}
+
+.signin-button:hover, .register-button:hover, .home-button:hover {
+  opacity: 0.9;
+}
+
+/* Error message */
 .error-message {
-  color: #e53935;
-  font-weight: 500;
+  color: #f44336;
+  font-size: 14px;
   text-align: center;
   margin-top: 20px;
 }
 
+/* Forgot password link */
+.forgot-password {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.forgot-password a {
+  color: #4991e5;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+/* Alert for success messages */
+.alert {
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.alert-success {
+  background-color: rgba(46, 125, 50, 0.2);
+  color: #4caf50;
+  border: 1px solid #4caf50;
+}
+
+/* Image for the left column */
+.featured-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
 /* Responsive adjustments */
-@media (max-width: 768px) {
-  .image-gallery {
-    flex-wrap: wrap;
+@media (max-width: 992px) {
+  .logo-img {
+    max-width: 80%;
+  }
+
+  .two-column-container {
+    flex-direction: column;
+  }
+
+  .left-column {
+    padding: 20px 10px;
+  }
+
+  .gray-placeholder {
+    min-height: 250px;
+  }
+
+  .right-column {
+    padding: 20px 10px;
+  }
+
+  .logo-header {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    display: flex;
     justify-content: center;
-  }
-
-  .image-placeholder {
-    margin-bottom: 10px;
-  }
-
-  .register-card {
-    padding: 25px;
+    width: 100%;
+    margin: 0 0 20px 0;
   }
 }
-/*!* Add these styles to your identity.css file *!*/
 
-/*.simple-header {*/
-/*  background-color: #000;*/
-/*  height: 60px;*/
-/*  width: 100%;*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  justify-content: flex-start;*/
-/*  padding: 0 20px;*/
-/*  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
-/*  position: fixed;*/
-/*  top: 0;*/
-/*  left: 0;*/
-/*  z-index: 1000;*/
-/*}*/
+@media (max-width: 768px) {
+  .logo-img {
+    max-width: 90%;
+  }
 
-/*.header-content {*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*}*/
+  .gray-placeholder {
+    min-height: 200px;
+  }
+}
 
-/*.home-link {*/
-/*  color: #fff;*/
-/*  text-decoration: none;*/
-/*  font-size: 16px;*/
-/*  font-weight: 500;*/
-/*  cursor: pointer;*/
-/*}*/
+@media (max-width: 576px) {
+  .logo-header {
+    margin: 15px 0 30px;
+  }
 
-/*.home-link:hover {*/
-/*  text-decoration: underline;*/
-/*}*/
+  .gray-placeholder {
+    min-height: 150px;
+  }
 
-/*!* Update this if you have padding due to the header *!*/
-/*.register-page {*/
-/*  padding-top: 60px; !* Should match the header height *!*/
-/*}*/
+  .signin-title {
+    font-size: 24px;
+  }
+
+  .tagline {
+    font-size: 14px;
+  }
+}
