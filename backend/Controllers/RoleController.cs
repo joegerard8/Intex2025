@@ -7,7 +7,7 @@ namespace backend.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-[Authorize(Roles = "Administrator")]
+[Authorize]
 public class RoleController : Controller
 {
     private readonly RoleManager<IdentityRole> _roleManager;

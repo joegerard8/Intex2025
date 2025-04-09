@@ -1,16 +1,15 @@
-// src/components/Footer.tsx
-import { Link } from 'react-router-dom';
-import logo from '../assets/images/logo-text.png';
+// Footer.tsx
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-white py-4 px-6 flex justify-between items-center border-t">
-            <div className="flex items-center">
-                <img src={logo} alt="CineNiche" className="h-6" />
+        <footer className="footer">
+            <div className="footer-content">
+                <p>© {new Date().getFullYear()} CineNiche. All rights reserved.</p>
             </div>
-
-            <div>
-                <Link to="/privacy" className="text-gray-700 hover:text-gray-900">
+            <div className="footer-links">
+                <Link to="/privacy" className="footer-link">
                     Privacy
                 </Link>
             </div>

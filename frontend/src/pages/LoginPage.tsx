@@ -1,8 +1,10 @@
 import { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../AuthorizeView";
+import Layout from "../components/Layout"; // Import the Layout component
 import "./identity.css";
 import "@fortawesome/fontawesome-free/css/all.css";
+import logo from "../assets/logoForMovies.png"; // Import the logo image
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -40,8 +42,8 @@ function LoginPage() {
     }
 
     const loginUrl = rememberme
-      ? "https://localhost:5000/login?useCookies=true"
-      : "https://localhost:5000/login?useSessionCookies=true";
+        ? "https://localhost:5000/login?useCookies=true"
+        : "https://localhost:5000/login?useSessionCookies=true";
 
     try {
       const response = await fetch(loginUrl, {
@@ -69,87 +71,106 @@ function LoginPage() {
     }
   };
 
+  // Wrap the existing content with the Layout component
   return (
-    <div className="container">
-      <div className="row">
-        <div className="card border-0 shadow rounded-3 ">
-          <div className="card-body p-4 p-sm-5">
-            <h5 className="card-title text-center mb-5 fw-light fs-5">
-              Sign In
-            </h5>
-            {message && (
-              <div className="alert alert-success text-center" role="alert">
-                {message}
-              </div>
-            )}
-            <form onSubmit={handleSubmit}>
-              <div className="form-floating mb-3">
-                <input
-                  className="form-control"
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChange={handleChange}
-                />
-                <label htmlFor="email">Email address</label>
-              </div>
-              <div className="form-floating mb-3">
-                <input
-                  className="form-control"
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChange={handleChange}
-                />
-                <label htmlFor="password">Password</label>
-              </div>
+      <Layout>
+        <div className="register-page">
+          <div className="content-container">
+            <div className="logo-container">
+              <img src={logo} alt="Logo" className="logo-img" />
+            </div>
 
-              <div className="form-check mb-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="rememberme"
-                  name="rememberme"
-                  checked={rememberme}
-                  onChange={handleChange}
-                />
-                <label className="form-check-label" htmlFor="rememberme">
-                  Remember password
-                </label>
-              </div>
+            <div className="image-gallery">
+              <div className="image-placeholder"></div>
+              <div className="image-placeholder"></div>
+              <div className="image-placeholder"></div>
+              <div className="image-placeholder"></div>
+              <div className="image-placeholder"></div>
+            </div>
 
-              <div className="d-grid mb-2">
-                <button className="btn btn-primary fw-bold" type="submit">
-                  Sign in
-                </button>
+            <div className="tagline">
+              Discover the films mainstream platforms don't offer. CineNiche curates cult classics, international gems, and indie treasures for true film enthusiasts.
+            </div>
+
+            <div className="register-container">
+              <div className="register-card">
+                <h2 className="register-title">Sign In</h2>
+
+                {message && (
+                    <div className="alert alert-success text-center" role="alert">
+                      {message}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <input
+                        className="form-input"
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={email}
+                        onChange={handleChange}
+                        placeholder="your@email.com"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <input
+                        className="form-input"
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={password}
+                        onChange={handleChange}
+                        placeholder="•••••••••••••"
+                    />
+                  </div>
+
+                  <div className="form-check mb-3">
+                    <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="rememberme"
+                        name="rememberme"
+                        checked={rememberme}
+                        onChange={handleChange}
+                    />
+                    <label className="form-check-label" htmlFor="rememberme">
+                      Remember me
+                    </label>
+                  </div>
+
+                  <div className="button-group">
+                    <button className="register-button" type="submit">
+                      SIGN IN
+                    </button>
+
+                    <button
+                        className="login-button"
+                        type="button"
+                        onClick={handleRegisterClick}
+                    >
+                      GO TO REGISTER
+                    </button>
+
+                    <button
+                        className="home-button"
+                        type="button"
+                        onClick={handleGoHomeClick}
+                    >
+                      HOME PAGE
+                    </button>
+                  </div>
+
+                  {error && <p className="error-message">{error}</p>}
+                </form>
               </div>
-              <div className="d-grid mb-2">
-                <button
-                  className="btn btn-secondary fw-bold"
-                  type="button"
-                  onClick={handleRegisterClick}
-                >
-                  Register
-                </button>
-              </div>
-              <hr className="my-4" />
-              <div className="d-grid mb-2">
-                <button
-                  className="btn btn-outline-primary fw-bold"
-                  type="button"
-                  onClick={handleGoHomeClick}
-                >
-                  Home Page
-                </button>
-              </div>
-              {error && <p className="error text-danger mt-3">{error}</p>}
-            </form>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </Layout>
+
   );
 }
 
