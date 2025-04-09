@@ -71,10 +71,7 @@ function Register() {
   return (
       <Layout>
         <div className="login-page">
-          {/* Logo center top */}
-          <div className="logo-header">
-            <img src={logo} alt="CineNiche" className="logo-img" />
-          </div>
+          
 
           {/* Two-column layout */}
           <div className="two-column-container">
@@ -97,13 +94,13 @@ function Register() {
                         name="email"
                         value={email}
                         onChange={handleChange}
-                        placeholder="hudson@test.com"
+                        placeholder="Please enter your email address"
                     />
                   </div>
 
                   <div className="form-group">
                     <div className="password-label">
-                      Password (must be 12 or more characters)
+                      Password (must be 20 or more characters)
                     </div>
                     <input
                         className="form-input"
@@ -112,7 +109,7 @@ function Register() {
                         name="password"
                         value={password}
                         onChange={handleChange}
-                        placeholder="•••••••••••••"
+                        placeholder=""
                     />
                   </div>
 
@@ -124,7 +121,7 @@ function Register() {
                         name="confirmPassword"
                         value={confirmPassword}
                         onChange={handleChange}
-                        placeholder="Confirm your password"
+                        placeholder="Re-type your password"
                     />
                   </div>
 
