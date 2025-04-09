@@ -2,6 +2,7 @@ using backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace backend.Data;
 
@@ -29,7 +30,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         entity.Property(e => e.UserId)
             .HasColumnName("user_id")
             .HasColumnType("int")
-            .ValueGeneratedOnAdd(); // ✅ Let SQL Server auto-increment it
+            .ValueGeneratedOnAdd() // ✅ Let SQL Server auto-increment it
+            .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
         });
     }
 }
