@@ -23,7 +23,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<MoviesRating>().HasNoKey();
+        builder.Entity<MoviesRating>()
+            .HasKey(r => new { r.UserId, r.ShowId });
 
         builder.Entity<ApplicationUser>(entity =>
         {

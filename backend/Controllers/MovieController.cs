@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using Microsoft.EntityFrameworkCore;
+
 
 
 namespace backend.Controllers
@@ -272,6 +274,46 @@ namespace backend.Controllers
             };
 
             return Ok(genreList);
-}
+        }
+
+            [HttpPost("SubmitUserRating")]
+            public async Task<IActionResult> SubmitUserRating([FromBody] MoviesRating rating)
+            {
+                if (rating == null)
+                {
+                    return BadRequest(new { message = "Rating data is null." });
+                }
+
+                var existing = await _dbContext.MoviesRatings
+                    .FirstOrDefaultAsync(r => r.UserId == rating.UserId && r.ShowId == rating.ShowId);
+
+                if (existing != null)
+                {
+                    existing.Rating = rating.Rating;
+                }
+                else
+                {
+                    _dbContext.MoviesRatings.Add(rating);
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { message = "Rating saved successfully." });
+            }
+
+            [HttpGet("GetUserRating/{userId}/{showId}")]
+            public async Task<IActionResult> GetUserRating(byte userId, string showId)
+            {
+                var rating = await _dbContext.MoviesRatings
+                    .FirstOrDefaultAsync(r => r.UserId == userId && r.ShowId == showId);
+
+                if (rating == null)
+                {
+                    return NotFound(new { message = "Rating not found." });
+                }
+
+                return Ok(rating);
+            }
+
+        }
     }
-}

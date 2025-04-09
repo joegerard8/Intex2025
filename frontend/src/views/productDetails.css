@@ -34,24 +34,26 @@
 }
 
 .rating {
-    display: flex;
-    align-items: center;
-    font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  font-size: 2rem; /* Increased size */
 }
 
 .star {
-    color: #555;
-    margin-right: 0.25rem;
+  color: #555;
+  margin-right: 0.4rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
 .star.filled {
-    color: #f5c518;
+  color: #f5c518; /* IMDb-style gold */
 }
 
 .rating-value {
-    margin-left: 0.5rem;
-    font-size: 1rem;
-    color: #aaa;
+  margin-left: 0.5rem;
+  font-size: 1.25rem;
+  color: #aaa;
 }
 
 .movie-meta {
@@ -74,6 +76,13 @@
 .meta-value {
     flex: 1;
     color: #aaa;
+}
+
+.rating-label {
+    margin-right: 1rem;
+    font-size: 1.1rem;
+    color: #ddd;
+    font-weight: 600;
 }
 
 .movie-description {
