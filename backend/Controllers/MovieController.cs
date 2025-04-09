@@ -18,6 +18,8 @@ namespace backend.Controllers
         {
             _dbContext = temp;
         }
+
+        
         
         [HttpGet("GetMovies")]
         public IActionResult GetMovies(
