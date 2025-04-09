@@ -1,37 +1,50 @@
-// src/components/Header.tsx
-import { Link } from 'react-router-dom';
+// Header.tsx
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { UserContext } from "../AuthorizeView"; // Update path if needed
+import Logout from "../Logout";
+import logo from '../assets/logoForMovies.png';
 
 const Header: React.FC = () => {
+    const { user } = useContext(UserContext);
+    const isAdmin = user?.roles?.includes("Administrator") ?? false;
+
     return (
-        <header className="bg-white py-4 px-6 flex justify-between items-center shadow-sm">
-            <Link to="/" className="flex items-center">
-                <div className="rounded-full bg-gray-900 w-10 h-10 flex items-center justify-center">
-                    <span className="text-white text-xl">★</span>
-                </div>
-            </Link>
-
-            <nav className="flex items-center space-x-6">
-                <Link to="/movies" className="text-gray-700 hover:text-gray-900">
-                    Movies
+        <header className="header">
+            <div className="logo-container">
+                <Link to="/">
+                    <img src={logo} alt="CineNiche Logo" className="logo-icon" />
                 </Link>
-                <Link to="/privacy" className="text-gray-700 hover:text-gray-900">
-                    Privacy
-                </Link>
+            </div>
+            <nav className="nav">
+                {/* Logged-in users */}
+                {user && (
+                    <>
+                        <Link to="/movies" className="nav-link">
+                            My Movies
+                        </Link>
+                        {isAdmin && (
+                            <Link to="/managemovies" className="nav-link">
+                                Manage Movies
+                            </Link>
+                        )}
+                        <Logout>
+                            <button className="nav-link sign-out">Sign Out</button>
+                        </Logout>
+                    </>
+                )}
 
-                <div className="flex items-center space-x-4">
-                    <Link
-                        to="/signin"
-                        className="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
-                    >
-                        Sign in
-                    </Link>
-                    <Link
-                        to="/register"
-                        className="bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700"
-                    >
-                        Register
-                    </Link>
-                </div>
+                {/* Logged-out users */}
+                {!user && (
+                    <div className="auth-links">
+                        <Link to="/login" className="nav-link sign-in">
+                            Sign In
+                        </Link>
+                        <Link to="/register" className="nav-link register">
+                            Register
+                        </Link>
+                    </div>
+                )}
             </nav>
         </header>
     );

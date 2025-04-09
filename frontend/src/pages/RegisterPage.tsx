@@ -1,26 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./identity.css";
+import Layout from "../components/Layout"; // Import the Layout component
+import "./identity.css"; 
+import logo from "../assets/logoForMovies.png"; // Import the logo image
 
-// Simple Header component with home link
-const SimpleHeader = () => {
-  const navigate = useNavigate();
-
-  const goToHome = () => {
-    navigate("/");
-  };
-
-  return (
-    <div className="simple-header">
-      <div className="header-content">
-        <a className="home-link" onClick={goToHome}>
-          Home
-        </a>
-      </div>
-    </div>
-  );
-};
-
+// We'll remove the SimpleHeader since we now have the Layout with Header
 function Register() {
   // State variables for email and passwords
   const [email, setEmail] = useState("");
@@ -47,7 +31,7 @@ function Register() {
     if (name === "confirmPassword") setConfirmPassword(value);
   };
 
-  // Handle submit event for the form
+  // Handle submit event for the form 39-Kate
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Validate email and passwords
@@ -73,118 +57,119 @@ function Register() {
           password: password,
         }),
       })
-        .then((response) => {
-          if (response.ok) {
-            navigate("/login", {
-              state: { message: "Registration successful. Please log in." },
-            });
-          } else {
+          .then((response) => {
+            if (response.ok) {
+              navigate("/login", {
+                state: { message: "Registration successful. Please log in." },
+              });
+            } else {
+              setError("Error registering.");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
             setError("Error registering.");
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          setError("Error registering.");
-        });
+          });
     }
   };
 
+  // Wrap the existing content with the Layout component
+  // and remove the SimpleHeader since it's redundant
   return (
-    <>
-      <SimpleHeader />
-      <div className="register-page">
-        <div className="content-container">
-          <div className="logo-container">
-            <div className="logo-box"></div>
-          </div>
+      <Layout>
+        <div className="register-page">
+          <div className="content-container">
+            <div className="logo-container">
+              <img src={logo} alt="Logo" className="logo-img" />
+            </div>
 
-          <div className="image-gallery">
-            <div className="image-placeholder"></div>
-            <div className="image-placeholder"></div>
-            <div className="image-placeholder"></div>
-            <div className="image-placeholder"></div>
-            <div className="image-placeholder"></div>
-          </div>
+            <div className="image-gallery">
+              <div className="image-placeholder"></div>
+              <div className="image-placeholder"></div>
+              <div className="image-placeholder"></div>
+              <div className="image-placeholder"></div>
+              <div className="image-placeholder"></div>
+            </div>
 
-          <div className="tagline">
-            Discover the films mainstream platforms don't offer. CineNiche
-            curates cult classics, international gems, and indie treasures for
-            true film enthusiasts.
-          </div>
+            <div className="tagline">
+              Discover the films mainstream platforms don't offer. CineNiche
+              curates cult classics, international gems, and indie treasures for
+              true film enthusiasts.
+            </div>
 
-          <div className="register-container">
-            <div className="register-card">
-              <h2 className="register-title">Register</h2>
+            <div className="register-container">
+              <div className="register-card">
+                <h2 className="register-title">Register</h2>
 
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <input
-                    className="form-input"
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={handleChange}
-                    placeholder="hudson@test.com"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <div className="password-label">
-                    Password (must be 12 or more characters)
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <input
+                        className="form-input"
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={email}
+                        onChange={handleChange}
+                        placeholder="hudson@test.com"
+                    />
                   </div>
-                  <input
-                    className="form-input"
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={password}
-                    onChange={handleChange}
-                    placeholder="•••••••••••••"
-                  />
-                </div>
 
-                <div className="form-group">
-                  <input
-                    className="form-input"
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={confirmPassword}
-                    onChange={handleChange}
-                    placeholder="Confirm your password"
-                  />
-                </div>
+                  <div className="form-group">
+                    <div className="password-label">
+                      Password (must be 12 or more characters)
+                    </div>
+                    <input
+                        className="form-input"
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={password}
+                        onChange={handleChange}
+                        placeholder="•••••••••••••"
+                    />
+                  </div>
 
-                <div className="button-group">
-                  <button className="register-button" type="submit">
-                    REGISTER
-                  </button>
+                  <div className="form-group">
+                    <input
+                        className="form-input"
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={confirmPassword}
+                        onChange={handleChange}
+                        placeholder="Confirm your password"
+                    />
+                  </div>
 
-                  <button
-                    className="login-button"
-                    type="button"
-                    onClick={handleLoginClick}
-                  >
-                    GO TO LOGIN
-                  </button>
+                  <div className="button-group">
+                    <button className="register-button" type="submit">
+                      REGISTER
+                    </button>
 
-                  <button
-                    className="home-button"
-                    type="button"
-                    onClick={handleGoHomeClick}
-                  >
-                    HOME PAGE
-                  </button>
-                </div>
-              </form>
+                    <button
+                        className="login-button"
+                        type="button"
+                        onClick={handleLoginClick}
+                    >
+                      GO TO LOGIN
+                    </button>
 
-              {error && <p className="error-message">{error}</p>}
+                    <button
+                        className="home-button"
+                        type="button"
+                        onClick={handleGoHomeClick}
+                    >
+                      HOME PAGE
+                    </button>
+                  </div>
+                </form>
+
+                {error && <p className="error-message">{error}</p>}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </Layout>
   );
 }
 
