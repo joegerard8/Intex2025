@@ -2,85 +2,77 @@ import React, { useEffect, useState, useContext } from "react";
 import Layout from "../components/Layout";
 import "./manageMovies.css";
 import { UserContext } from "../AuthorizeView";
-
-interface Movie {
-  id: string;
-  title: string;
-  manager: string;
-  email: string;
-}
+import GenreFilter from "../components/GenreFilter";
+import {
+  fetchMovies,
+  deleteMovie,
+  updateMovie,
+  addMovie,
+  fetchGenres,
+} from "../api/api.ts";
+import { MoviesTitle } from "../types/movie";
 
 const ManageMovies: React.FC = () => {
   const { user } = useContext(UserContext);
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<MoviesTitle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedMovies, setSelectedMovies] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const moviesPerPage = 10;
 
+  const loadMovies = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchMovies(
+        moviesPerPage,
+        currentPage,
+        selectedGenres
+      );
+      setMovies(data.movies);
+    } catch (err) {
+      setError("Failed to load movies");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchMovies = async () => {
-      setLoading(true);
-      setError("");
+    loadMovies();
+  }, [currentPage, selectedGenres]);
 
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        const mockMovies: Movie[] = Array.from({ length: 30 }, (_, i) => ({
-          id: (i + 1).toString(),
-          title: `Movie Title ${i + 1}`,
-          manager: "Product Manager",
-          email: "username@company.com",
-        }));
-
-        setMovies(mockMovies);
-      } catch (err) {
-        setError("Failed to load movies");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMovies();
-  }, []);
+  const handleDeleteMovie = async (id: string) => {
+    try {
+      await deleteMovie(id);
+      loadMovies();
+    } catch (error) {
+      setError("Failed to delete movie");
+    }
+  };
 
   const toggleSelectAll = () => {
-    if (selectedMovies.size === paginatedMovies.length) {
+    if (selectedMovies.size === movies.length) {
       setSelectedMovies(new Set());
     } else {
-      const newSelected = new Set(selectedMovies);
-      paginatedMovies.forEach((movie) => newSelected.add(movie.id));
-      setSelectedMovies(newSelected);
+      setSelectedMovies(new Set(movies.map((m) => m.showId)));
     }
   };
 
   const toggleSelectMovie = (id: string) => {
-    const newSelected = new Set(selectedMovies);
-    if (newSelected.has(id)) {
-      newSelected.delete(id);
-    } else {
-      newSelected.add(id);
-    }
-    setSelectedMovies(newSelected);
-  };
-
-  const indexOfLastMovie = currentPage * moviesPerPage;
-  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
-  const paginatedMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
-  const totalPages = Math.ceil(movies.length / moviesPerPage);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    const updated = new Set(selectedMovies);
+    updated.has(id) ? updated.delete(id) : updated.add(id);
+    setSelectedMovies(updated);
   };
 
   const renderPagination = () => {
     const pages = [];
+    const totalPages = Math.ceil(movies.length / moviesPerPage);
 
     pages.push(
       <button
         key="prev"
-        onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+        onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
         disabled={currentPage === 1}
         className="pagination-button"
       >
@@ -97,7 +89,7 @@ const ManageMovies: React.FC = () => {
         pages.push(
           <button
             key={i}
-            onClick={() => handlePageChange(i)}
+            onClick={() => setCurrentPage(i)}
             className={`pagination-button ${currentPage === i ? "active" : ""}`}
           >
             {i}
@@ -115,8 +107,7 @@ const ManageMovies: React.FC = () => {
     pages.push(
       <button
         key="next"
-        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage((p) => p + 1)}
         className="pagination-button"
       >
         Next
@@ -137,6 +128,11 @@ const ManageMovies: React.FC = () => {
 
       <h1 className="welcome-title">Welcome, {user?.email}</h1>
 
+      <GenreFilter
+        selectedGenres={selectedGenres}
+        setSelectedGenres={setSelectedGenres}
+      />
+
       {loading ? (
         <div className="loading">Loading...</div>
       ) : error ? (
@@ -150,40 +146,44 @@ const ManageMovies: React.FC = () => {
                   <input
                     type="checkbox"
                     checked={
-                      selectedMovies.size === paginatedMovies.length &&
-                      paginatedMovies.length > 0
+                      selectedMovies.size === movies.length && movies.length > 0
                     }
                     onChange={toggleSelectAll}
                   />
                 </th>
                 <th>Title</th>
-                <th>Average Rating</th>
                 <th>Release Year</th>
                 <th>Duration</th>
                 <th colSpan={2}>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {paginatedMovies.map((movie) => (
-                <tr key={movie.id}>
+              {movies.map((movie) => (
+                <tr key={movie.showId}>
                   <td>
                     <input
                       type="checkbox"
-                      checked={selectedMovies.has(movie.id)}
-                      onChange={() => toggleSelectMovie(movie.id)}
+                      checked={selectedMovies.has(movie.showId)}
+                      onChange={() => toggleSelectMovie(movie.showId)}
                     />
                   </td>
                   <td>{movie.title}</td>
-                  <td>Product manager</td>
-                  <td>{movie.email}</td>
+                  <td>{movie.releaseYear}</td>
+                  <td>{movie.duration}</td>
                   <td>
-                    <button className="action-button edit-button">
-                      <span className="action-dot"></span>
+                    <button
+                      className="action-button edit-button"
+                      onClick={() => alert("Edit functionality coming soon")}
+                    >
+                      ✏️
                     </button>
                   </td>
                   <td>
-                    <button className="action-button delete-button">
-                      <span className="action-dot"></span>
+                    <button
+                      className="action-button delete-button"
+                      onClick={() => handleDeleteMovie(movie.showId)}
+                    >
+                      ❌
                     </button>
                   </td>
                 </tr>
