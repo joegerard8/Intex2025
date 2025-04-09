@@ -36,7 +36,6 @@ export const API_URL = "https://localhost:5000/api/Movie";
 export const getSimilarMovies = async (showId: string): Promise<SimilarMoviesResponse> => {
   try {
     const response = await fetch(`${API_URL}/GetSimilarMovies/${showId}`);
-    console.log(response);
     if (!response.ok) {
       throw new Error("Failed to fetch similar movies");
     }
@@ -47,6 +46,58 @@ export const getSimilarMovies = async (showId: string): Promise<SimilarMoviesRes
     throw error;
   }
 }
+
+// getting the user rating score. 
+export const getUserRatings = async (userId: number, showId: string): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}/GetUserRating/${userId}/${showId}`);
+
+    // If the user has no rating, return null instead of throwing an error
+    if (response.status === 404) {
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user ratings");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Unexpected error fetching user ratings:", error);
+    return null; // fallback for any other kind of error
+  }
+};
+
+
+export const submitUserRating = async (
+  userId: number,
+  showId: string,
+  rating: number
+): Promise<void> => {
+  try {
+    const response = await fetch(`${API_URL}/SubmitUserRating`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId,
+        showId,
+        rating,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to submit rating');
+    }
+
+    const data = await response.json();
+  } catch (error) {
+    console.error('❌ Error submitting user rating:', error);
+  }
+};
+
 
 // Fetch movies (with pagination, genre filtering, and optional search)
 export const fetchMovies = async (
