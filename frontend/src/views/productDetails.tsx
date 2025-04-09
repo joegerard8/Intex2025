@@ -2,20 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import './productDetails.css';
+import { getMovies, getSimilarMovies, fetchSimilarMoviesDetails } from '../api/api.ts';
+import { MoviesTitle } from '../types/movie.ts';
+import MovieCard from '../components/MovieCard.tsx';   
+import MovieCarousel from '../components/MovieCarousel.tsx';
 
-interface Movie {
-    id: string;
-    title: string;
-    posterUrl: string;
-    duration: number;
-    director: string;
-    cast: string[];
-    country: string;
-    genres: string[];
-    rating: number;
-    description: string;
-    year: number;
-}
 
 interface SimilarMovie {
     id: string;
@@ -23,76 +14,60 @@ interface SimilarMovie {
     posterUrl: string;
 }
 
+
 const ProductDetailPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const [movie, setMovie] = useState<Movie | null>(null);
+    const [movie, setMovie] = useState<MoviesTitle | null>(null);
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    const showId = useParams<{ id: string }>().id || '0';
+
+    const getSimilarTitles = async () => {
+        try {
+            const response = await getSimilarMovies(showId);
+            const recommendationIds = Object.entries(response)
+                .filter(([key]) => key.startsWith("recommendation"))
+                .map(([, value]) => value);
+            getSimilarTitlesDetails(recommendationIds);
+        }
+        catch (err) {
+            console.error('Failed to load similar titles', err);
+        }
+    };
+
+    const getSimilarTitlesDetails = async (recommendations: string[]) => {
+        try {
+            const movies = await fetchSimilarMoviesDetails(recommendations);
+            const similarMoviesData = movies.map((movieData: any) => ({
+                id: movieData.movies[0].showId,
+                title: movieData.movies[0].title,
+                posterUrl: movieData.movies[0].image_url
+            }));
+            setSimilarMovies(similarMoviesData);
+        } catch (err) {
+            console.error('Failed to load similar movie details', err);
+        }
+    };
+
+
     useEffect(() => {
-        // In a real app, you would fetch the movie data from your API
-        // For now, we'll simulate an API call with a timeout
+        setLoading(true);
         const fetchMovie = async () => {
-            setLoading(true);
-            setError('');
-
             try {
-                // Simulating API call
-                await new Promise(resolve => setTimeout(resolve, 500));
-
-                // Mock data - in real app, this would come from your API
-                if (id === '1') {
-                    setMovie({
-                        id: '1',
-                        title: 'Jaws',
-                        posterUrl: '',
-                        duration: 118,
-                        director: 'Steven Spielberg',
-                        cast: ['Roy Scheider', 'Richard Dreyfuss', 'Robert Shaw', 'Murray Hamilton', 'Lorraine Gary'],
-                        country: 'USA',
-                        genres: ['Horror', 'Action', 'Adventure'],
-                        rating: 4.5,
-                        description: "When a young woman is killed by a shark while skinny-dipping near the New England tourist town of Amity Island, police chief Martin Brody wants to close the beaches but is overruled by the mayor who fears for the summer economy. With help from a marine biologist and a professional shark hunter, Brody attempts to hunt down the killer great white shark that threatens their summer beach community.",
-                        year: 1975
-                    });
-
-                    setSimilarMovies([
-                        { id: '16', title: 'Jaws 3-D', posterUrl: '' },
-                        { id: '17', title: 'The Third Chronicles of Terror', posterUrl: '' },
-                        { id: '18', title: 'Jaws 2', posterUrl: '' }
-                    ]);
-                } else {
-                    // Default movie data if ID doesn't match
-                    setMovie({
-                        id: id || '0',
-                        title: 'Sample Movie',
-                        posterUrl: '',
-                        duration: 120,
-                        director: 'Sample Director',
-                        cast: ['Actor 1', 'Actor 2', 'Actor 3'],
-                        country: 'Country',
-                        genres: ['Genre 1', 'Genre 2'],
-                        rating: 4.0,
-                        description: 'This is a sample movie description.',
-                        year: 2020
-                    });
-
-                    setSimilarMovies([
-                        { id: '19', title: 'Similar Movie 1', posterUrl: '' },
-                        { id: '20', title: 'Similar Movie 2', posterUrl: '' },
-                        { id: '21', title: 'Similar Movie 3', posterUrl: '' }
-                    ]);
-                }
+                const response = await getMovies(showId);
+                console.log(response.movies[0])
+                setMovie(response.movies[0] || null);
             } catch (err) {
                 setError('Failed to load movie details');
-            } finally {
-                setLoading(false);
             }
         };
-
         fetchMovie();
-    }, [id]);
+        getSimilarTitles();
+        setLoading(false);
+    }, [showId]);
+
 
     if (loading) {
         return (
@@ -135,10 +110,10 @@ const ProductDetailPage: React.FC = () => {
                         {[...Array(5)].map((_, i) => (
                             <span
                                 key={i}
-                                className={`star ${i < Math.floor(movie.rating) ? 'filled' : ''}`}
+                                className={`star ${i < Math.floor(parseInt(movie.rating || '0')) ? 'filled' : ''}`}
                             >
                 ★
-              </span>
+                        </span>
                         ))}
                         <span className="rating-value">({movie.rating})</span>
                     </div>
@@ -156,7 +131,7 @@ const ProductDetailPage: React.FC = () => {
 
                         <div className="meta-item">
                             <span className="meta-label">Cast:</span>
-                            <span className="meta-value">{movie.cast.join(', ')}</span>
+                            <span className="meta-value">{movie.cast}</span>
                         </div>
 
                         <div className="meta-item">
@@ -164,10 +139,10 @@ const ProductDetailPage: React.FC = () => {
                             <span className="meta-value">{movie.country}</span>
                         </div>
 
-                        <div className="meta-item">
+                        {/* <div className="meta-item">
                             <span className="meta-label">Genres:</span>
                             <span className="meta-value">{movie.genres.join(', ')}</span>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="movie-description">
@@ -177,23 +152,30 @@ const ProductDetailPage: React.FC = () => {
 
                 <div className="movie-poster-container">
                     <div className="movie-poster-placeholder">
-                        <span className="movie-title-placeholder">{movie.title}</span>
+                        <img 
+                            src={movie.image_url} 
+                            className="w-100 h-100" 
+                            style={{ objectFit: 'cover' }} 
+                            alt={movie.title}
+                        />
                     </div>
                 </div>
 
-                <div className="similar-movies">
+                {/* <div className="similar-movies">
                     <h2>Similar Titles</h2>
                     <div className="similar-movies-grid">
                         {similarMovies.map(similar => (
-                            <Link key={similar.id} to={`/movie/${similar.id}`} className="similar-movie">
-                                <div className="similar-movie-placeholder">
-                                    <span className="similar-title-placeholder">{similar.title}</span>
-                                </div>
-                            </Link>
+                            <MovieCard
+                                key={similar.id}
+                                url={similar.posterUrl}
+                                title={similar.title}
+                                showId={similar.id}
+                            />
                         ))}
                     </div>
-                </div>
+                </div> */}
             </div>
+            <MovieCarousel movies={similarMovies} title="Similar Titles" />
         </Layout>
     );
 };

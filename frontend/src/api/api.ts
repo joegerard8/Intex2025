@@ -5,7 +5,37 @@ interface FetchMoviesResponse {
   totalNumMovies: number;
 }
 
-const API_URL = "https://localhost:5000/api/Movie"; // Swap this out with prodUrl when deploying
+interface SimilarMoviesResponse {
+  title: string;
+  recommendation1: string;
+  recommendation2: string;
+  recommendation3: string;
+  recommendation4: string;
+  recommendation5: string;
+  recommendation6: string;
+  recommendation7: string;
+  recommendation8: string;
+  recommendation9: string;
+  recommendation10: string;
+}
+
+// Function to fetch movies from the API
+export const API_URL = "https://localhost:5000/api/Movie";
+
+// getting all the similar movies, queries the item recommendation table.
+export const getSimilarMovies = async (showId: string): Promise<SimilarMoviesResponse> => {
+  try {
+    const response = await fetch(`${API_URL}/GetSimilarMovies/${showId}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch similar movies");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching similar movies:", error);
+    throw error;
+  }
+}
 
 // Fetch movies (with pagination, genre filtering, and optional search)
 export const fetchMovies = async (
@@ -53,6 +83,19 @@ export const fetchMovieById = async (
   } catch (error) {
     console.error("Error fetching movie by ID:", error);
     throw error;
+  }
+};
+
+export const fetchSimilarMoviesDetails = async (recommendations: string[]) => {
+  try {
+    const promises = recommendations.map((id) =>
+      fetch(`${API_URL}/fetchMovieById?showId=${id}`).then(res => res.json())
+    );
+    const movies = await Promise.all(promises);
+    return movies;
+  } catch (err) {
+    console.error('Error fetching recommended movie details:', err);
+    throw err;
   }
 };
 
