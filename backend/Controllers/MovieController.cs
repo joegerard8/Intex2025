@@ -2,6 +2,8 @@ using backend.Data;
 using backend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace backend.Controllers
 {
@@ -124,6 +126,7 @@ namespace backend.Controllers
 
 
         [HttpPost("AddMovie")]
+        [Authorize(Roles = "Administrator")]
         public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
         {
             if (newMovie == null)
@@ -144,6 +147,7 @@ namespace backend.Controllers
         }
 
         [HttpPut("UpdateMovie/{showId}")]
+        [Authorize(Roles = "Administrator")]
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
             var existingMovie = _dbContext.MoviesTitles.Find(showId);
@@ -171,6 +175,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("DeleteMovie/{showId}")]
+        [Authorize(Roles = "Administrator")]
         public IActionResult DeleteMovie(string showId)
         {
             var movie = _dbContext.MoviesTitles.Find(showId);

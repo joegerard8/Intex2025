@@ -104,6 +104,7 @@ export const addMovie = async (newMovie: MoviesTitle): Promise<MoviesTitle> => {
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -129,6 +130,7 @@ export const updateMovie = async (
   try {
     const response = await fetch(`${API_URL}/UpdateMovie/${showId}`, {
       method: "PUT",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -150,6 +152,7 @@ export const updateMovie = async (
 export const deleteMovie = async (showId: string): Promise<void> => {
   try {
     const response = await fetch(`${API_URL}/DeleteMovie/${showId}`, {
+      credentials: "include",
       method: "DELETE",
     });
 
