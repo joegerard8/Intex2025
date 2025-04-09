@@ -20,6 +20,7 @@ const emptyMovie: MoviesTitle = {
   rating: "",
   duration: "",
   description: "",
+  image_url: "",
   // Initialize all genre booleans as false
   action: false,
   adventure: false,
