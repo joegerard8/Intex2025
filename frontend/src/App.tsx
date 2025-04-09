@@ -11,6 +11,9 @@ import RegisterPage from './pages/RegisterPage.tsx'
 import Unauthorized from './pages/Unauthorized.tsx';
 import AuthorizeView, { RequireAuth, RequireRole } from './AuthorizeView.tsx';
 import Layout from './components/Layout.tsx';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 
 function App() {
@@ -39,6 +42,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="/moviedetails/:id" element={<ProductDetailPage />} />
 
           {/* Authenticated-only */}
           <Route

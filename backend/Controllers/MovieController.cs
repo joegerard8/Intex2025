@@ -17,47 +17,112 @@ namespace backend.Controllers
             _dbContext = temp;
         }
 
-        [HttpGet("Movies")]
+        [HttpGet("GetMovies")]
         public IActionResult GetMovies(
-            [FromQuery] string? search = null,  // Optional search by title
-            [FromQuery] int skip = 0,           // Optional pagination start
-            [FromQuery] int take = 20)          // Optional pagination amount
+            [FromQuery] int pageSize = 20,
+            [FromQuery] int pageNum = 1,
+            [FromQuery] List<string>? genres = null,
+            [FromQuery] string? search = null,
+            [FromQuery] string? showId = null)
         {
-            try
-            {
-            // Start the query from the database
-            var query = _dbContext.MoviesTitles.AsQueryable();
+        IQueryable<MoviesTitle> query = _dbContext.MoviesTitles.AsQueryable();
 
-            // If the user typed something into search, filter by title
-            if (!string.IsNullOrEmpty(search))
+    // Return one specific movie if showId is provided
+        if (!string.IsNullOrEmpty(showId))
+        {
+            var movie = query.FirstOrDefault(m => m.ShowId == showId);
+            if (movie == null)
             {
-                query = query.Where(m => m.Title.Contains(search));
+                return NotFound(new { message = "Movie not found." });
             }
 
-            // Count total after filtering
-            var totalCount = query.Count();
-
-            // Apply pagination
-            var movies = query.Skip(skip).Take(take).ToList();
-
-            // Build the response object
-            var response = new
+            return Ok(new
             {
-                Movies = movies,
-                Count = totalCount
-            };
-
-            return Ok(response); // return 200 + the data
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, new
-            {
-                message = "An error occurred while retrieving movies.",
-                error = ex.Message
+                Movies = new List<MoviesTitle> { movie },
+                TotalNumMovies = 1
             });
         }
+
+        // Optional title search
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(m => m.Title.Contains(search));
+        }
+
+        // Optional genre filtering
+        if (genres != null && genres.Any())
+        {
+            foreach (var genre in genres)
+            {
+                switch (genre)
+                {
+                    case "Action": query = query.Where(m => m.Action); break;
+                    case "Adventure": query = query.Where(m => m.Adventure); break;
+                    case "AnimeSeriesInternationalTvShows": query = query.Where(m => m.AnimeSeriesInternationalTvShows); break;
+                    case "BritishTvShowsDocuseriesInternationalTvShows": query = query.Where(m => m.BritishTvShowsDocuseriesInternationalTvShows); break;
+                    case "Children": query = query.Where(m => m.Children); break;
+                    case "Comedies": query = query.Where(m => m.Comedies); break;
+                    case "ComediesDramasInternationalMovies": query = query.Where(m => m.ComediesDramasInternationalMovies); break;
+                    case "ComediesInternationalMovies": query = query.Where(m => m.ComediesInternationalMovies); break;
+                    case "ComediesRomanticMovies": query = query.Where(m => m.ComediesRomanticMovies); break;
+                    case "CrimeTvShowsDocuseries": query = query.Where(m => m.CrimeTvShowsDocuseries); break;
+                    case "Documentaries": query = query.Where(m => m.Documentaries); break;
+                    case "DocumentariesInternationalMovies": query = query.Where(m => m.DocumentariesInternationalMovies); break;
+                    case "Docuseries": query = query.Where(m => m.Docuseries); break;
+                    case "Dramas": query = query.Where(m => m.Dramas); break;
+                    case "DramasInternationalMovies": query = query.Where(m => m.DramasInternationalMovies); break;
+                    case "DramasRomanticMovies": query = query.Where(m => m.DramasRomanticMovies); break;
+                    case "FamilyMovies": query = query.Where(m => m.FamilyMovies); break;
+                    case "Fantasy": query = query.Where(m => m.Fantasy); break;
+                    case "HorrorMovies": query = query.Where(m => m.HorrorMovies); break;
+                    case "InternationalMoviesThrillers": query = query.Where(m => m.InternationalMoviesThrillers); break;
+                    case "InternationalTvShowsRomanticTvShowsTvDramas": query = query.Where(m => m.InternationalTvShowsRomanticTvShowsTvDramas); break;
+                    case "KidsTv": query = query.Where(m => m.KidsTv); break;
+                    case "LanguageTvShows": query = query.Where(m => m.LanguageTvShows); break;
+                    case "Musicals": query = query.Where(m => m.Musicals); break;
+                    case "NatureTv": query = query.Where(m => m.NatureTv); break;
+                    case "RealityTv": query = query.Where(m => m.RealityTv); break;
+                    case "Spirituality": query = query.Where(m => m.Spirituality); break;
+                    case "TvAction": query = query.Where(m => m.TvAction); break;
+                    case "TvComedies": query = query.Where(m => m.TvComedies); break;
+                    case "TvDramas": query = query.Where(m => m.TvDramas); break;
+                    case "Thrillers": query = query.Where(m => m.Thrillers); break;
+                }
+            }
+        }
+
+        var totalNumMovies = query.Count();
+
+        var movies = query
+            .Skip((pageNum - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var result = new
+        {
+            Movies = movies,
+            TotalNumMovies = totalNumMovies
+        };
+
+        return Ok(result);
     }
+
+    // getting the similar movies to then pull all of the information we need.
+    [HttpGet("GetSimilarMovies/{showId}")]
+    public IActionResult GetSimilarMovies(string showId)
+{
+    // Assuming 'show_id' is the primary key or matches exactly in ItemRecommendations
+    var recommendation = _dbContext.ItemRecommendations
+        .FirstOrDefault(r => r.ShowId == showId);
+
+    if (recommendation == null)
+    {
+        return NotFound("Recommendation not found.");
+    }
+
+    return Ok(recommendation);
+}
+
 
         
         [HttpPost("AddMovie")]

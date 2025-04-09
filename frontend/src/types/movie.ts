@@ -3,12 +3,13 @@ export interface MoviesTitle {
   type: string;
   title: string;
   director?: string;
-  cast?: string;
+  cast: string;
   country?: string;
   releaseYear?: number;
   rating?: string;
   duration?: string;
   description: string;
+  image_url: string;
 
   // All genre boolean fields
   action: boolean;

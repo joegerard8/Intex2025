@@ -32,6 +32,9 @@ public class MoviesTitle
 
     public string Description { get; set; } = null!;
 
+    [Column("image_url")]
+    public string image_url { get; set; } = null!;
+
     [Column("Action")]
     public bool Action { get; set; }
 
