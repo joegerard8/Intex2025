@@ -4,7 +4,6 @@ import { UserContext } from "../AuthorizeView";
 import Layout from "../components/Layout";
 import "./identity.css";
 import "@fortawesome/fontawesome-free/css/all.css";
-import logo from "../assets/HomePageLogo.png"; 
 import movieCollage from "../assets/movieCollage.png"; // Placeholder for the gray image
 
 function LoginPage() {
