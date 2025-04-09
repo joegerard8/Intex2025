@@ -84,7 +84,7 @@ const ManageMovies: React.FC = () => {
     try {
       const movie = await fetchMovieById(id);
       if (movie) {
-        setCurrentMovie(movie);
+        setCurrentMovie(movie.movies[0]);
         setIsEditModalOpen(true);
       }
     } catch (error) {
