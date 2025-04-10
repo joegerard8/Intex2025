@@ -153,7 +153,21 @@ const Movies: React.FC = () => {
             <div className="error-message">{error}</div>
           )}
 
-          <h1 className="section-title">Our Catalog</h1>
+              <h1 className="section-title" style={{
+                  fontSize: "2.5rem",
+                  fontWeight: 700,
+                  marginBottom: "1rem",
+                  borderBottom: "1px solid #333",
+                  paddingBottom: "0.5rem",
+                  letterSpacing: "0.5px",
+                  background: "linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(200,200,200,0.7))",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  textShadow: "0px 2px 3px rgba(0,0,0,0.3)"
+              }}>
+                  Our Catalog
+              </h1>
 
           <div className="movies-grid">
             {filteredMovies.map((movie) => (

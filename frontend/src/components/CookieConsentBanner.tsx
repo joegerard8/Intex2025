@@ -72,8 +72,8 @@ const CookieConsentBanner = () => {
           color: "white",
           cursor: "pointer",
         }}
-        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#2563eb")}
-        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#3b82f6")}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#ffffff")}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#6b7280")}
       >
         Accept Cookies
       </button>
