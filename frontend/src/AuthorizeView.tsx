@@ -24,14 +24,18 @@ function AuthorizeView(props: { children: React.ReactNode }) {
   const [authorized, setAuthorized] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User>({ email: "", roles: [] });
+  const API_URL = "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net"
 
   const refreshUser = async () => {
     setLoading(true);
     try {
-      const response = await fetch("https://localhost:5000/pingauth", {
-        method: "GET",
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/pingauth",
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
 
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
