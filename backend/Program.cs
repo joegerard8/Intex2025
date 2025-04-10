@@ -80,12 +80,28 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// app.MapMethods("/register", new[] { "OPTIONS" }, () => Results.Ok())
-//    .WithMetadata(new Microsoft.AspNetCore.Cors.Infrastructure.EnableCorsAttribute("AllowFrontend"));
+// app.MapPost("/register", async (
+//     RegisterRequest request,
+//     UserManager<ApplicationUser> userManager,
+//     SignInManager<ApplicationUser> signInManager,
+//     HttpContext context) =>
+// {
+//     var user = new ApplicationUser
+//     {
+//         UserName = request.Email,
+//         Email = request.Email
+//     };
 
+//     var result = await userManager.CreateAsync(user, request.Password);
+//     if (!result.Succeeded)
+//     {
+//         return Results.BadRequest(result.Errors);
+//     }
 
+//     await signInManager.SignInAsync(user, isPersistent: false);
+//     return Results.Ok(new { message = "User registered successfully." });
 
-
+// }).RequireCors("AllowFrontend");
 
 // ✅ Use ApplicationUser for Identity API
 app.MapIdentityApi<ApplicationUser>()
