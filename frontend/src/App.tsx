@@ -40,14 +40,14 @@ function App() {
             }
           />
 
-          <Route
+          {/* <Route
             path="/movies"
             element={
               <Layout>
                 <Movies />
               </Layout>
             }
-          />
+          /> */}
 
           <Route path="/movie/:id" element={<ProductDetailPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -56,7 +56,7 @@ function App() {
           <Route path="/moviedetails/:id" element={<ProductDetailPage />} />
 
           {/* Authenticated-only */}
-          {/* <Route
+          <Route
             path="/movies"
             element={
               <RequireAuth>
@@ -65,7 +65,7 @@ function App() {
                 </Layout>
               </RequireAuth>
             }
-          /> */}
+          />
 
           {/* Admin-only */}
           <Route
