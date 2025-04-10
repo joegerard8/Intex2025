@@ -4,6 +4,8 @@ import Layout from '../components/Layout';
 import './movies.css';
 import logoForMovies from '../assets/logoForMovies.png';
 import AuthorizeView from '../AuthorizeView';
+import { fetchMovies } from '../api/api.ts';
+import MovieCard from '../components/MovieCard.tsx';
 
 interface Movie {
     id: string;
@@ -19,42 +21,76 @@ const Movies: React.FC = () => {
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [moviesPerPage] = useState(20); // or whatever chunk size works
+    const [hasMore, setHasMore] = useState(true);
+    const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+    const [totalMovies, setTotalMovies] = useState(0);
+
+    const handleSearchChage = (searchTerm: string ) => {
+      setMovies([]);
+      setCurrentPage(1);
+      setHasMore(true);
+      setSearchTerm(searchTerm);
+    };
+
+    const loadMovies = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchMovies(
+          moviesPerPage,
+          currentPage,
+          selectedGenres,
+          searchTerm
+        );
+
+        const moviesData = data.movies
+          .filter((movieData: any) => movieData.image_url && movieData.image_url.trim() !== '')
+          .map((movieData: any) => ({
+            id: movieData.showId,
+            title: movieData.title,
+            posterUrl: movieData.image_url,
+        }));
+
+
+        setMovies(prev => [...prev, ...moviesData]);
+      // append new movies
+        setTotalMovies(data.totalNumMovies);
+        if (movies.length + data.movies.length >= data.totalNumMovies) {
+          setHasMore(false);
+        }
+      } catch (err) {
+        setError("Failed to load movies");
+      } finally {
+        setLoading(false);
+      }
+  };
+
     useEffect(() => {
-        // In a real app, you would fetch movies from your API
-        const fetchMovies = async () => {
-            setLoading(true);
-            setError('');
+      loadMovies();
+    }, [currentPage, searchTerm, selectedGenres]);
 
-            try {
-                // Simulating API call
-                await new Promise(resolve => setTimeout(resolve, 500));
+    useEffect(() => {
+      setMovies([]);
+      setCurrentPage(1);
+      setHasMore(true);
+    }, [searchTerm, selectedGenres]);
 
-                // Mock data
-                const mockMovies = [
-                    { id: '1', title: '4th Man Out', posterUrl: '', genres: ['Comedy', 'Drama'], year: 2015 },
-                    { id: '2', title: '3 Turken & 1 Baby', posterUrl: '', genres: ['Comedy'], year: 2015 },
-                    { id: '3', title: '5x7', posterUrl: '', genres: ['Drama', 'Romance'], year: 2011 },
-                    { id: '4', title: '6 cm', posterUrl: '', genres: ['Adventure', 'Drama'], year: 2017 },
-                    { id: '5', title: 'Khon Maat', posterUrl: '', genres: ['Horror', 'Thriller'], year: 2019 },
-                    { id: '6', title: '10 Days In City', posterUrl: '', genres: ['Drama', 'Crime'], year: 2014 },
-                    { id: '7', title: '10 Jours En Or', posterUrl: '', genres: ['Comedy', 'Drama'], year: 2012 },
-                    { id: '8', title: '24 Hours', posterUrl: '', genres: ['Action', 'Thriller'], year: 2016 },
-                    { id: '9', title: '50 Kills', posterUrl: '', genres: ['Horror', 'Thriller'], year: 2018 },
-                    { id: '10', title: '6-5=2', posterUrl: '', genres: ['Horror'], year: 2013 },
-                ];
+    useEffect(() => {
+      const handleScroll = () => {
+        if (
+          window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
+          !loading &&
+          hasMore
+        ) {
+          setCurrentPage(prev => prev + 1);
+        }
+    };
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, [loading, hasMore]);
 
-                setMovies(mockMovies);
-            } catch (err) {
-                setError('Failed to load movies');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchMovies();
-    }, []);
-
-    // Filter movies based on search term
+    // // Filter movies based on search term
     const filteredMovies = movies.filter(movie =>
         movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         movie.genres.some(genre => genre.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -72,9 +108,9 @@ const Movies: React.FC = () => {
             <div className="search-container">
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Find your next movie..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => handleSearchChage(e.target.value)}
                 className="search-input"
               />
               <button className="search-button">
@@ -95,40 +131,36 @@ const Movies: React.FC = () => {
               </button>
             </div>
 
-            {loading ? (
-              <div className="loading">Loading...</div>
-            ) : error ? (
-              <div className="error-message">{error}</div>
-            ) : (
-              <>
-                <h1 className="section-title">Top Films</h1>
+            {error && (
+            <div className="error-message">{error}</div>
+          )}
 
-                <div className="movies-grid">
-                  {filteredMovies.map((movie) => (
-                    <Link
-                      key={movie.id}
-                      to={`/movie/${movie.id}`}
-                      className="movie-card"
-                    >
-                      <div className="movie-poster-container">
-                        <div className="movie-poster-placeholder">
-                          <span className="movie-title-placeholder">
-                            {movie.title}
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
+          <h1 className="section-title">Our Catalog</h1>
 
-                {filteredMovies.length === 0 && (
-                  <div className="no-results">
-                    No movies found matching "{searchTerm}"
-                  </div>
-                )}
-              </>
-            )}
+          <div className="movies-grid">
+            {filteredMovies.map((movie) => (
+              <MovieCard 
+                key={movie.id}
+                url={movie.posterUrl}
+                title={movie.title}
+                showId={movie.id}
+              />
+            ))}
           </div>
+
+          {filteredMovies.length === 0 && !loading && (
+            <div className="no-results">
+              No movies found matching "{searchTerm}"
+            </div>
+          )}
+
+          {loading && (
+            <div className="loading-indicator">
+              Loading more movies...
+            </div>
+          )}
+        </div>
+
     );
 };
 
