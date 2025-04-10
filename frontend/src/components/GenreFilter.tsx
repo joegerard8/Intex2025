@@ -14,7 +14,7 @@ function GenreFilter({
     const fetchGenres = async () => {
       try {
         const response = await fetch(
-          "https://localhost:5000/api/Movie/GetGenres"
+          "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/api/Movie/GetGenres"
         );
         const data = await response.json();
         console.log("Fetched genres:", data);
