@@ -22,7 +22,7 @@ function Logout({ children }: { children: React.ReactNode }) {
 
       if (response.ok) {
         await refreshUser(); // 👈 Clear user from context
-        window.location.href = "/login"; // OR use navigate('/login') if you prefer
+        window.location.href = "/"; // OR use navigate('/login') if you prefer
       } else {
         console.error("Logout failed:", response.status);
       }

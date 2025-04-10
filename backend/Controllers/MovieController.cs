@@ -157,6 +157,7 @@ public IActionResult ConsentToCookies()
     
     // getting movies recommended to a specific user
         [HttpGet("GetUserRecommendedMovies/{userId}")]
+        [Authorize]
         public IActionResult GetUserRecommendedMovies(byte userId) 
         {
             var recommendations = _dbContext.HomeRecommendations
@@ -173,6 +174,7 @@ public IActionResult ConsentToCookies()
 
         // getting the users id to get their unique recommendations
         [HttpGet("GetUserId")]
+        [Authorize]
         public IActionResult GetUserId(string email)
         {
             var user = _dbContext.ApplicationUsers.FirstOrDefault(u => u.Email == email);
@@ -291,6 +293,7 @@ public IActionResult ConsentToCookies()
         }
 
             [HttpPost("SubmitUserRating")]
+            [Authorize]
             public async Task<IActionResult> SubmitUserRating([FromBody] MoviesRating rating)
             {
                 if (rating == null)
@@ -316,6 +319,7 @@ public IActionResult ConsentToCookies()
             }
 
             [HttpGet("GetUserRating/{userId}/{showId}")]
+            [Authorize]
             public async Task<IActionResult> GetUserRating(byte userId, string showId)
             {
                 var rating = await _dbContext.MoviesRatings
