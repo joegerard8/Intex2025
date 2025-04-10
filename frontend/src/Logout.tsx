@@ -10,7 +10,7 @@ function Logout({ children }: { children: React.ReactNode }) {
 
     try {
       const response = await fetch(
-        "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/logout",
+        "https://localhost:5000/logout",
         {
           method: "POST",
           credentials: "include",

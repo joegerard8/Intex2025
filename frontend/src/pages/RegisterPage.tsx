@@ -10,8 +10,8 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  // const localregisterurl = "https://localhost:5000/register";
-  const publicregisterurl = "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/register";
+  const localregisterurl = "https://localhost:5000/register";
+  // const publicregisterurl = "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/register";
 
   const [error, setError] = useState("");
 
@@ -39,7 +39,7 @@ function Register() {
     } else {
       setError("");
 
-      fetch(publicregisterurl, {
+      fetch(localregisterurl, {
         method: "POST",
         credentials: "include",
         headers: {

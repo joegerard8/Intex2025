@@ -5,6 +5,7 @@ using backend.Data;
 using backend.Services;
 using backend.Models; // assuming ApplicationUser is in Models
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -24,8 +25,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
-    options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email;
+    options.Password.RequiredLength = 20;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
 });
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -84,7 +88,9 @@ app.MapControllers();
 
 
 // ✅ Use ApplicationUser for Identity API
-app.MapIdentityApi<ApplicationUser>();
+app.MapIdentityApi<ApplicationUser>()
+    .RequireCors("AllowFrontend");
+
 
 
 app.MapPost("/logout", async (HttpContext context, SignInManager<ApplicationUser> signInManager) =>
