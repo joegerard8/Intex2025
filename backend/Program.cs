@@ -52,7 +52,7 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins(
                 "http://localhost:3000",
-                "https://gentle-ocean-085838b1e.6.azurestaticapps.net/"
+                "https://gentle-ocean-085838b1e.6.azurestaticapps.net"
             )
             .AllowCredentials()
             .AllowAnyMethod()
