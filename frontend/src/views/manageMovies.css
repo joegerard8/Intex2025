@@ -25,6 +25,162 @@
     margin-bottom: 2rem;
 }
 
+/* Updated search and filter styles */
+.management-toolbar {
+    margin-bottom: 1.5rem;
+}
+
+.filter-search-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.search-container {
+    flex-grow: 1;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #ddd;
+    font-size: 1rem;
+}
+
+/* Filter icon styles */
+.filter-container {
+    position: relative;
+    margin-right: 1rem;
+}
+
+.filter-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #222;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+}
+
+.filter-icon:hover {
+    background-color: #333;
+}
+
+.selected-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #c72a2a;
+    color: white;
+    font-size: 0.75rem;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Filter dropdown styles */
+.filter-dropdown {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    z-index: 10;
+    min-width: 300px;
+    max-width: 90vw;
+    max-height: 500px;
+    overflow-y: auto;
+    background-color: #1a1a1a !important;
+    border: 1px solid #333 !important;
+}
+
+.parent-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.parent-category {
+    margin-bottom: 0.5rem;
+}
+
+.parent-checkbox {
+    margin-right: 0.5rem;
+}
+
+.parent-label {
+    font-weight: 500;
+    color: #ddd;
+}
+
+.parent-label.partially-selected {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Advanced options */
+.advanced-options {
+    margin-top: 1rem;
+    border-top: 1px solid #333;
+    padding-top: 0.5rem;
+}
+
+.advanced-options .btn-link {
+    color: #6c757d;
+    padding: 0;
+    font-size: 0.875rem;
+}
+
+#advanced-filters.show {
+    display: flex !important;
+    margin-top: 0.5rem;
+}
+
+/* Action buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.add-button {
+    background-color: #2a6cc7;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: #3a7cd7;
+}
+
+.bulk-delete-button {
+    background-color: #c72a2a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.bulk-delete-button:hover {
+    background-color: #d73a3a;
+}
+
+/* Table styles */
 .movies-table-container {
     background-color: #1a1a1a;
     border-radius: 8px;
@@ -138,7 +294,7 @@
     color: #e50914;
 }
 
-/* New Styles for Modals and Controls */
+/* Modal styles */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -223,4 +379,23 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+}
+
+/* No movies message */
+.no-movies-message {
+    padding: 2rem;
+    text-align: center;
+    color: #aaa;
+    font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .parent-categories {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .filter-dropdown {
+        min-width: 250px;
+    }
 }
