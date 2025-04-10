@@ -10,6 +10,7 @@ import {
   submitUserRating,
   getUserRatings
 } from '../api/api.ts';
+import { useNavigate } from 'react-router-dom';
 import { MoviesTitle } from '../types/movie.ts';
 import MovieCard from '../components/MovieCard.tsx';
 import MovieCarousel from '../components/MovieCarousel.tsx';
@@ -30,6 +31,8 @@ const ProductDetailPage: React.FC = () => {
     const [userId, setUserId] = useState<number | null>(0);
     const [hoveredRating, setHoveredRating] = useState<number | null>(null);
     const [userRating, setUserRating] = useState<number>(0);
+
+    const navigate = useNavigate();
 
     const showId = useParams<{ id: string }>().id || '0';
 
@@ -155,6 +158,9 @@ const ProductDetailPage: React.FC = () => {
     return (
         <Layout>
             <div className="movie-detail-page">
+                <div className="back-button" onClick={() => navigate(-1)}>
+                    &times;
+                </div>
                 <div className="barcode-logo">
                     <div className="barcode-image">
                     </div>

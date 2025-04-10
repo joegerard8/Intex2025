@@ -1,9 +1,11 @@
 .movie-detail-page {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-    padding: 1rem 0;
+  position: relative; /* 🔥 makes absolute button position work */
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  padding: 1rem 0;
 }
+
 
 .barcode-logo {
     grid-column: 1 / -1;
@@ -197,4 +199,27 @@
     .movie-poster-container {
         order: -1;
     }
+}
+
+.back-button {
+  position: absolute;
+  top: 3rem;
+  right: 1.5rem;
+  font-size: 1.5rem;
+  color: #fff;
+  background: #333;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;              /* ✅ switch from text-align to flexbox */
+  align-items: center;        /* ✅ vertically center */
+  justify-content: center;    /* ✅ horizontally center */
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s ease;
+}
+
+
+.back-button:hover {
+  background: #e50914;
 }

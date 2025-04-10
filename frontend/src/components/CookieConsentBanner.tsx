@@ -14,7 +14,7 @@ const CookieConsentBanner = () => {
   const handleAccept = async () => {
     try {
       const response = await fetch(
-        "https://localhost:5000/api/Movie/ConsentToCookies",
+        "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/api/Movie/ConsentToCookies",
         {
           method: "POST",
           credentials: "include",
@@ -25,7 +25,7 @@ const CookieConsentBanner = () => {
 
       if (response.ok) {
         // 👇 Alternate method to finalize the consent
-        await fetch("https://localhost:5000/trigger-consent", {
+        await fetch("https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/trigger-consent", {
           method: "GET",
           credentials: "include",
         });
@@ -72,8 +72,8 @@ const CookieConsentBanner = () => {
           color: "white",
           cursor: "pointer",
         }}
-        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#2563eb")}
-        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#3b82f6")}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#ffffff")}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#6b7280")}
       >
         Accept Cookies
       </button>

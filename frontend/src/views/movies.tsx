@@ -114,39 +114,60 @@ const Movies: React.FC = () => {
               </div>
               {/* Removed brand name text */}
             </div>
+            
+            <div className="search-bar-wrapper">
+              <div className="search-bar">
+                <input
+                  type="text"
+                  placeholder="Find your next movie..."
+                  value={searchTerm}
+                  onChange={(e) => handleSearchChage(e.target.value)}
+                  className="search-input"
+                />
+                <button className="search-button">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                </button>
+              </div>
 
-            <div className="search-container">
-              <input
-                type="text"
-                placeholder="Find your next movie..."
-                value={searchTerm}
-                onChange={(e) => handleSearchChage(e.target.value)}
-                className="search-input"
-              />
-              <button className="search-button">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-              </button>
-              <GenreFilter selectedGenres={selectedGenres} setSelectedGenres={setSelectedGenres} />
+              <div className="filter-button">
+                <GenreFilter selectedGenres={selectedGenres} setSelectedGenres={setSelectedGenres} />
+              </div>
             </div>
+
+
 
             {error && (
             <div className="error-message">{error}</div>
           )}
 
-          <h1 className="section-title">Our Catalog</h1>
+              <h1 className="section-title" style={{
+                  fontSize: "2.5rem",
+                  fontWeight: 700,
+                  marginBottom: "1rem",
+                  borderBottom: "1px solid #333",
+                  paddingBottom: "0.5rem",
+                  letterSpacing: "0.5px",
+                  background: "linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(200,200,200,0.7))",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  textShadow: "0px 2px 3px rgba(0,0,0,0.3)"
+              }}>
+                  Our Catalog
+              </h1>
 
           <div className="movies-grid">
             {filteredMovies.map((movie) => (

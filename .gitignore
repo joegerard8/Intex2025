@@ -32,6 +32,7 @@ pnpm-debug.log*
 # Build results
 backend/bin/
 backend/obj/
+backend/appsettings.Development.json
 
 # Rider
 .idea/
