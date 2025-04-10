@@ -1,55 +1,82 @@
+// components/CookieConsentBanner.tsx
 import { useEffect, useState } from "react";
-
-const COOKIE_KEY = "cookie_consent";
 
 const CookieConsentBanner = () => {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem(COOKIE_KEY);
-    if (!consent) {
+    const consentGiven = localStorage.getItem("cookieConsent");
+    if (!consentGiven) {
       setShowBanner(true);
     }
   }, []);
 
-  const handleAccept = () => {
-    localStorage.setItem(COOKIE_KEY, "granted");
-    fetch("https://localhost:5000/ConsentGranted", {
-      method: "POST",
-      credentials: "include",
-    });
-    setShowBanner(false);
-  };
+  const handleAccept = async () => {
+    try {
+      const response = await fetch(
+        "https://localhost:5000/api/Movie/ConsentToCookies",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
 
-  const handleReject = () => {
-    localStorage.setItem(COOKIE_KEY, "rejected");
-    setShowBanner(false);
+      const data = await response.json();
+
+      if (response.ok) {
+        // 👇 Alternate method to finalize the consent
+        await fetch("https://localhost:5000/trigger-consent", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        localStorage.setItem("cookieConsent", "true");
+        setShowBanner(false);
+        console.log("Consent success:", data);
+      } else {
+        console.error("Consent failed:", data);
+      }
+    } catch (error) {
+      console.error("Network error during consent:", error);
+    }
   };
 
   if (!showBanner) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black text-white p-4 z-50">
-      <div className="flex justify-between items-center max-w-4xl mx-auto">
-        <p>
-          We use cookies to improve your experience. By continuing, you agree to
-          our cookie policy.
-        </p>
-        <div className="flex gap-2 ml-4">
-          <button
-            onClick={handleAccept}
-            className="bg-green-600 px-3 py-1 rounded"
-          >
-            Accept
-          </button>
-          <button
-            onClick={handleReject}
-            className="bg-red-600 px-3 py-1 rounded"
-          >
-            Reject
-          </button>
-        </div>
-      </div>
+    <div
+      style={{
+        position: "fixed",
+        top: "72px",
+        left: 0,
+        right: 0,
+        backgroundColor: "#1f2937",
+        color: "white",
+        padding: "1rem",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        zIndex: 9999,
+        boxShadow: "0 -2px 10px rgba(0,0,0,0.3)",
+      }}
+    >
+      <span>This site uses cookies for login. Accept to continue.</span>
+      <button
+        onClick={handleAccept}
+        style={{
+          marginLeft: "1rem",
+          backgroundColor: "#3b82f6",
+          padding: "0.5rem 1rem",
+          borderRadius: "0.375rem",
+          border: "none",
+          color: "white",
+          cursor: "pointer",
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#2563eb")}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#3b82f6")}
+      >
+        Accept Cookies
+      </button>
     </div>
   );
 };
