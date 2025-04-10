@@ -3,18 +3,22 @@ import { UserContext } from "./AuthorizeView";
 
 function Logout({ children }: { children: React.ReactNode }) {
   const { refreshUser } = useContext(UserContext);
+  const API_URL = "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net";
 
   const handleLogout = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://localhost:5000/logout", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/logout",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         await refreshUser(); // 👈 Clear user from context
