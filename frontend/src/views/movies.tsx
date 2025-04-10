@@ -46,18 +46,21 @@ const Movies: React.FC = () => {
           searchTerm
         );
 
-        const moviesData = data.movies
-          .filter((movieData: any) => movieData.image_url && movieData.image_url.trim() !== '')
-          .map((movieData: any) => ({
-            id: movieData.showId,
-            title: movieData.title,
-            posterUrl: movieData.image_url,
-            genres: movieData.genres || [],
-            year: movieData.year ?? 0
+        const newMovies = data.movies
+        .filter((movieData: any) => movieData.image_url && movieData.image_url.trim() !== '')
+        .map((movieData: any) => ({
+          id: movieData.showId,
+          title: movieData.title,
+          posterUrl: movieData.image_url,
+          genres: movieData.genres || [],
+          year: movieData.year ?? 0
         }));
 
-
-        setMovies(prev => [...prev, ...moviesData]);
+        setMovies(prev => {
+          const existingIds = new Set(prev.map(m => m.id));
+          const uniqueNewMovies = newMovies.filter(m => !existingIds.has(m.id));
+          return [...prev, ...uniqueNewMovies];
+        });
       // append new movies
         setTotalMovies(data.totalNumMovies);
         if (movies.length + data.movies.length >= data.totalNumMovies) {
