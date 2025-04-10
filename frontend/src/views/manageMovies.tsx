@@ -6,6 +6,7 @@ import GenreFilter from "../components/GenreFilter";
 import SearchIcon from '@mui/icons-material/Search'; // Use Material UI icon instead 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 import {
   fetchMovies,
   deleteMovie,
@@ -24,27 +25,25 @@ const ManageMovies: React.FC = () => {
   const [error, setError] = useState("");
   const [selectedMovies, setSelectedMovies] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10); // 🔹 page size state
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [totalMovies, setTotalMovies] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Modal states
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentMovie, setCurrentMovie] = useState<MoviesTitle | null>(null);
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
 
-  const moviesPerPage = 10;
-
   const loadMovies = async () => {
     setLoading(true);
     try {
       const data = await fetchMovies(
-          moviesPerPage,
-          currentPage,
-          selectedGenres,
-          searchTerm
+        pageSize,
+        currentPage,
+        selectedGenres,
+        searchTerm
       );
       setMovies(data.movies);
       setTotalMovies(data.totalNumMovies);
@@ -57,7 +56,7 @@ const ManageMovies: React.FC = () => {
 
   useEffect(() => {
     loadMovies();
-  }, [currentPage, selectedGenres, searchTerm]);
+  }, [currentPage, selectedGenres, searchTerm, pageSize]);
 
   const handleDeleteMovie = async (id: string) => {
     setSelectedMovieId(id);
@@ -72,7 +71,6 @@ const ManageMovies: React.FC = () => {
       loadMovies();
       setIsDeleteModalOpen(false);
       setSelectedMovieId(null);
-      // Remove from selected movies if it was selected
       if (selectedMovies.has(selectedMovieId)) {
         const updated = new Set(selectedMovies);
         updated.delete(selectedMovieId);
@@ -152,37 +150,37 @@ const ManageMovies: React.FC = () => {
 
   const renderPagination = () => {
     const pages = [];
-    const totalPages = Math.ceil(totalMovies / moviesPerPage);
+    const totalPages = Math.ceil(totalMovies / pageSize);
 
     pages.push(
-        <button
-            key="prev"
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-            disabled={currentPage === 1}
-            className="pagination-button"
-        >
-          Prev
-        </button>
+      <button
+        key="prev"
+        onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+        disabled={currentPage === 1}
+        className="pagination-button"
+      >
+        Prev
+      </button>
     );
 
     for (let i = 1; i <= totalPages; i++) {
       if (
-          i === 1 ||
-          i === totalPages ||
-          (i >= currentPage - 1 && i <= currentPage + 1)
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - 1 && i <= currentPage + 1)
       ) {
         pages.push(
-            <button
-                key={i}
-                onClick={() => setCurrentPage(i)}
-                className={`pagination-button ${currentPage === i ? "active" : ""}`}
-            >
-              {i}
-            </button>
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i)}
+            className={`pagination-button ${currentPage === i ? "active" : ""}`}
+          >
+            {i}
+          </button>
         );
       } else if (i === currentPage - 2 || i === currentPage + 2) {
         pages.push(
-            <span key={`ellipsis-${i}`} className="pagination-ellipsis">
+          <span key={`ellipsis-${i}`} className="pagination-ellipsis">
             ...
           </span>
         );
@@ -190,14 +188,14 @@ const ManageMovies: React.FC = () => {
     }
 
     pages.push(
-        <button
-            key="next"
-            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="pagination-button"
-        >
-          Next
-        </button>
+      <button
+        key="next"
+        onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+        disabled={currentPage === totalPages}
+        className="pagination-button"
+      >
+        Next
+      </button>
     );
 
     return pages;
@@ -206,8 +204,7 @@ const ManageMovies: React.FC = () => {
   return (
     <div className="manage-movies-page">
       <div className="barcode-logo">
-        <div className="barcode-image">
-        </div>
+        <div className="barcode-image"></div>
         <div className="brand-name"></div>
       </div>
 
@@ -215,7 +212,6 @@ const ManageMovies: React.FC = () => {
 
       <div className="management-toolbar">
         <div className="filter-search-container">
-          {/* Updated GenreFilter with filter icon */}
           <GenreFilter
             selectedGenres={selectedGenres}
             setSelectedGenres={setSelectedGenres}
@@ -240,7 +236,7 @@ const ManageMovies: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
                 width: "100%",
-                padding: "0.75rem 1rem 0.75rem 3rem", // left padding for icon
+                padding: "0.75rem 1rem 0.75rem 3rem",
                 backgroundColor: "#1a1a1a",
                 border: "1px solid #333",
                 borderRadius: "4px",
@@ -252,6 +248,33 @@ const ManageMovies: React.FC = () => {
         </div>
 
         <div className="action-buttons">
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <label htmlFor="pageSize" style={{ color: "#ddd" }}>
+              Page Size:
+            </label>
+            <select
+              id="pageSize"
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              style={{
+                padding: "0.5rem",
+                backgroundColor: "#1a1a1a",
+                color: "#ddd",
+                border: "1px solid #333",
+                borderRadius: "4px",
+              }}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+            </select>
+          </div>
+
           <button className="add-button" onClick={handleAddMovie}>
             Add New Movie
           </button>
@@ -363,12 +386,10 @@ const ManageMovies: React.FC = () => {
               </tbody>
             </table>
           )}
-
           <div className="pagination">{renderPagination()}</div>
         </div>
       )}
 
-      {/* Add Movie Modal */}
       <Modal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
@@ -380,7 +401,6 @@ const ManageMovies: React.FC = () => {
         />
       </Modal>
 
-      {/* Edit Movie Modal */}
       <Modal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
@@ -395,7 +415,6 @@ const ManageMovies: React.FC = () => {
         )}
       </Modal>
 
-      {/* Delete Confirmation Modal */}
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

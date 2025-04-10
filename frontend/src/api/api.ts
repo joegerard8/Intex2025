@@ -167,9 +167,9 @@ export const getUserId = async (email: string): Promise<number | null> => {
   try {
     const response = await fetch(
       `${API_URL}/GetUserId?email=${encodeURIComponent(email)}`,
-      {
-        credentials: "include",
-      }
+        {
+            credentials: "include",
+        }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch user ID");

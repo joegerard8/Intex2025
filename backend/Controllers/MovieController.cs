@@ -293,6 +293,7 @@ public IActionResult ConsentToCookies()
         }
 
             [HttpPost("SubmitUserRating")]
+            [Authorize]
             public async Task<IActionResult> SubmitUserRating([FromBody] MoviesRating rating)
             {
                 if (rating == null)
@@ -318,6 +319,7 @@ public IActionResult ConsentToCookies()
             }
 
             [HttpGet("GetUserRating/{userId}/{showId}")]
+            [Authorize]
             public async Task<IActionResult> GetUserRating(byte userId, string showId)
             {
                 var rating = await _dbContext.MoviesRatings
