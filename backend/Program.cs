@@ -37,12 +37,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-    options.CheckConsentNeeded = context => true; // 🚫 block non-essential cookies until consent
-    options.MinimumSameSitePolicy = SameSiteMode.None;
-    options.Secure = CookieSecurePolicy.Always;
-});
+
 
 
 builder.Services.AddCors(options =>
@@ -74,7 +69,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
-app.UseCookiePolicy();
 
 app.UseAuthentication();
 app.UseAuthorization();
