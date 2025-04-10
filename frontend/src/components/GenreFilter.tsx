@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 
-// Format genre name by adding spaces between capital letters
 const formatGenreName = (genre: string) => {
   return genre.replace(/([a-z])([A-Z])/g, '$1 $2');
 };
@@ -46,32 +45,37 @@ function GenreFilter({
   const toggleFilters = () => setShowFilters(!showFilters);
 
   return (
-      <div className="filter-container">
-        <div className="filter-icon" onClick={toggleFilters}>
+      <div className="position-relative">
+        <div className="d-flex align-items-center gap-2" onClick={toggleFilters} style={{ cursor: 'pointer' }}>
           <FilterListIcon style={{ fontSize: 20 }} />
           {selectedGenres.length > 0 && (
-              <span className="selected-count">{selectedGenres.length}</span>
+              <span className="badge bg-secondary">{selectedGenres.length}</span>
           )}
         </div>
 
         {showFilters && (
-            <div className="filter-dropdown">
-              <div className="filter-dropdown-header">
-                <h5>Filter by Genre</h5>
-                <div className="filter-actions">
+            <div
+                className="bg-dark text-light border rounded shadow p-3 mt-2 position-absolute"
+                style={{
+                  minWidth: '300px',
+                  maxHeight: '400px',
+                  overflowY: 'auto',
+                  zIndex: 1000
+                }}
+            >
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <h6 className="mb-0">Filter by Genre</h6>
+                <div className="d-flex align-items-center gap-2">
                   {selectedGenres.length > 0 && (
-                      <button onClick={clearAllFilters} className="clear-filters-btn">
-                        Clear Filters
+                      <button onClick={clearAllFilters} className="btn btn-sm btn-outline-light">
+                        Clear
                       </button>
                   )}
-                  <CloseIcon
-                      onClick={toggleFilters}
-                      style={{ fontSize: 20, cursor: "pointer" }}
-                  />
+                  <CloseIcon style={{ cursor: 'pointer' }} onClick={toggleFilters} />
                 </div>
               </div>
 
-              <div className="genre-checkboxes">
+              <div className="d-flex flex-column gap-2">
                 {genres.map((genre) => (
                     <div key={genre} className="form-check">
                       <input
