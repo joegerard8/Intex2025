@@ -1,5 +1,5 @@
-import Slider from "react-slick";
 import MovieCard from "./MovieCard"; // adjust path as needed
+import { useEffect, useRef } from 'react';
 
 type Movie = {
   id: string;
@@ -13,49 +13,67 @@ interface MovieCarouselProps {
 }
 
 const MovieCarousel = ({ movies, title = "Movies" }: MovieCarouselProps) => {
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 2,
-    responsive: [
-      {
-        breakpoint: 1200,
-        settings: { slidesToShow: 4 },
-      },
-      {
-        breakpoint: 992,
-        settings: { slidesToShow: 3 },
-      },
-      {
-        breakpoint: 768,
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 480,
-        settings: { slidesToShow: 1 },
-      },
-    ],
-  };
+  const movieScrollRef = useRef<HTMLDivElement>(null);
+  const topSprocketRef = useRef<HTMLDivElement>(null);
+  const bottomSprocketRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollLeft = movieScrollRef.current?.scrollLeft ?? 0;
+      if (topSprocketRef.current) {
+        topSprocketRef.current.scrollLeft = scrollLeft;
+      }
+      if (bottomSprocketRef.current) {
+        bottomSprocketRef.current.scrollLeft = scrollLeft;
+      }
+    };
+
+    const scrollContainer = movieScrollRef.current;
+    scrollContainer?.addEventListener('scroll', handleScroll);
+
+    return () => {
+      scrollContainer?.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <div className="movie-carousel" style={{ marginTop: "2rem", padding: "0 1rem" }}>
       <h2 style={{ fontSize: "1.25rem", fontWeight: 500, marginBottom: "1rem", borderBottom: "1px solid #333", paddingBottom: "0.5rem" }}>
         {title}
       </h2>
-      <Slider {...settings}>
-        {movies.map((movie) => (
-          <div key={movie.id} style={{ padding: "0 0.20rem" }}>
 
-            <MovieCard
-              url={movie.posterUrl}
-              title={movie.title}
-              showId={movie.id}
-            />
-          </div>
-        ))}
-      </Slider>
+      <div className="film-strip">
+        {/* Top sprockets (needs ref!) */}
+        <div
+          ref={topSprocketRef}
+          className="sprockets d-flex overflow-x-auto no-scrollbar"
+        >
+          {Array.from({ length: 100 }).map((_, i) => (
+            <div key={i} className="sprocket-hole" />
+          ))}
+        </div>
+
+        {/* Movie scroll area (needs ref!) */}
+        <div
+          ref={movieScrollRef}
+          className="d-flex movie-scroll-wrapper"
+          style={{ gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}
+        >
+          {movies.map((movie) => (
+            <MovieCard key={movie.id} url={movie.posterUrl} title={movie.title} showId={movie.id} />
+          ))}
+        </div>
+
+        {/* Bottom sprockets (needs ref!) */}
+        <div
+          ref={bottomSprocketRef}
+          className="sprockets d-flex overflow-x-auto no-scrollbar"
+        >
+          {Array.from({ length: 100 }).map((_, i) => (
+            <div key={i} className="sprocket-hole" />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

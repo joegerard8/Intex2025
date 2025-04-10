@@ -10,6 +10,7 @@ import {
 } from "../api/api.ts";
 import MovieCarousel from "../components/MovieCarousel.tsx";
 import { Movie } from "@mui/icons-material";
+import Layout from "../components/Layout.tsx";
 
 interface Movie {
   id: string;
@@ -30,6 +31,8 @@ const HomePage: React.FC = () => {
     []
   );
   const [userId, setUserId] = useState<number | null>(null);
+
+  const [loading, setLoading] = useState(false);
 
   const fetchUserId = async () => {
     try {
@@ -86,11 +89,21 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       await fetchUserId();
       await fetchUserRecommendedMovies();
+      setLoading(false);
     };
     getData();
   }, [userId, user]);
+
+  if (loading) {
+    return (
+        <Layout>
+            <div className="loading">Loading...</div>
+        </Layout>
+    );
+  }
 
   return (
     <>

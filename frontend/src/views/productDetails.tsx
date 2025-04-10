@@ -159,7 +159,6 @@ const ProductDetailPage: React.FC = () => {
                     <div className="barcode-image">
                         <img src="/barcode.png" alt="CineNiche" />
                     </div>
-                    <div className="brand-name">CineNiche</div>
                 </div>
 
                 <div className="movie-details">

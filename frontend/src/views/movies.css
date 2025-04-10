@@ -4,6 +4,7 @@
     gap: 2rem;
     width: 100%;
     max-width: 100%;
+    padding-top: 80px;
 }
 
 .barcode-logo {
@@ -151,5 +152,13 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1.5rem;
-    width: 100%;
+    width: 
+    100%;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 1rem;
+  font-style: italic;
+  color: #888;
 }

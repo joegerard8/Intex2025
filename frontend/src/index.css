@@ -108,3 +108,39 @@ html, #root {
     background-color: #f9f9f9;
   }
 }
+
+.movie-scroll-wrapper {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.movie-scroll-wrapper::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Opera */
+}
+
+.film-strip {
+  position: relative;
+}
+
+.sprockets {
+  padding: 0.3rem 0;
+}
+
+.sprockets::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.sprocket-hole {
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 2px;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+
