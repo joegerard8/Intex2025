@@ -30,7 +30,8 @@ interface SimilarMoviesResponse {
 }
 
 // Function to fetch movies from the API
-export const API_URL = "https://localhost:5000/api/Movie";
+// export const API_URL = "https://localhost:5000/api/Movie";
+export const API_URL = "https://gentle-ocean-085838b1e.6.azurestaticapps.net/api/Movie";
 
 // getting all the similar movies, queries the item recommendation table.
 export const getSimilarMovies = async (showId: string): Promise<SimilarMoviesResponse> => {
