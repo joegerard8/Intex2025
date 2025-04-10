@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.Features;
 
 
 
@@ -22,6 +23,21 @@ namespace backend.Controllers
         }
 
         
+[HttpPost("ConsentToCookies")]
+public IActionResult ConsentToCookies()
+{
+    HttpContext.Response.Cookies.Append(".AspNet.Consent", "yes", new CookieOptions
+    {
+        Path = "/",
+        HttpOnly = true,
+        Secure = true,
+        SameSite = SameSiteMode.None,
+        IsEssential = true,
+        Expires = DateTimeOffset.UtcNow.AddYears(1)
+    });
+
+    return Ok(new { message = "Consent granted." });
+}
         
         
         [HttpGet("GetMovies")]

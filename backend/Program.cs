@@ -39,6 +39,16 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.Name = ".AspNetCore.Identity.Application";
     options.LoginPath = "/login";
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    //Tell ASP.NET this is a non-essential cookie
+    options.Cookie.IsEssential = false;
+
+});
+
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // Enforce consent check for all non-essential cookies
+    options.CheckConsentNeeded = context => true;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
 
@@ -75,15 +85,13 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 
+
+app.UseCookiePolicy(); // 👈 Must be BEFORE Authentication & Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllers();
-
-// app.MapMethods("/register", new[] { "OPTIONS" }, () => Results.Ok())
-//    .WithMetadata(new Microsoft.AspNetCore.Cors.Infrastructure.EnableCorsAttribute("AllowFrontend"));
-
-
 
 
 
@@ -92,6 +100,7 @@ app.MapIdentityApi<ApplicationUser>()
     .RequireCors("AllowFrontend");
 
 
+app.MapGet("/trigger-consent", () => Results.Ok("Consent triggered."));
 
 app.MapPost("/logout", async (HttpContext context, SignInManager<ApplicationUser> signInManager) =>
 {

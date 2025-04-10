@@ -202,170 +202,187 @@ const ManageMovies: React.FC = () => {
   };
 
   return (
-      <div className="manage-movies-page">
-        <div className="barcode-logo">
-          <div className="barcode-image">
-            <img src="/barcode.png" alt="CineNiche" />
-          </div>
-          <div className="brand-name">CineNiche</div>
+    <div className="manage-movies-page">
+      <div className="barcode-logo">
+        <div className="barcode-image">
         </div>
-
-        <h1 className="welcome-title">Welcome, {user?.email}</h1>
-
-        <div className="management-toolbar">
-          <div className="filter-search-container">
-            {/* Updated GenreFilter with filter icon */}
-            <GenreFilter
-                selectedGenres={selectedGenres}
-                setSelectedGenres={setSelectedGenres}
-            />
-
-            <div className="search-container">
-              <SearchIcon style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#666' }} />
-              <input
-                  type="text"
-                  placeholder="Search movies..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="search-input"
-              />
-            </div>
-          </div>
-
-          <div className="action-buttons">
-            <button className="add-button" onClick={handleAddMovie}>
-              Add New Movie
-            </button>
-            {selectedMovies.size > 0 && (
-                <button className="bulk-delete-button" onClick={handleBulkDelete}>
-                  Delete Selected ({selectedMovies.size})
-                </button>
-            )}
-          </div>
-        </div>
-
-        {loading ? (
-            <div className="loading">Loading...</div>
-        ) : error ? (
-            <div className="error-message">{error}</div>
-        ) : (
-            <div className="movies-table-container">
-              {movies.length === 0 ? (
-                  <div className="no-movies-message">
-                    No movies found. Try changing your filters or add a new movie.
-                  </div>
-              ) : (
-                  <table className="movies-table">
-                    <thead>
-                    <tr>
-                      <th>
-                        <input
-                            type="checkbox"
-                            checked={
-                                selectedMovies.size === movies.length &&
-                                movies.length > 0
-                            }
-                            onChange={toggleSelectAll}
-                        />
-                      </th>
-                      <th>Title</th>
-                      <th>Type</th>
-                      <th>Release Year</th>
-                      <th>Duration</th>
-                      <th>Rating</th>
-                      <th colSpan={2}>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {movies.map((movie) => (
-                        <tr key={movie.showId}>
-                          <td>
-                            <input
-                                type="checkbox"
-                                checked={selectedMovies.has(movie.showId)}
-                                onChange={() => toggleSelectMovie(movie.showId)}
-                            />
-                          </td>
-                          <td>{movie.title}</td>
-                          <td>{movie.type}</td>
-                          <td>{movie.releaseYear}</td>
-                          <td>{movie.duration}</td>
-                          <td>{movie.rating}</td>
-                          <td>
-                            <button
-                                className="action-button edit-button"
-                                onClick={() => handleEditMovie(movie.showId)}
-                            >
-                              ✏️
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                                className="action-button delete-button"
-                                onClick={() => handleDeleteMovie(movie.showId)}
-                            >
-                              ❌
-                            </button>
-                          </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                  </table>
-              )}
-
-              <div className="pagination">{renderPagination()}</div>
-            </div>
-        )}
-
-        {/* Add Movie Modal */}
-        <Modal
-            isOpen={isAddModalOpen}
-            onClose={() => setIsAddModalOpen(false)}
-            title="Add New Movie"
-        >
-          <MovieForm
-              onSubmit={handleSubmitAdd}
-              onCancel={() => setIsAddModalOpen(false)}
-          />
-        </Modal>
-
-        {/* Edit Movie Modal */}
-        <Modal
-            isOpen={isEditModalOpen}
-            onClose={() => setIsEditModalOpen(false)}
-            title="Edit Movie"
-        >
-          {currentMovie && (
-              <MovieForm
-                  movie={currentMovie}
-                  onSubmit={handleSubmitEdit}
-                  onCancel={() => setIsEditModalOpen(false)}
-              />
-          )}
-        </Modal>
-
-        {/* Delete Confirmation Modal */}
-        <Modal
-            isOpen={isDeleteModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)}
-            title="Confirm Delete"
-        >
-          <div className="delete-confirmation">
-            <p>Are you sure you want to delete this movie?</p>
-            <div className="modal-actions">
-              <button
-                  className="cancel-button"
-                  onClick={() => setIsDeleteModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button className="delete-button" onClick={confirmDeleteMovie}>
-                Delete
-              </button>
-            </div>
-          </div>
-        </Modal>
+        <div className="brand-name"></div>
       </div>
+
+      <h1 className="welcome-title">Welcome, {user?.email}</h1>
+
+      <div className="management-toolbar">
+        <div className="filter-search-container">
+          {/* Updated GenreFilter with filter icon */}
+          <GenreFilter
+            selectedGenres={selectedGenres}
+            setSelectedGenres={setSelectedGenres}
+          />
+
+          <div style={{ position: "relative", width: "100%" }}>
+            <SearchIcon
+              style={{
+                position: "absolute",
+                left: "1rem",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#666",
+                pointerEvents: "none",
+                zIndex: 1,
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Search movies..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "0.75rem 1rem 0.75rem 3rem", // left padding for icon
+                backgroundColor: "#1a1a1a",
+                border: "1px solid #333",
+                borderRadius: "4px",
+                color: "#ddd",
+                fontSize: "1rem",
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="action-buttons">
+          <button className="add-button" onClick={handleAddMovie}>
+            Add New Movie
+          </button>
+          {selectedMovies.size > 0 && (
+            <button className="bulk-delete-button" onClick={handleBulkDelete}>
+              Delete Selected ({selectedMovies.size})
+            </button>
+          )}
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="loading">Loading...</div>
+      ) : error ? (
+        <div className="error-message">{error}</div>
+      ) : (
+        <div className="movies-table-container">
+          {movies.length === 0 ? (
+            <div className="no-movies-message">
+              No movies found. Try changing your filters or add a new movie.
+            </div>
+          ) : (
+            <table className="movies-table">
+              <thead>
+                <tr>
+                  <th>
+                    <input
+                      type="checkbox"
+                      checked={
+                        selectedMovies.size === movies.length &&
+                        movies.length > 0
+                      }
+                      onChange={toggleSelectAll}
+                    />
+                  </th>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Release Year</th>
+                  <th>Duration</th>
+                  <th>Rating</th>
+                  <th colSpan={2}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {movies.map((movie) => (
+                  <tr key={movie.showId}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedMovies.has(movie.showId)}
+                        onChange={() => toggleSelectMovie(movie.showId)}
+                      />
+                    </td>
+                    <td>{movie.title}</td>
+                    <td>{movie.type}</td>
+                    <td>{movie.releaseYear}</td>
+                    <td>{movie.duration}</td>
+                    <td>{movie.rating}</td>
+                    <td>
+                      <button
+                        className="action-button edit-button"
+                        onClick={() => handleEditMovie(movie.showId)}
+                      >
+                        ✏️
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="action-button delete-button"
+                        onClick={() => handleDeleteMovie(movie.showId)}
+                      >
+                        ❌
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          <div className="pagination">{renderPagination()}</div>
+        </div>
+      )}
+
+      {/* Add Movie Modal */}
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        title="Add New Movie"
+      >
+        <MovieForm
+          onSubmit={handleSubmitAdd}
+          onCancel={() => setIsAddModalOpen(false)}
+        />
+      </Modal>
+
+      {/* Edit Movie Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title="Edit Movie"
+      >
+        {currentMovie && (
+          <MovieForm
+            movie={currentMovie}
+            onSubmit={handleSubmitEdit}
+            onCancel={() => setIsEditModalOpen(false)}
+          />
+        )}
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title="Confirm Delete"
+      >
+        <div className="delete-confirmation">
+          <p>Are you sure you want to delete this movie?</p>
+          <div className="modal-actions">
+            <button
+              className="cancel-button"
+              onClick={() => setIsDeleteModalOpen(false)}
+            >
+              Cancel
+            </button>
+            <button className="delete-button" onClick={confirmDeleteMovie}>
+              Delete
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </div>
   );
 };
 
