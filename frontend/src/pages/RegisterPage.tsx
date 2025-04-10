@@ -10,15 +10,13 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
+  // const localregisterurl = "https://localhost:5000/register";
+  const publicregisterurl = "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/register";
+
   const [error, setError] = useState("");
 
-  const handleLoginClick = () => {
-    navigate("/login");
-  };
-
-  const handleGoHomeClick = () => {
-    navigate("/");
-  };
+  const handleLoginClick = () => navigate("/login");
+  const handleGoHomeClick = () => navigate("/");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,21 +39,17 @@ function Register() {
     } else {
       setError("");
 
-      fetch(
-        "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/register",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-            confirmPassword: confirmPassword,
-          }),
-        }
-      )
+      fetch(publicregisterurl, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password
+        }),
+      })
         .then((response) => {
           if (response.ok) {
             navigate("/login", {
@@ -83,11 +77,9 @@ function Register() {
               className="featured-image"
             />
           </div>
-
           <div className="right-column">
             <div className="signin-section">
               <h2 className="signin-title">Register</h2>
-
               <form onSubmit={handleSubmit} className="auth-form">
                 <div className="form-group">
                   <input
@@ -100,7 +92,6 @@ function Register() {
                     placeholder="Please enter your email address"
                   />
                 </div>
-
                 <div className="form-group">
                   <div className="password-label">
                     Password (must be 20 or more characters)
@@ -112,10 +103,8 @@ function Register() {
                     name="password"
                     value={password}
                     onChange={handleChange}
-                    placeholder=""
                   />
                 </div>
-
                 <div className="form-group">
                   <input
                     className="form-input"
@@ -127,12 +116,10 @@ function Register() {
                     placeholder="Re-type your password"
                   />
                 </div>
-
                 <div className="button-group">
                   <button className="signin-button" type="submit">
                     REGISTER
                   </button>
-
                   <button
                     className="register-button"
                     type="button"
@@ -140,7 +127,6 @@ function Register() {
                   >
                     GO TO LOGIN
                   </button>
-
                   <button
                     className="home-button"
                     type="button"
@@ -149,7 +135,6 @@ function Register() {
                     HOME PAGE
                   </button>
                 </div>
-
                 {error && <p className="error-message">{error}</p>}
               </form>
             </div>

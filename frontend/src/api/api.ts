@@ -29,7 +29,7 @@ interface SimilarMoviesResponse {
   recommendation10: string;
 }
 
-// Function to fetch movies from the API
+//Function to fetch movies from the API
 // export const API_URL = "https://localhost:5000/api/Movie";
 export const API_URL =
   "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/api/Movie";

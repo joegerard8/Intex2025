@@ -67,6 +67,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 
@@ -75,45 +76,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// app.MapMethods("/register", new[] { "OPTIONS" }, () => Results.Ok())
+//    .WithMetadata(new Microsoft.AspNetCore.Cors.Infrastructure.EnableCorsAttribute("AllowFrontend"));
+
+
 
 
 
 // ✅ Use ApplicationUser for Identity API
 app.MapIdentityApi<ApplicationUser>();
 
-app.MapPost("/register", async (
-    UserManager<ApplicationUser> userManager,
-    HttpContext context,
-    RegisterRequest request) =>
-{
-    try{
-    if (request.Password != request.ConfirmPassword)
-    {
-        return Results.BadRequest(new { message = "Passwords do not match" });
-    }
-
-    var user = new ApplicationUser
-    {
-        Email = request.Email,
-        UserName = request.Email
-    };
-
-    var result = await userManager.CreateAsync(user, request.Password);
-
-    if (!result.Succeeded)
-    {
-        return Results.BadRequest(new { message = string.Join("; ", result.Errors.Select(e => e.Description)) });
-    }
-
-    // Sign in or respond as needed (optional)
-    return Results.Ok(new { message = "Registration successful" });
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error in register endpoint: {ex}");
-        return Results.Problem(ex.Message);
-    }
-});
 
 app.MapPost("/logout", async (HttpContext context, SignInManager<ApplicationUser> signInManager) =>
 {
