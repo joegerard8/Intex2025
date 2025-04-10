@@ -61,43 +61,39 @@ namespace backend.Controllers
                 // Optional genre filtering
                 if (genres != null && genres.Any())
                 {
-                    foreach (var genre in genres)
-                    {
-                        switch (genre)
-                        {
-                            case "Action": query = query.Where(m => m.Action); break;
-                            case "Adventure": query = query.Where(m => m.Adventure); break;
-                            case "AnimeSeriesInternationalTvShows": query = query.Where(m => m.AnimeSeriesInternationalTvShows); break;
-                            case "BritishTvShowsDocuseriesInternationalTvShows": query = query.Where(m => m.BritishTvShowsDocuseriesInternationalTvShows); break;
-                            case "Children": query = query.Where(m => m.Children); break;
-                            case "Comedies": query = query.Where(m => m.Comedies); break;
-                            case "ComediesDramasInternationalMovies": query = query.Where(m => m.ComediesDramasInternationalMovies); break;
-                            case "ComediesInternationalMovies": query = query.Where(m => m.ComediesInternationalMovies); break;
-                            case "ComediesRomanticMovies": query = query.Where(m => m.ComediesRomanticMovies); break;
-                            case "CrimeTvShowsDocuseries": query = query.Where(m => m.CrimeTvShowsDocuseries); break;
-                            case "Documentaries": query = query.Where(m => m.Documentaries); break;
-                            case "DocumentariesInternationalMovies": query = query.Where(m => m.DocumentariesInternationalMovies); break;
-                            case "Docuseries": query = query.Where(m => m.Docuseries); break;
-                            case "Dramas": query = query.Where(m => m.Dramas); break;
-                            case "DramasInternationalMovies": query = query.Where(m => m.DramasInternationalMovies); break;
-                            case "DramasRomanticMovies": query = query.Where(m => m.DramasRomanticMovies); break;
-                            case "FamilyMovies": query = query.Where(m => m.FamilyMovies); break;
-                            case "Fantasy": query = query.Where(m => m.Fantasy); break;
-                            case "HorrorMovies": query = query.Where(m => m.HorrorMovies); break;
-                            case "InternationalMoviesThrillers": query = query.Where(m => m.InternationalMoviesThrillers); break;
-                            case "InternationalTvShowsRomanticTvShowsTvDramas": query = query.Where(m => m.InternationalTvShowsRomanticTvShowsTvDramas); break;
-                            case "KidsTv": query = query.Where(m => m.KidsTv); break;
-                            case "LanguageTvShows": query = query.Where(m => m.LanguageTvShows); break;
-                            case "Musicals": query = query.Where(m => m.Musicals); break;
-                            case "NatureTv": query = query.Where(m => m.NatureTv); break;
-                            case "RealityTv": query = query.Where(m => m.RealityTv); break;
-                            case "Spirituality": query = query.Where(m => m.Spirituality); break;
-                            case "TvAction": query = query.Where(m => m.TvAction); break;
-                            case "TvComedies": query = query.Where(m => m.TvComedies); break;
-                            case "TvDramas": query = query.Where(m => m.TvDramas); break;
-                            case "Thrillers": query = query.Where(m => m.Thrillers); break;
-                        }
-                    }
+                    query = query.Where(m =>
+                        (genres.Contains("Action") && m.Action) ||
+                        (genres.Contains("Adventure") && m.Adventure) ||
+                        (genres.Contains("AnimeSeriesInternationalTvShows") && m.AnimeSeriesInternationalTvShows) ||
+                        (genres.Contains("BritishTvShowsDocuseriesInternationalTvShows") && m.BritishTvShowsDocuseriesInternationalTvShows) ||
+                        (genres.Contains("Children") && m.Children) ||
+                        (genres.Contains("Comedies") && m.Comedies) ||
+                        (genres.Contains("ComediesDramasInternationalMovies") && m.ComediesDramasInternationalMovies) ||
+                        (genres.Contains("ComediesInternationalMovies") && m.ComediesInternationalMovies) ||
+                        (genres.Contains("ComediesRomanticMovies") && m.ComediesRomanticMovies) ||
+                        (genres.Contains("CrimeTvShowsDocuseries") && m.CrimeTvShowsDocuseries) ||
+                        (genres.Contains("Documentaries") && m.Documentaries) ||
+                        (genres.Contains("DocumentariesInternationalMovies") && m.DocumentariesInternationalMovies) ||
+                        (genres.Contains("Docuseries") && m.Docuseries) ||
+                        (genres.Contains("Dramas") && m.Dramas) ||
+                        (genres.Contains("DramasInternationalMovies") && m.DramasInternationalMovies) ||
+                        (genres.Contains("DramasRomanticMovies") && m.DramasRomanticMovies) ||
+                        (genres.Contains("FamilyMovies") && m.FamilyMovies) ||
+                        (genres.Contains("Fantasy") && m.Fantasy) ||
+                        (genres.Contains("HorrorMovies") && m.HorrorMovies) ||
+                        (genres.Contains("InternationalMoviesThrillers") && m.InternationalMoviesThrillers) ||
+                        (genres.Contains("InternationalTvShowsRomanticTvShowsTvDramas") && m.InternationalTvShowsRomanticTvShowsTvDramas) ||
+                        (genres.Contains("KidsTv") && m.KidsTv) ||
+                        (genres.Contains("LanguageTvShows") && m.LanguageTvShows) ||
+                        (genres.Contains("Musicals") && m.Musicals) ||
+                        (genres.Contains("NatureTv") && m.NatureTv) ||
+                        (genres.Contains("RealityTv") && m.RealityTv) ||
+                        (genres.Contains("Spirituality") && m.Spirituality) ||
+                        (genres.Contains("TvAction") && m.TvAction) ||
+                        (genres.Contains("TvComedies") && m.TvComedies) ||
+                        (genres.Contains("TvDramas") && m.TvDramas) ||
+                        (genres.Contains("Thrillers") && m.Thrillers)
+                    );
                 }
 
                 var totalNumMovies = query.Count();
