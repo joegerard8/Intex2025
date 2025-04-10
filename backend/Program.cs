@@ -75,11 +75,18 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
+
+
+// ✅ Use ApplicationUser for Identity API
+app.MapIdentityApi<ApplicationUser>();
+
 app.MapPost("/register", async (
     UserManager<ApplicationUser> userManager,
     HttpContext context,
     RegisterRequest request) =>
 {
+    try{
     if (request.Password != request.ConfirmPassword)
     {
         return Results.BadRequest(new { message = "Passwords do not match" });
@@ -100,11 +107,13 @@ app.MapPost("/register", async (
 
     // Sign in or respond as needed (optional)
     return Results.Ok(new { message = "Registration successful" });
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error in register endpoint: {ex}");
+        return Results.Problem(ex.Message);
+    }
 });
-
-
-// ✅ Use ApplicationUser for Identity API
-app.MapIdentityApi<ApplicationUser>();
 
 app.MapPost("/logout", async (HttpContext context, SignInManager<ApplicationUser> signInManager) =>
 {
