@@ -96,6 +96,7 @@ namespace backend.Controllers
                     );
                 }
 
+
                 var totalNumMovies = query.Count();
 
                 var movies = query

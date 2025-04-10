@@ -6,6 +6,7 @@ import logoForMovies from '../assets/logoForMovies.png';
 import AuthorizeView from '../AuthorizeView';
 import { fetchMovies } from '../api/api.ts';
 import MovieCard from '../components/MovieCard.tsx';
+import GenreFilter from '../components/GenreFilter.tsx';
 
 interface Movie {
     id: string;
@@ -26,6 +27,7 @@ const Movies: React.FC = () => {
     const [hasMore, setHasMore] = useState(true);
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     const [totalMovies, setTotalMovies] = useState(0);
+
 
     const handleSearchChage = (searchTerm: string ) => {
       setMovies([]);
@@ -69,11 +71,10 @@ const Movies: React.FC = () => {
   };
 
     useEffect(() => {
-      if (currentPage !== 1) {
-        loadMovies();
-      }
-    }, [currentPage]);
-    
+    if (currentPage === 1) return; // avoid double call on filter/search reset
+    loadMovies();
+  }, [currentPage]);
+
     useEffect(() => {
       setMovies([]);
       setCurrentPage(1);
@@ -135,6 +136,7 @@ const Movies: React.FC = () => {
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
               </button>
+              <GenreFilter selectedGenres={selectedGenres} setSelectedGenres={setSelectedGenres} />
             </div>
 
             {error && (
@@ -166,6 +168,7 @@ const Movies: React.FC = () => {
             </div>
           )}
         </div>
+
 
     );
 };
