@@ -88,7 +88,7 @@ export const submitUserRating = async (
 ): Promise<void> => {
   try {
     const response = await fetch(`${API_URL}/SubmitUserRating`, {
-        credentials: "include",
+      credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
