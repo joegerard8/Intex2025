@@ -58,7 +58,10 @@ export const getUserRatings = async (
 ): Promise<any> => {
   try {
     const response = await fetch(
-      `${API_URL}/GetUserRating/${userId}/${showId}`
+      `${API_URL}/GetUserRating/${userId}/${showId}`,
+      {
+        credentials: "include",
+      }
     );
 
     // If the user has no rating, return null instead of throwing an error
@@ -85,6 +88,7 @@ export const submitUserRating = async (
 ): Promise<void> => {
   try {
     const response = await fetch(`${API_URL}/SubmitUserRating`, {
+      credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -143,7 +147,10 @@ export const getUserRecommendedMovies = async (
 ): Promise<UserRecommendedResponse[]> => {
   try {
     const response = await fetch(
-      `${API_URL}/GetUserRecommendedMovies/${userId}`
+      `${API_URL}/GetUserRecommendedMovies/${userId}`,
+      {
+        credentials: "include",
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch user recommended movies");
@@ -159,7 +166,10 @@ export const getUserRecommendedMovies = async (
 export const getUserId = async (email: string): Promise<number | null> => {
   try {
     const response = await fetch(
-      `${API_URL}/GetUserId?email=${encodeURIComponent(email)}`
+      `${API_URL}/GetUserId?email=${encodeURIComponent(email)}`,
+      {
+        credentials: "include",
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch user ID");
