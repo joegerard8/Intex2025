@@ -6,6 +6,7 @@ import logoForMovies from '../assets/logoForMovies.png';
 import AuthorizeView from '../AuthorizeView';
 import { fetchMovies } from '../api/api.ts';
 import MovieCard from '../components/MovieCard.tsx';
+import GenreFilter from '../components/GenreFilter.tsx';
 
 interface Movie {
     id: string;
@@ -27,6 +28,7 @@ const Movies: React.FC = () => {
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     const [totalMovies, setTotalMovies] = useState(0);
 
+
     const handleSearchChage = (searchTerm: string ) => {
       setMovies([]);
       setCurrentPage(1);
@@ -44,18 +46,21 @@ const Movies: React.FC = () => {
           searchTerm
         );
 
-        const moviesData = data.movies
-          .filter((movieData: any) => movieData.image_url && movieData.image_url.trim() !== '')
-          .map((movieData: any) => ({
-            id: movieData.showId,
-            title: movieData.title,
-            posterUrl: movieData.image_url,
-            genres: movieData.genres || [],
-            year: movieData.year ?? 0
+        const newMovies = data.movies
+        .filter((movieData: any) => movieData.image_url && movieData.image_url.trim() !== '')
+        .map((movieData: any) => ({
+          id: movieData.showId,
+          title: movieData.title,
+          posterUrl: movieData.image_url,
+          genres: movieData.genres || [],
+          year: movieData.year ?? 0
         }));
 
-
-        setMovies(prev => [...prev, ...moviesData]);
+        setMovies(prev => {
+          const existingIds = new Set(prev.map(m => m.id));
+          const uniqueNewMovies = newMovies.filter(m => !existingIds.has(m.id));
+          return [...prev, ...uniqueNewMovies];
+        });
       // append new movies
         setTotalMovies(data.totalNumMovies);
         if (movies.length + data.movies.length >= data.totalNumMovies) {
@@ -69,11 +74,10 @@ const Movies: React.FC = () => {
   };
 
     useEffect(() => {
-      if (currentPage !== 1) {
-        loadMovies();
-      }
-    }, [currentPage]);
-    
+    if (currentPage === 1) return; // avoid double call on filter/search reset
+    loadMovies();
+  }, [currentPage]);
+
     useEffect(() => {
       setMovies([]);
       setCurrentPage(1);
@@ -135,6 +139,7 @@ const Movies: React.FC = () => {
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
               </button>
+              <GenreFilter selectedGenres={selectedGenres} setSelectedGenres={setSelectedGenres} />
             </div>
 
             {error && (
@@ -166,6 +171,7 @@ const Movies: React.FC = () => {
             </div>
           )}
         </div>
+
 
     );
 };

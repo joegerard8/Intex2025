@@ -30,7 +30,7 @@ function AuthorizeView(props: { children: React.ReactNode }) {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://localhost:5000/pingauth",
+        "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/pingauth",
         {
           method: "GET",
           credentials: "include",

@@ -41,13 +41,13 @@ function LoginPage() {
       return;
     }
 
-    const loginUrl = rememberme
-      ? "https://localhost:5000/login?useCookies=true"
-      : "https://localhost:5000/login?useSessionCookies=true";
-
     // const loginUrl = rememberme
-    //   ? "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/login?useCookies=true"
-    //   : "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/login?useSessionCookies=true";
+    //   ? "https://localhost:5000/login?useCookies=true"
+    //   : "https://localhost:5000/login?useSessionCookies=true";
+
+    const loginUrl = rememberme
+      ? "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/login?useCookies=true"
+      : "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/login?useSessionCookies=true";
 
     try {
       const response = await fetch(loginUrl, {

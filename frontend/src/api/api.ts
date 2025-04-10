@@ -30,9 +30,9 @@ interface SimilarMoviesResponse {
 }
 
 //Function to fetch movies from the API
-export const API_URL = "https://localhost:5000/api/Movie";
-// export const API_URL =
-//   "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/api/Movie";
+// export const API_URL = "https://localhost:5000/api/Movie";
+export const API_URL =
+  "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/api/Movie";
 
 // getting all the similar movies, queries the item recommendation table.
 export const getSimilarMovies = async (
