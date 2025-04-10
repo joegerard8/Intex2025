@@ -14,8 +14,6 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
-    # env:
-    #   ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -34,6 +32,8 @@ jobs:
 
   deploy_backend:
     name: Deploy .NET Backend to Azure App Service
+    env:
+      ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
     runs-on: ubuntu-latest
     needs: build_and_deploy_job
     steps:
