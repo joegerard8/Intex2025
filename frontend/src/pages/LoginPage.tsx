@@ -4,7 +4,7 @@ import { UserContext } from "../AuthorizeView";
 import Layout from "../components/Layout";
 import "./identity.css";
 import "@fortawesome/fontawesome-free/css/all.css";
-import movieCollage from "../assets/movieCollage.png"; // Placeholder for the gray image
+import movieCollage from "../assets/movieCollage.png";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -42,8 +42,8 @@ function LoginPage() {
     }
 
     const loginUrl = rememberme
-        ? "https://localhost:5000/login?useCookies=true"
-        : "https://localhost:5000/login?useSessionCookies=true";
+      ? "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/login?useCookies=true"
+      : "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/login?useSessionCookies=true";
 
     try {
       const response = await fetch(loginUrl, {
@@ -72,101 +72,93 @@ function LoginPage() {
   };
 
   return (
-      <Layout>
-        <div className="login-page">
-          
+    <Layout>
+      <div className="login-page">
+        <div className="two-column-container">
+          <div className="left-column">
+            <img src={movieCollage} alt="Featured movies" className="featured-image" />
+          </div>
 
-          {/* Two-column layout */}
-          <div className="two-column-container">
-            {/* Left column - Gray placeholder */}
-            <div className="left-column">
-              <img src={movieCollage} alt="Featured movies" className="featured-image" />
-            </div>
+          <div className="right-column">
+            <div className="signin-section">
+              <h2 className="signin-title">Sign In</h2>
 
-            {/* Right column - Login form */}
-            <div className="right-column">
+              {message && (
+                <div className="alert alert-success" role="alert">
+                  {message}
+                </div>
+              )}
 
-              <div className="signin-section">
-                <h2 className="signin-title">Sign In</h2>
+              <form onSubmit={handleSubmit} className="auth-form">
+                <div className="form-group">
+                  <input
+                    className="form-input"
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={handleChange}
+                    placeholder="Email address"
+                  />
+                </div>
 
-                {message && (
-                    <div className="alert alert-success" role="alert">
-                      {message}
-                    </div>
-                )}
+                <div className="form-group">
+                  <input
+                    className="form-input"
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={handleChange}
+                    placeholder="Password"
+                  />
+                </div>
 
-                <form onSubmit={handleSubmit} className="auth-form">
-                  <div className="form-group">
-                    <input
-                        className="form-input"
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={email}
-                        onChange={handleChange}
-                        placeholder="Email address"
-                    />
-                  </div>
+                <div className="remember-me">
+                  <input
+                    className="remember-checkbox"
+                    type="checkbox"
+                    id="rememberme"
+                    name="rememberme"
+                    checked={rememberme}
+                    onChange={handleChange}
+                  />
+                  <label className="remember-label" htmlFor="rememberme">
+                    Remember me
+                  </label>
+                </div>
 
-                  <div className="form-group">
-                    <input
-                        className="form-input"
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={handleChange}
-                        placeholder="Password"
-                    />
-                  </div>
+                <div className="button-group">
+                  <button className="signin-button" type="submit">
+                    SIGN IN
+                  </button>
+                  <button
+                    className="register-button"
+                    type="button"
+                    onClick={handleRegisterClick}
+                  >
+                    GO TO REGISTER
+                  </button>
+                  <button
+                    className="home-button"
+                    type="button"
+                    onClick={handleGoHomeClick}
+                  >
+                    HOME PAGE
+                  </button>
+                </div>
 
-                  <div className="remember-me">
-                    <input
-                        className="remember-checkbox"
-                        type="checkbox"
-                        id="rememberme"
-                        name="rememberme"
-                        checked={rememberme}
-                        onChange={handleChange}
-                    />
-                    <label className="remember-label" htmlFor="rememberme">
-                      Remember me
-                    </label>
-                  </div>
+                {error && <p className="error-message">{error}</p>}
 
-                  <div className="button-group">
-                    <button className="signin-button" type="submit">
-                      SIGN IN
-                    </button>
-
-                    <button
-                        className="register-button"
-                        type="button"
-                        onClick={handleRegisterClick}
-                    >
-                      GO TO REGISTER
-                    </button>
-
-                    <button
-                        className="home-button"
-                        type="button"
-                        onClick={handleGoHomeClick}
-                    >
-                      HOME PAGE
-                    </button>
-                  </div>
-
-                  {error && <p className="error-message">{error}</p>}
-
-                  <div className="forgot-password">
-                    <a href="/forgot-password">Forgot password?</a>
-                  </div>
-                </form>
-              </div>
+                <div className="forgot-password">
+                  <a href="/forgot-password">Forgot password?</a>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-      </Layout>
+      </div>
+    </Layout>
   );
 }
 
