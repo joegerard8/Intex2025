@@ -176,13 +176,36 @@ const HomePage: React.FC = () => {
         {!user && (
             <>
               <div className="cineniche-wrapper">
-                <h2 className="cineniche-heading">
+                <h2 className="cineniche-heading" style={{
+                  fontSize: "2.5rem",
+                  fontWeight: 700,
+                  marginBottom: "1rem",
+                  letterSpacing: "0.5px",
+                  background: "linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(200,200,200,0.7))",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  textShadow: "0px 2px 3px rgba(0,0,0,0.3)"
+                }}>
                   More Reasons to Join CineNiche
                 </h2>
                 <div className="cineniche-section">
                   <div className="cineniche-card">
                     <p>
-                      <strong>CineNiche is not your average movie site.</strong>
+                      <strong style={{
+                        fontSize: "1.5rem",
+                        fontWeight: 700,
+                        display: "inline-block",
+                        marginBottom: "0.5rem",
+                        letterSpacing: "0.5px",
+                        background: "linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(200,200,200,0.7))",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
+                        textShadow: "0px 1px 2px rgba(0,0,0,0.3)"
+                      }}>
+                        CineNiche is not your average movie site.
+                      </strong>
                       <br />
                       We focus on the overlooked, the underappreciated, and the
                       unforgettable. From arthouse horror to cult gems, this is
@@ -191,7 +214,20 @@ const HomePage: React.FC = () => {
                   </div>
                   <div className="cineniche-card">
                     <p>
-                      <strong>Start with your personalized recommendations.</strong>
+                      <strong style={{
+                        fontSize: "1.5rem",
+                        fontWeight: 700,
+                        display: "inline-block",
+                        marginBottom: "0.5rem",
+                        letterSpacing: "0.5px",
+                        background: "linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(200,200,200,0.7))",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
+                        textShadow: "0px 1px 2px rgba(0,0,0,0.3)"
+                      }}>
+                        Start with your personalized recommendations.
+                      </strong>
                       <br />
                       Not sure what to watch? We've got curated suggestions based on
                       your taste — just sign in to see what we've picked for you.
@@ -199,7 +235,20 @@ const HomePage: React.FC = () => {
                   </div>
                   <div className="cineniche-card">
                     <p>
-                      <strong>Leave ratings & explore by genre.</strong>
+                      <strong style={{
+                        fontSize: "1.5rem",
+                        fontWeight: 700,
+                        display: "inline-block",
+                        marginBottom: "0.5rem",
+                        letterSpacing: "0.5px",
+                        background: "linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(200,200,200,0.7))",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
+                        textShadow: "0px 1px 2px rgba(0,0,0,0.3)"
+                      }}>
+                        Leave ratings & explore by genre.
+                      </strong>
                       <br />
                       Whether you're into mind-bending thrillers or cozy family
                       flicks, CineNiche makes it easy to find films that match your

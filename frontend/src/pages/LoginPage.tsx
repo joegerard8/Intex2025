@@ -85,7 +85,19 @@ function LoginPage() {
 
           <div className="right-column">
             <div className="signin-section">
-              <h2 className="signin-title">Sign In</h2>
+              <h2 className="signin-title" style={{
+                fontSize: "2.5rem",
+                fontWeight: 700,
+                marginBottom: "1rem",
+                letterSpacing: "0.5px",
+                background: "linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(200,200,200,0.7))",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+                textShadow: "0px 2px 3px rgba(0,0,0,0.3)"
+              }}>
+                Sign In
+              </h2>
 
               {message && (
                 <div className="alert alert-success" role="alert">
