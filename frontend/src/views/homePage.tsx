@@ -138,7 +138,16 @@ const HomePage: React.FC = () => {
 
           {user && (
               <div className="welcome-section">
-                <h1>Welcome, {user.email}</h1>
+                <h1 style={{
+                  fontSize: "2.5rem",
+                  fontWeight: 700,
+                  marginBottom: "1rem",
+                  letterSpacing: "0.5px",
+                  color: "white",  // Solid white instead of gradient
+                  textShadow: "0px 2px 3px rgba(0,0,0,0.3)"
+                }}>
+                  Welcome, {user.email}
+                </h1>
               </div>
           )}
         </div>

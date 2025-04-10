@@ -48,21 +48,19 @@ const MovieCarousel = ({
 
     return (
         <div className={`movie-carousel ${isNumbered ? 'numbered-carousel' : ''}`} style={{ marginTop: "2rem", padding: "0 1rem" }}>
-            {/* Apply special styling only if isNumbered is true */}
+            {/* Apply consistent gradient title styling to ALL carousels */}
             <h2 style={{
-                fontSize: isNumbered ? "2.5rem" : "1.25rem",
-                fontWeight: isNumbered ? 700 : 500,
+                fontSize: "2.5rem",
+                fontWeight: 700,
                 marginBottom: "1rem",
                 borderBottom: "1px solid #333",
                 paddingBottom: "0.5rem",
-                ...(isNumbered ? {
-                    letterSpacing: "0.5px",
-                    background: "linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(200,200,200,0.7))",
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    color: "transparent",
-                    textShadow: "0px 2px 3px rgba(0,0,0,0.3)"
-                } : {})
+                letterSpacing: "0.5px",
+                background: "linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(200,200,200,0.7))",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+                textShadow: "0px 2px 3px rgba(0,0,0,0.3)"
             }}>
                 {title}
             </h2>
@@ -79,7 +77,7 @@ const MovieCarousel = ({
                             overflowX: 'auto',
                             paddingBottom: '0.5rem',
                             paddingLeft: '120px', // Increased left padding to make room for the numbers
-                            paddingTop: '1rem'
+                            paddingTop: '1rem',
                         }}
                     >
                         {movies.map((movie, index) => (
