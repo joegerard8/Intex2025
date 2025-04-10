@@ -45,6 +45,7 @@ function Register() {
         "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/register",
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

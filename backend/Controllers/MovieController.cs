@@ -23,6 +23,7 @@ namespace backend.Controllers
 
         
         
+        
         [HttpGet("GetMovies")]
         public IActionResult GetMovies(
             [FromQuery] int pageSize = 20,
