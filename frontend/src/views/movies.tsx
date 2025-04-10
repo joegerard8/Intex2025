@@ -69,13 +69,17 @@ const Movies: React.FC = () => {
   };
 
     useEffect(() => {
-      loadMovies();
-    }, [currentPage, searchTerm, selectedGenres]);
-
+      if (currentPage !== 1) {
+        loadMovies();
+      }
+    }, [currentPage]);
+    
     useEffect(() => {
       setMovies([]);
       setCurrentPage(1);
       setHasMore(true);
+
+      loadMovies();
     }, [searchTerm, selectedGenres]);
 
     useEffect(() => {
