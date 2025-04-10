@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import "./identity.css";
-import logo from "../assets/HomePageLogo.png";
 import movieCollage from "../assets/movieCollage.png";
 
 function Register() {
@@ -42,118 +41,120 @@ function Register() {
     } else {
       setError("");
 
-      fetch("https://localhost:5000/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      })
-          .then((response) => {
-            if (response.ok) {
-              navigate("/login", {
-                state: { message: "Registration successful. Please log in." },
-              });
-            } else {
-              setError("Error registering.");
-            }
-          })
-          .catch((error) => {
-            console.error(error);
+      fetch(
+        "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            navigate("/login", {
+              state: { message: "Registration successful. Please log in." },
+            });
+          } else {
             setError("Error registering.");
-          });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          setError("Error registering.");
+        });
     }
   };
 
   return (
-      <Layout>
-        <div className="login-page">
-          
+    <Layout>
+      <div className="login-page">
+        <div className="two-column-container">
+          <div className="left-column">
+            <img
+              src={movieCollage}
+              alt="Featured movies"
+              className="featured-image"
+            />
+          </div>
 
-          {/* Two-column layout */}
-          <div className="two-column-container">
-            {/* Left column - Gray placeholder */}
-            <div className="left-column">
-              <img src={movieCollage} alt="Featured movies" className="featured-image" />
-            </div>
+          <div className="right-column">
+            <div className="signin-section">
+              <h2 className="signin-title">Register</h2>
 
-            {/* Right column - Registration form */}
-            <div className="right-column">
-              <div className="signin-section">
-                <h2 className="signin-title">Register</h2>
+              <form onSubmit={handleSubmit} className="auth-form">
+                <div className="form-group">
+                  <input
+                    className="form-input"
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={handleChange}
+                    placeholder="Please enter your email address"
+                  />
+                </div>
 
-                <form onSubmit={handleSubmit} className="auth-form">
-                  <div className="form-group">
-                    <input
-                        className="form-input"
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={email}
-                        onChange={handleChange}
-                        placeholder="Please enter your email address"
-                    />
+                <div className="form-group">
+                  <div className="password-label">
+                    Password (must be 20 or more characters)
                   </div>
+                  <input
+                    className="form-input"
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={handleChange}
+                    placeholder=""
+                  />
+                </div>
 
-                  <div className="form-group">
-                    <div className="password-label">
-                      Password (must be 20 or more characters)
-                    </div>
-                    <input
-                        className="form-input"
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={handleChange}
-                        placeholder=""
-                    />
-                  </div>
+                <div className="form-group">
+                  <input
+                    className="form-input"
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Re-type your password"
+                  />
+                </div>
 
-                  <div className="form-group">
-                    <input
-                        className="form-input"
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        value={confirmPassword}
-                        onChange={handleChange}
-                        placeholder="Re-type your password"
-                    />
-                  </div>
+                <div className="button-group">
+                  <button className="signin-button" type="submit">
+                    REGISTER
+                  </button>
 
-                  <div className="button-group">
-                    <button className="signin-button" type="submit">
-                      REGISTER
-                    </button>
+                  <button
+                    className="register-button"
+                    type="button"
+                    onClick={handleLoginClick}
+                  >
+                    GO TO LOGIN
+                  </button>
 
-                    <button
-                        className="register-button"
-                        type="button"
-                        onClick={handleLoginClick}
-                    >
-                      GO TO LOGIN
-                    </button>
+                  <button
+                    className="home-button"
+                    type="button"
+                    onClick={handleGoHomeClick}
+                  >
+                    HOME PAGE
+                  </button>
+                </div>
 
-                    <button
-                        className="home-button"
-                        type="button"
-                        onClick={handleGoHomeClick}
-                    >
-                      HOME PAGE
-                    </button>
-                  </div>
-
-                  {error && <p className="error-message">{error}</p>}
-                </form>
-              </div>
+                {error && <p className="error-message">{error}</p>}
+              </form>
             </div>
           </div>
         </div>
-      </Layout>
+      </div>
+    </Layout>
   );
 }
 
