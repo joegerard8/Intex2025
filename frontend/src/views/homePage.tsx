@@ -149,41 +149,48 @@ const HomePage: React.FC = () => {
       {/* Public content section below the background image */}
       {!user && (
         <>
-          <div className="cineniche-section">
-            <div className="cineniche-card">
-              <p>
-                You have stumbled upon the gateway to all of our creative
-                endeavors. CineNiche specializes in horror as an art form.
-                Sometimes we criticize, while other times we are creating works
-                based on our favorite films.
-              </p>
+          <div className="cineniche-wrapper">
+            <h2 className="cineniche-heading">
+              More Reasons to Join CineNiche
+            </h2>
+            <div className="cineniche-section">
+              <div className="cineniche-card">
+                <p>
+                  <strong>CineNiche is not your average movie site.</strong>
+                  <br />
+                  We focus on the overlooked, the underappreciated, and the
+                  unforgettable. From arthouse horror to cult gems, this is
+                  where the true cinephiles dig deeper.
+                </p>
+              </div>
+              <div className="cineniche-card">
+                <p>
+                  <strong>Start with your personalized recommendations.</strong>
+                  <br />
+                  Not sure what to watch? We’ve got curated suggestions based on
+                  your taste — just sign in to see what we’ve picked for you.
+                </p>
+              </div>
+              <div className="cineniche-card">
+                <p>
+                  <strong>Leave ratings & explore by genre.</strong>
+                  <br />
+                  Whether you're into mind-bending thrillers or cozy family
+                  flicks, CineNiche makes it easy to find films that match your
+                  vibe.
+                </p>
+              </div>
             </div>
-            <div className="cineniche-card">
-              <p>
-                You can check out our Etsy shop, where we create personalized
-                stencils for any occasion or film lover.
-              </p>
+            <div className="learn-more-container">
+              <a
+                href="https://cineniche.blogspot.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="learn-more-btn"
+              >
+                Learn More About CineNiche
+              </a>
             </div>
-            <div className="cineniche-card">
-              <p>
-                You can also take a look at a Halloween themed children's book
-                we recently published on Amazon titled{" "}
-                <em>THE MANY MASKS OF EDGAR SAM</em>. As always, you can read
-                our reviews and articles that appear on various websites. Have a
-                look around and see everything we have to offer.
-              </p>
-            </div>
-          </div>
-
-          <div className="learn-more-container">
-            <a
-              href="https://cineniche.blogspot.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="learn-more-btn"
-            >
-              Learn More About CineNiche
-            </a>
           </div>
         </>
       )}
