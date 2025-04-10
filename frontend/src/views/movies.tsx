@@ -50,6 +50,8 @@ const Movies: React.FC = () => {
             id: movieData.showId,
             title: movieData.title,
             posterUrl: movieData.image_url,
+            genres: movieData.genres || [],
+            year: movieData.year ?? 0
         }));
 
 
