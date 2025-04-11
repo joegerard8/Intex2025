@@ -1,125 +1,259 @@
-import React, { useEffect } from 'react';
-import './privacy.css';
+import React, { useEffect } from "react";
+import "./privacy.css";
 
 const Privacy: React.FC = () => {
-    const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-        e.preventDefault();
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-            const links = document.querySelectorAll('.sidebar-nav a');
-            links.forEach(link => link.classList.remove('active'));
-            e.currentTarget.classList.add('active');
-        }
-    };
+  const scrollToSection = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    id: string
+  ) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const yOffset = -90; // Adjust to match your scroll-margin-top
+      const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+      const links = document.querySelectorAll(".sidebar-nav a");
+      links.forEach((link) => link.classList.remove("active"));
+      e.currentTarget.classList.add("active");
+    }
+  };
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const sections = document.querySelectorAll('h3[id]');
-            const scrollPosition = window.scrollY + 100;
+useEffect(() => {
+  const handleScroll = () => {
+    const sections = document.querySelectorAll("h3[id]");
+    const scrollPosition = window.scrollY + 100;
 
-            sections.forEach(section => {
-                const sectionElement = section as HTMLElement;
-                const sectionTop = sectionElement.offsetTop;
-                const sectionHeight = sectionElement.offsetHeight;
-                const sectionId = sectionElement.getAttribute('id') || '';
+    sections.forEach((section) => {
+      const sectionElement = section as HTMLElement;
+      const sectionTop = sectionElement.offsetTop;
+      const sectionHeight = sectionElement.offsetHeight;
+      const sectionId = sectionElement.getAttribute("id") || "";
 
-                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                    const links = document.querySelectorAll('.sidebar-nav a');
-                    links.forEach(link => link.classList.remove('active'));
-                    const activeLink = document.querySelector(`.sidebar-nav a[href="#${sectionId}"]`);
-                    if (activeLink) activeLink.classList.add('active');
-                }
-            });
-        };
+      const activeLink = document.querySelector(
+        `.sidebar-nav a[href="#${sectionId}"]`
+      );
+      if (
+        scrollPosition >= sectionTop &&
+        scrollPosition < sectionTop + sectionHeight &&
+        activeLink
+      ) {
+        document
+          .querySelectorAll(".sidebar-nav a")
+          .forEach((link) => link.classList.remove("active"));
+        activeLink.classList.add("active");
+      }
+    });
+  };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+  // Prevent auto-scroll to bottom if there's no hash in the URL
+  if (!window.location.hash) {
+    window.scrollTo(0, 0);
+  }
 
-    return (
-        <div className="privacy-page">
-            {/* Just the black header strip */}
-            <div className="privacy-header"></div>
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
 
-            <div className="privacy-container">
-                {/* Sidebar Navigation */}
-                <div className="privacy-sidebar">
-                    <h2 className="sidebar-title">Contents</h2>
-                    <ul className="sidebar-nav">
-                        <li><a href="#introduction" onClick={(e) => scrollToSection(e, 'introduction')} className="active">Introduction</a></li>
-                        <li><a href="#information-we-collect" onClick={(e) => scrollToSection(e, 'information-we-collect')}>Information We Collect</a></li>
-                        <li><a href="#how-we-use" onClick={(e) => scrollToSection(e, 'how-we-use')}>How We Use Your Information</a></li>
-                        <li><a href="#sharing" onClick={(e) => scrollToSection(e, 'sharing')}>Sharing Your Information</a></li>
-                        <li><a href="#contact" onClick={(e) => scrollToSection(e, 'contact')}>Contact Us</a></li>
-                    </ul>
-                </div>
 
-                {/* Main Content */}
-                <div className="privacy-content-wrapper">
-                    <div className="privacy-content">
-                        <h2>CineNiche Privacy Policy</h2>
-                        <p className="updated-date">LAST UPDATED: APRIL 2025</p>
+  return (
+    <div className="privacy-page">
+      <div className="privacy-header"></div>
 
-                        <div id="introduction">
-                            <p className="intro-text">
-                                At CineNiche, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our streaming service, website, and mobile application. By accessing our service, you acknowledge that you have read, understood, and agree to be bound by all the terms of this Privacy Policy.
-                            </p>
-                        </div>
-
-                        <h3 id="information-we-collect">Information We Collect</h3>
-                        <p className="section-subtitle">Information You Provide to Us</p>
-                        <ul className="privacy-list">
-                            <li>Account information: When you register an account, we collect your name, email address, phone number, password, age, gender, location/ZIP code, and payment information.</li>
-                            <li>Profile information: User preferences, viewing history, watchlists, and ratings.</li>
-                            <li>Communications: We store correspondence when you contact our customer service.</li>
-                        </ul>
-
-                        <p className="section-subtitle">Information We Collect Automatically</p>
-                        <ul className="privacy-list">
-                            <li>Usage Information: Information about your interactions with our Service, including viewing history, search queries, and how you interact with content.</li>
-                            <li>Location Information: General location information based on your IP address.</li>
-                            <li>Device and Browser Information: We collect cookies and data regarding your device, browser type, referring/exit pages, and timestamps.</li>
-                            <li>Content and Cookies: We collect cookies and similar tracking technologies to track activity on our Service and hold certain information.</li>
-                        </ul>
-
-                        <h3 id="how-we-use">How We Use Your Information</h3>
-                        <p>We use the information we collect to:</p>
-                        <ul className="privacy-list">
-                            <li>Provide, maintain, and improve our service</li>
-                            <li>Process transactions and send transactional communications</li>
-                            <li>Respond to your comments, questions, and requests</li>
-                            <li>Send emails and push notifications related to your account</li>
-                            <li>Personalize your experience, including content recommendations</li>
-                            <li>Monitor and analyze trends, usage, and activities</li>
-                            <li>Detect, prevent, and address technical issues or illegal activities</li>
-                            <li>Comply with legal obligations</li>
-                        </ul>
-
-                        <h3 id="sharing">Sharing Your Information</h3>
-                        <p>We may share your information with:</p>
-                        <ul className="privacy-list">
-                            <li>Service providers who perform services for us</li>
-                            <li>Business partners with your consent</li>
-                            <li>Other third parties with your consent</li>
-                            <li>In response to legal process or government requests</li>
-                            <li>To protect our rights, privacy, safety, or property</li>
-                            <li>In connection with a merger, sale, or acquisition</li>
-                        </ul>
-
-                        <h3 id="contact">Contact Us</h3>
-                        <p>If you have questions about this Privacy Policy, please contact us at privacy@cineniche.com or write to us at:</p>
-                        <p className="contact-address">
-                            CineNiche, Inc.<br />
-                            Privacy Department<br />
-                            123 Film Street<br />
-                            Hollywood, CA 90028
-                        </p>
-                    </div>
-                </div>
-            </div>
+      <div className="privacy-container">
+        <div className="privacy-sidebar">
+          <h2 className="sidebar-title">Contents</h2>
+          <ul className="sidebar-nav">
+            <li>
+              <a
+                href="#introduction"
+                onClick={(e) => scrollToSection(e, "introduction")}
+                className="active"
+              >
+                Introduction
+              </a>
+            </li>
+            <li>
+              <a
+                href="#information-we-collect"
+                onClick={(e) => scrollToSection(e, "information-we-collect")}
+              >
+                Information We Collect
+              </a>
+            </li>
+            <li>
+              <a
+                href="#how-we-use"
+                onClick={(e) => scrollToSection(e, "how-we-use")}
+              >
+                How We Use Your Information
+              </a>
+            </li>
+            <li>
+              <a
+                href="#legal-basis"
+                onClick={(e) => scrollToSection(e, "legal-basis")}
+              >
+                Legal Basis for Processing
+              </a>
+            </li>
+            <li>
+              <a href="#rights" onClick={(e) => scrollToSection(e, "rights")}>
+                Your Rights
+              </a>
+            </li>
+            <li>
+              <a href="#sharing" onClick={(e) => scrollToSection(e, "sharing")}>
+                Sharing Your Information
+              </a>
+            </li>
+            <li>
+              <a href="#contact" onClick={(e) => scrollToSection(e, "contact")}>
+                Contact Us
+              </a>
+            </li>
+          </ul>
         </div>
-    );
+
+        <div className="privacy-content-wrapper">
+          <div className="privacy-content">
+            <h2>CineNiche Privacy Policy</h2>
+            <p className="updated-date">LAST UPDATED: APRIL 2025</p>
+
+            <div id="introduction">
+              <p className="intro-text">
+                At CineNiche, we are committed to protecting your privacy. This
+                Privacy Policy outlines how we collect, use, share, and protect
+                your personal data in compliance with the General Data
+                Protection Regulation (GDPR).
+              </p>
+            </div>
+
+            <h3 id="information-we-collect">Information We Collect</h3>
+            <p className="section-subtitle">Information You Provide to Us</p>
+            <ul className="privacy-list">
+              <li>
+                Registration details such as name, email address, password, date
+                of birth, and billing information.
+              </li>
+              <li>
+                Profile preferences including language, genres, and favorite
+                shows.
+              </li>
+              <li>
+                Communication data like messages sent to our support team.
+              </li>
+            </ul>
+
+            <p className="section-subtitle">
+              Information We Collect Automatically
+            </p>
+            <ul className="privacy-list">
+              <li>
+                Usage data (e.g., watch history, clicks, and navigation
+                patterns).
+              </li>
+              <li>
+                Device and technical info (e.g., IP address, device type,
+                browser).
+              </li>
+              <li>
+                Cookies and similar tracking technologies for analytics and
+                personalization.
+              </li>
+            </ul>
+
+            <h3 id="how-we-use">How We Use Your Information</h3>
+            <ul className="privacy-list">
+              <li>To deliver and maintain our streaming service</li>
+              <li>To personalize content recommendations</li>
+              <li>To communicate service updates and offers</li>
+              <li>To ensure security and prevent abuse</li>
+              <li>To comply with legal obligations</li>
+            </ul>
+
+            <h3 id="legal-basis">Legal Basis for Processing</h3>
+            <ul className="privacy-list">
+              <li>
+                <strong>Consent:</strong> When you provide explicit permission
+                for us to use your data.
+              </li>
+              <li>
+                <strong>Contract:</strong> When processing is necessary to
+                fulfill our agreement with you (e.g., account creation).
+              </li>
+              <li>
+                <strong>Legal Obligation:</strong> To comply with applicable
+                laws and regulations.
+              </li>
+              <li>
+                <strong>Legitimate Interest:</strong> For business interests
+                such as service improvement, while respecting your privacy
+                rights.
+              </li>
+            </ul>
+
+            <h3 id="rights">Your Rights Under GDPR</h3>
+            <ul className="privacy-list">
+              <li>
+                <strong>Right to Access:</strong> You can request copies of your
+                personal data.
+              </li>
+              <li>
+                <strong>Right to Rectification:</strong> You can ask us to
+                correct inaccurate information.
+              </li>
+              <li>
+                <strong>Right to Erasure:</strong> You can request deletion of
+                your data, under certain conditions.
+              </li>
+              <li>
+                <strong>Right to Restrict Processing:</strong> You can request
+                that we limit how we use your data.
+              </li>
+              <li>
+                <strong>Right to Object:</strong> You can object to our use of
+                your data based on legitimate interests.
+              </li>
+              <li>
+                <strong>Right to Data Portability:</strong> You can request your
+                data in a format that allows it to be transferred to another
+                provider.
+              </li>
+              <li>
+                <strong>Right to Lodge a Complaint:</strong> You may file a
+                complaint with a supervisory authority in your EU country.
+              </li>
+            </ul>
+
+            <h3 id="sharing">Sharing Your Information</h3>
+            <ul className="privacy-list">
+              <li>Third-party processors under data protection agreements</li>
+              <li>Legal authorities when required by law</li>
+              <li>In connection with mergers or acquisition events</li>
+            </ul>
+
+            <h3 id="contact">Contact Us</h3>
+            <p>
+              If you have questions about this Privacy Policy or want to
+              exercise your rights, contact us at:
+            </p>
+            <p className="contact-address">
+              CineNiche, Inc.
+              <br />
+              Data Protection Officer
+              <br />
+              123 Film Street
+              <br />
+              Hollywood, CA 90028
+              <br />
+              Email:{" "}
+              <a href="mailto:privacy@cineniche.com">privacy@cineniche.com</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Privacy;
