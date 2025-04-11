@@ -52,8 +52,6 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 });
 
 
-
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",

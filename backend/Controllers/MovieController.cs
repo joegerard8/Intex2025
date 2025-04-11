@@ -25,7 +25,6 @@ namespace backend.Controllers
         [HttpPost("ConsentToCookies")]
         public IActionResult ConsentToCookies()
         {
-            // Sets a consent cookie with appropriate options
             HttpContext.Response.Cookies.Append(".AspNet.Consent", "yes", new CookieOptions
             {
                 Path = "/",
