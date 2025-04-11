@@ -1,3 +1,4 @@
+// user interface to store user details
 export interface MoviesUser {
   userId: number;
   name: string;

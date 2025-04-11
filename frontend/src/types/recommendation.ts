@@ -1,3 +1,4 @@
+// itemrecommendation object that is used for the recommendations on the movie details page 
 export interface ItemRecommendation {
   showId: string;
   movie: string;

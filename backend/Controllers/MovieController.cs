@@ -1,45 +1,45 @@
+// Required namespaces for working with ASP.NET Core, Entity Framework, HTTP, and authorization
 using backend.Data;
 using backend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http.Features;
-
-
 
 namespace backend.Controllers
 {
+    // This defines the base route for the controller: api/Movie
     [Route("api/[controller]")]
     [ApiController]
     public class MovieController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
 
+        // Constructor that injects the database context
         public MovieController(ApplicationDbContext temp)
         {
             _dbContext = temp;
         }
 
-        
-[HttpPost("ConsentToCookies")]
-public IActionResult ConsentToCookies()
-{
-    HttpContext.Response.Cookies.Append(".AspNet.Consent", "yes", new CookieOptions
-    {
-        Path = "/",
-        HttpOnly = true,
-        Secure = true,
-        SameSite = SameSiteMode.None,
-        IsEssential = true,
-        Expires = DateTimeOffset.UtcNow.AddYears(1)
-    });
+        // Endpoint to store cookie consent
+        [HttpPost("ConsentToCookies")]
+        public IActionResult ConsentToCookies()
+        {
+            // Sets a consent cookie with appropriate options
+            HttpContext.Response.Cookies.Append(".AspNet.Consent", "yes", new CookieOptions
+            {
+                Path = "/",
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                IsEssential = true,
+                Expires = DateTimeOffset.UtcNow.AddYears(1)
+            });
 
-    return Ok(new { message = "Consent granted." });
-}
-        
-        
+            return Ok(new { message = "Consent granted." });
+        }
+
+        // GET movies, with optional filtering by genre, search, or specific showId
         [HttpGet("GetMovies")]
         public IActionResult GetMovies(
             [FromQuery] int pageSize = 20,
@@ -52,29 +52,21 @@ public IActionResult ConsentToCookies()
             {
                 IQueryable<MoviesTitle> query = _dbContext.MoviesTitles.AsQueryable();
 
-                // Return one specific movie if showId is provided
+                // If a specific movie is requested by ID
                 if (!string.IsNullOrEmpty(showId))
                 {
                     var movie = query.FirstOrDefault(m => m.ShowId == showId);
                     if (movie == null)
-                    {
                         return NotFound(new { message = "Movie not found." });
-                    }
 
-                    return Ok(new
-                    {
-                        Movies = new List<MoviesTitle> { movie },
-                        TotalNumMovies = 1
-                    });
+                    return Ok(new { Movies = new List<MoviesTitle> { movie }, TotalNumMovies = 1 });
                 }
 
-                // Optional title search
+                // Filter by search keyword
                 if (!string.IsNullOrEmpty(search))
-                {
                     query = query.Where(m => m.Title.Contains(search));
-                }
 
-                // Optional genre filtering
+                // Filter by selected genres
                 if (genres != null && genres.Any())
                 {
                     query = query.Where(m =>
@@ -112,21 +104,14 @@ public IActionResult ConsentToCookies()
                     );
                 }
 
-
+                // Get total count and paginate results
                 var totalNumMovies = query.Count();
-
                 var movies = query
                     .Skip((pageNum - 1) * pageSize)
                     .Take(pageSize)
                     .ToList();
 
-                var result = new
-                {
-                    Movies = movies,
-                    TotalNumMovies = totalNumMovies
-                };
-
-                return Ok(result);
+                return Ok(new { Movies = movies, TotalNumMovies = totalNumMovies });
             }
             catch (Exception ex)
             {
@@ -134,71 +119,62 @@ public IActionResult ConsentToCookies()
                 {
                     message = "An error occurred while fetching movies.",
                     error = ex.Message,
-                    stackTrace = ex.StackTrace // optionally remove for production
+                    stackTrace = ex.StackTrace // Consider omitting in production
                 });
             }
         }
 
-      // getting the similar movies to then pull all of the information we need.
+        // Gets similar movie recommendations for a specific showId
         [HttpGet("GetSimilarMovies/{showId}")]
         public IActionResult GetSimilarMovies(string showId)
         {
-        // Assuming 'show_id' is the primary key or matches exactly in ItemRecommendations
-        var recommendation = _dbContext.ItemRecommendations
-            .FirstOrDefault(r => r.ShowId == showId);
+            var recommendation = _dbContext.ItemRecommendations
+                .FirstOrDefault(r => r.ShowId == showId);
 
-        if (recommendation == null)
-        {
-            return NotFound("Recommendation not found.");
+            if (recommendation == null)
+                return NotFound("Recommendation not found.");
+
+            return Ok(recommendation);
         }
 
-        return Ok(recommendation);
-        }
-    
-    // getting movies recommended to a specific user
+        // Get personalized home recommendations for a user
         [HttpGet("GetUserRecommendedMovies/{userId}")]
         [Authorize]
-        public IActionResult GetUserRecommendedMovies(byte userId) 
+        public IActionResult GetUserRecommendedMovies(byte userId)
         {
             var recommendations = _dbContext.HomeRecommendations
                 .Where(r => r.user_id == userId)
                 .ToList();
 
             if (recommendations == null || !recommendations.Any())
-            {
                 return NotFound(new { message = "No recommendations found for this user." });
-            }
 
             return Ok(recommendations);
         }
 
-        // getting the users id to get their unique recommendations
+        // Get the UserId from an email address
         [HttpGet("GetUserId")]
         [Authorize]
         public IActionResult GetUserId(string email)
         {
             var user = _dbContext.ApplicationUsers.FirstOrDefault(u => u.Email == email);
             if (user == null)
-            {
                 return NotFound(new { message = "User not found." });
-            }
+
             return Ok(new { userId = user.UserId });
         }
 
+        // Admin endpoint to add a new movie
         [HttpPost("AddMovie")]
         [Authorize(Roles = "Administrator")]
         public IActionResult AddMovie([FromBody] MoviesTitle newMovie)
         {
             if (newMovie == null)
-            {
                 return BadRequest(new { message = "Movie data is null." });
-            }
 
             var existing = _dbContext.MoviesTitles.Find(newMovie.ShowId);
             if (existing != null)
-            {
                 return Conflict(new { message = "A movie with the same ShowId already exists." });
-            }
 
             _dbContext.MoviesTitles.Add(newMovie);
             _dbContext.SaveChanges();
@@ -206,27 +182,24 @@ public IActionResult ConsentToCookies()
             return Ok(newMovie);
         }
 
+        // Admin endpoint to update an existing movie
         [HttpPut("UpdateMovie/{showId}")]
         [Authorize(Roles = "Administrator")]
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
             var existingMovie = _dbContext.MoviesTitles.Find(showId);
             if (existingMovie == null)
-            {
                 return NotFound(new { message = "Movie not found." });
-            }
 
             if (updatedMovie == null || updatedMovie.ShowId != showId)
-            {
                 return BadRequest(new { message = "Movie data is null or ShowId mismatch." });
-            }
 
+            // Update movie fields
             existingMovie.Title = updatedMovie.Title;
             existingMovie.Director = updatedMovie.Director;
             existingMovie.ReleaseYear = updatedMovie.ReleaseYear;
             existingMovie.Rating = updatedMovie.Rating;
             existingMovie.Description = updatedMovie.Description;
-            // Optionally update genres here if needed...
 
             _dbContext.MoviesTitles.Update(existingMovie);
             _dbContext.SaveChanges();
@@ -234,15 +207,14 @@ public IActionResult ConsentToCookies()
             return Ok(existingMovie);
         }
 
+        // Admin endpoint to delete a movie by ShowId
         [HttpDelete("DeleteMovie/{showId}")]
         [Authorize(Roles = "Administrator")]
         public IActionResult DeleteMovie(string showId)
         {
             var movie = _dbContext.MoviesTitles.Find(showId);
             if (movie == null)
-            {
                 return NotFound(new { message = "Movie not found." });
-            }
 
             _dbContext.MoviesTitles.Remove(movie);
             _dbContext.SaveChanges();
@@ -250,88 +222,64 @@ public IActionResult ConsentToCookies()
             return NoContent();
         }
 
-
+        // Return a static list of all available genre names
         [HttpGet("GetGenres")]
         public IActionResult GetGenres()
         {
             var genreList = new List<string>
             {
-                "Action",
-                "Adventure",
-                "AnimeSeriesInternationalTvShows",
-                "BritishTvShowsDocuseriesInternationalTvShows",
-                "Children",
-                "Comedies",
-                "ComediesDramasInternationalMovies",
-                "ComediesInternationalMovies",
-                "ComediesRomanticMovies",
-                "CrimeTvShowsDocuseries",
-                "Documentaries",
-                "DocumentariesInternationalMovies",
-                "Docuseries",
-                "Dramas",
-                "DramasInternationalMovies",
-                "DramasRomanticMovies",
-                "FamilyMovies",
-                "Fantasy",
-                "HorrorMovies",
-                "InternationalMoviesThrillers",
-                "InternationalTvShowsRomanticTvShowsTvDramas",
-                "KidsTv",
-                "LanguageTvShows",
-                "Musicals",
-                "NatureTv",
-                "RealityTv",
-                "Spirituality",
-                "TvAction",
-                "TvComedies",
-                "TvDramas",
-                "Thrillers"
+                "Action", "Adventure", "AnimeSeriesInternationalTvShows",
+                "BritishTvShowsDocuseriesInternationalTvShows", "Children", "Comedies",
+                "ComediesDramasInternationalMovies", "ComediesInternationalMovies",
+                "ComediesRomanticMovies", "CrimeTvShowsDocuseries", "Documentaries",
+                "DocumentariesInternationalMovies", "Docuseries", "Dramas",
+                "DramasInternationalMovies", "DramasRomanticMovies", "FamilyMovies",
+                "Fantasy", "HorrorMovies", "InternationalMoviesThrillers",
+                "InternationalTvShowsRomanticTvShowsTvDramas", "KidsTv", "LanguageTvShows",
+                "Musicals", "NatureTv", "RealityTv", "Spirituality", "TvAction",
+                "TvComedies", "TvDramas", "Thrillers"
             };
 
             return Ok(genreList);
         }
 
-            [HttpPost("SubmitUserRating")]
-            [Authorize]
-            public async Task<IActionResult> SubmitUserRating([FromBody] MoviesRating rating)
+        // Submits or updates a user's rating for a movie
+        [HttpPost("SubmitUserRating")]
+        [Authorize]
+        public async Task<IActionResult> SubmitUserRating([FromBody] MoviesRating rating)
+        {
+            if (rating == null)
+                return BadRequest(new { message = "Rating data is null." });
+
+            var existing = await _dbContext.MoviesRatings
+                .FirstOrDefaultAsync(r => r.UserId == rating.UserId && r.ShowId == rating.ShowId);
+
+            if (existing != null)
             {
-                if (rating == null)
-                {
-                    return BadRequest(new { message = "Rating data is null." });
-                }
-
-                var existing = await _dbContext.MoviesRatings
-                    .FirstOrDefaultAsync(r => r.UserId == rating.UserId && r.ShowId == rating.ShowId);
-
-                if (existing != null)
-                {
-                    existing.Rating = rating.Rating;
-                }
-                else
-                {
-                    _dbContext.MoviesRatings.Add(rating);
-                }
-
-                await _dbContext.SaveChangesAsync();
-
-                return Ok(new { message = "Rating saved successfully." });
+                existing.Rating = rating.Rating;
+            }
+            else
+            {
+                _dbContext.MoviesRatings.Add(rating);
             }
 
-            [HttpGet("GetUserRating/{userId}/{showId}")]
-            [Authorize]
-            public async Task<IActionResult> GetUserRating(byte userId, string showId)
-            {
-                var rating = await _dbContext.MoviesRatings
-                    .FirstOrDefaultAsync(r => r.UserId == userId && r.ShowId == showId);
+            await _dbContext.SaveChangesAsync();
 
-                if (rating == null)
-                {
-                    return NotFound(new { message = "Rating not found." });
-                }
+            return Ok(new { message = "Rating saved successfully." });
+        }
 
-                return Ok(rating);
-            }
+        // Retrieves a specific rating given by a user for a movie
+        [HttpGet("GetUserRating/{userId}/{showId}")]
+        [Authorize]
+        public async Task<IActionResult> GetUserRating(byte userId, string showId)
+        {
+            var rating = await _dbContext.MoviesRatings
+                .FirstOrDefaultAsync(r => r.UserId == userId && r.ShowId == showId);
 
+            if (rating == null)
+                return NotFound(new { message = "Rating not found." });
+
+            return Ok(rating);
         }
     }
+}

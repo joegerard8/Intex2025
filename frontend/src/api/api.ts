@@ -1,10 +1,21 @@
+// Importing the movie type definition
 import { MoviesTitle } from "../types/movie";
 
+// ===============================
+// Interfaces for API responses
+// ===============================
+
+/**
+ * Response shape for fetching a paginated list of movies.
+ */
 interface FetchMoviesResponse {
   movies: MoviesTitle[];
   totalNumMovies: number;
 }
 
+/**
+ * Response shape for user-specific movie recommendations.
+ */
 interface UserRecommendedResponse {
   user_id: number;
   collaborative: string;
@@ -15,6 +26,9 @@ interface UserRecommendedResponse {
   family_recs: string;
 }
 
+/**
+ * Response shape for similar movies using item-based recommendations.
+ */
 interface SimilarMoviesResponse {
   title: string;
   recommendation1: string;
@@ -29,12 +43,13 @@ interface SimilarMoviesResponse {
   recommendation10: string;
 }
 
-//Function to fetch movies from the API
-// export const API_URL = "https://localhost:5000/api/Movie";
+// Base URL of the API
 export const API_URL =
   "https://intex2025backend-fsh2fcgnacaycebx.eastus-01.azurewebsites.net/api/Movie";
 
-// getting all the similar movies, queries the item recommendation table.
+// =====================================================
+// Fetch similar movies using item-based recommendation
+// =====================================================
 export const getSimilarMovies = async (
   showId: string
 ): Promise<SimilarMoviesResponse> => {
@@ -51,7 +66,9 @@ export const getSimilarMovies = async (
   }
 };
 
-// getting the user rating score.
+// =====================================================
+// Fetch user rating for a specific movie
+// =====================================================
 export const getUserRatings = async (
   userId: number,
   showId: string
@@ -60,13 +77,12 @@ export const getUserRatings = async (
     const response = await fetch(
       `${API_URL}/GetUserRating/${userId}/${showId}`,
       {
-        credentials: "include",
+        credentials: "include", // Includes session cookies
       }
     );
 
-    // If the user has no rating, return null instead of throwing an error
     if (response.status === 404) {
-      return null;
+      return null; // No rating found for this user and show
     }
 
     if (!response.ok) {
@@ -77,10 +93,13 @@ export const getUserRatings = async (
     return data;
   } catch (error) {
     console.error("Unexpected error fetching user ratings:", error);
-    return null; // fallback for any other kind of error
+    return null;
   }
 };
 
+// =====================================================
+// Submit a user's rating for a movie
+// =====================================================
 export const submitUserRating = async (
   userId: number,
   showId: string,
@@ -88,29 +107,27 @@ export const submitUserRating = async (
 ): Promise<void> => {
   try {
     const response = await fetch(`${API_URL}/SubmitUserRating`, {
-      credentials: "include",
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        userId,
-        showId,
-        rating,
-      }),
+      body: JSON.stringify({ userId, showId, rating }),
     });
 
     if (!response.ok) {
       throw new Error("Failed to submit rating");
     }
 
-    const data = await response.json();
+    await response.json(); // No-op for now, can be logged if needed
   } catch (error) {
-    console.error("❌ Error submitting user rating:", error);
+    console.error("Error submitting user rating:", error);
   }
 };
 
-// Fetch movies (with pagination, genre filtering, and optional search)
+// =====================================================
+// Fetch paginated movies with genre filters and search
+// =====================================================
 export const fetchMovies = async (
   pageSize: number,
   pageNum: number,
@@ -141,7 +158,9 @@ export const fetchMovies = async (
   }
 };
 
-//getting movies recommended to a specific user
+// =====================================================
+// Fetch recommended movies for a specific user
+// =====================================================
 export const getUserRecommendedMovies = async (
   userId: number
 ): Promise<UserRecommendedResponse[]> => {
@@ -152,9 +171,11 @@ export const getUserRecommendedMovies = async (
         credentials: "include",
       }
     );
+
     if (!response.ok) {
       throw new Error("Failed to fetch user recommended movies");
     }
+
     return await response.json();
   } catch (error) {
     console.error("Error fetching user recommended movies:", error);
@@ -162,18 +183,22 @@ export const getUserRecommendedMovies = async (
   }
 };
 
-// getting the user id
+// =====================================================
+// Get user ID based on their email address
+// =====================================================
 export const getUserId = async (email: string): Promise<number | null> => {
   try {
     const response = await fetch(
       `${API_URL}/GetUserId?email=${encodeURIComponent(email)}`,
-        {
-            credentials: "include",
-        }
+      {
+        credentials: "include",
+      }
     );
+
     if (!response.ok) {
       throw new Error("Failed to fetch user ID");
     }
+
     const data = await response.json();
     return data.userId || null;
   } catch (error) {
@@ -182,16 +207,20 @@ export const getUserId = async (email: string): Promise<number | null> => {
   }
 };
 
-// Fetch one specific movie by showId
+// =====================================================
+// Fetch details for a single movie by showId
+// =====================================================
 export const fetchMovieById = async (
   showId: string
 ): Promise<FetchMoviesResponse | null> => {
   try {
     const response = await fetch(`${API_URL}/GetMovies?showId=${showId}`);
+
     if (!response.ok) {
       if (response.status === 404) return null;
       throw new Error("Failed to fetch movie");
     }
+
     const data = await response.json();
     return data || null;
   } catch (error) {
@@ -200,7 +229,12 @@ export const fetchMovieById = async (
   }
 };
 
-export const fetchSimilarMoviesDetails = async (recommendations: string[]) => {
+// =====================================================
+// Fetch movie details for an array of recommendation IDs
+// =====================================================
+export const fetchSimilarMoviesDetails = async (
+  recommendations: string[]
+): Promise<any[]> => {
   try {
     const promises = recommendations.map((id) =>
       fetch(`${API_URL}/GetMovies?showId=${id}`).then((res) => res.json())
@@ -213,7 +247,9 @@ export const fetchSimilarMoviesDetails = async (recommendations: string[]) => {
   }
 };
 
-// Add a new movie
+// =====================================================
+// Add a new movie to the database
+// =====================================================
 export const addMovie = async (newMovie: MoviesTitle): Promise<MoviesTitle> => {
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
@@ -236,7 +272,9 @@ export const addMovie = async (newMovie: MoviesTitle): Promise<MoviesTitle> => {
   }
 };
 
-// Update a movie
+// =====================================================
+// Update an existing movie by showId
+// =====================================================
 export const updateMovie = async (
   showId: string,
   updatedMovie: MoviesTitle
@@ -262,12 +300,14 @@ export const updateMovie = async (
   }
 };
 
-// Delete a movie
+// =====================================================
+// Delete a movie from the database
+// =====================================================
 export const deleteMovie = async (showId: string): Promise<void> => {
   try {
     const response = await fetch(`${API_URL}/DeleteMovie/${showId}`, {
-      credentials: "include",
       method: "DELETE",
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -279,10 +319,13 @@ export const deleteMovie = async (showId: string): Promise<void> => {
   }
 };
 
-// Get genres list (like GetBookCategories)
+// =====================================================
+// Fetch the list of all available movie genres
+// =====================================================
 export const fetchGenres = async (): Promise<string[]> => {
   try {
     const response = await fetch(`${API_URL}/GetGenres`);
+
     if (!response.ok) {
       throw new Error("Failed to fetch genres");
     }
