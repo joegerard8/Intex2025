@@ -1,3 +1,4 @@
+// essentially a movie object, just has a strange name
 export interface MoviesTitle {
   showId: string;
   type: string;

@@ -68,11 +68,13 @@ const ProductDetailPage: React.FC = () => {
     const getSimilarTitlesDetails = async (recommendations: string[]) => {
         try {
         const movies = await fetchSimilarMoviesDetails(recommendations);
-        const similarMoviesData = movies.map((movieData: any) => ({
-            id: movieData.movies[0].showId,
-            title: movieData.movies[0].title,
-            posterUrl: movieData.movies[0].image_url
-        }));
+        const similarMoviesData = movies
+            .filter((movieData: any) => movieData.movies[0]?.image_url)
+            .map((movieData: any) => ({
+                id: movieData.movies[0].showId,
+                title: movieData.movies[0].title,
+                posterUrl: movieData.movies[0].image_url
+            }));
         setSimilarMovies(similarMoviesData);
         } catch (err) {
         console.error('Failed to load similar movie details', err);

@@ -18,7 +18,9 @@ import { MoviesTitle } from "../types/movie";
 import Modal from "../components/Modal";
 import MovieForm from "../components/MovieForm";
 
+// page to manage movies
 const ManageMovies: React.FC = () => {
+  // all the state components that we need to handle everything 
   const { user } = useContext(UserContext);
   const [movies, setMovies] = useState<MoviesTitle[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,6 +38,7 @@ const ManageMovies: React.FC = () => {
   const [currentMovie, setCurrentMovie] = useState<MoviesTitle | null>(null);
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
 
+  // function to load movies
   const loadMovies = async () => {
     setLoading(true);
     try {
@@ -54,15 +57,18 @@ const ManageMovies: React.FC = () => {
     }
   };
 
+  // use effect to load movies when page size, current page, selected genres or search term changes
   useEffect(() => {
     loadMovies();
   }, [currentPage, selectedGenres, searchTerm, pageSize]);
 
+  // deletes movie, allows user to confirm deletion
   const handleDeleteMovie = async (id: string) => {
     setSelectedMovieId(id);
     setIsDeleteModalOpen(true);
   };
 
+  // confirming deletion
   const confirmDeleteMovie = async () => {
     if (!selectedMovieId) return;
 
@@ -81,6 +87,7 @@ const ManageMovies: React.FC = () => {
     }
   };
 
+  // allows user to edit the movie
   const handleEditMovie = async (id: string) => {
     try {
       const movie = await fetchMovieById(id);
@@ -93,11 +100,13 @@ const ManageMovies: React.FC = () => {
     }
   };
 
+  // allow user to add a new movie
   const handleAddMovie = () => {
     setCurrentMovie(null);
     setIsAddModalOpen(true);
   };
 
+  // submits new mmovie
   const handleSubmitAdd = async (movie: MoviesTitle) => {
     try {
       await addMovie(movie);
@@ -108,6 +117,7 @@ const ManageMovies: React.FC = () => {
     }
   };
 
+  // submits changes for an existing movie 
   const handleSubmitEdit = async (movie: MoviesTitle) => {
     try {
       await updateMovie(movie.showId, movie);
@@ -118,6 +128,7 @@ const ManageMovies: React.FC = () => {
     }
   };
 
+  // allos the user to delete selected movies in bulk
   const handleBulkDelete = async () => {
     if (selectedMovies.size === 0) return;
 
@@ -134,6 +145,7 @@ const ManageMovies: React.FC = () => {
     }
   };
 
+  // handling the seelction for all movies
   const toggleSelectAll = () => {
     if (selectedMovies.size === movies.length) {
       setSelectedMovies(new Set());
@@ -148,6 +160,7 @@ const ManageMovies: React.FC = () => {
     setSelectedMovies(updated);
   };
 
+  // handling pagination for the movies 
   const renderPagination = () => {
     const pages = [];
     const totalPages = Math.ceil(totalMovies / pageSize);
@@ -201,6 +214,7 @@ const ManageMovies: React.FC = () => {
     return pages;
   };
 
+  // return statement, has a table, a search bar, filters, modals, pagination and all the other necessary components
   return (
     <div className="manage-movies-page">
       <div className="barcode-logo">

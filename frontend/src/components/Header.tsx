@@ -1,4 +1,4 @@
-// Header.tsx
+// Header component, looks 
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../AuthorizeView"; // Update path if needed

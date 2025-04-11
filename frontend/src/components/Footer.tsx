@@ -1,4 +1,4 @@
-// Footer.tsx
+// Footer component. Shows the privacy policy link and copyright information.
 import React from "react";
 import { Link } from "react-router-dom";
 
