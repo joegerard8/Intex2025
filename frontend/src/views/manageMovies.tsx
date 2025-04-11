@@ -233,7 +233,10 @@ const ManageMovies: React.FC = () => {
               type="text"
               placeholder="Search movies..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1); // ✅ reset to page 1 when search term changes
+              }}
               style={{
                 width: "100%",
                 padding: "0.75rem 1rem 0.75rem 3rem",
@@ -335,50 +338,58 @@ const ManageMovies: React.FC = () => {
                     <td>{movie.rating}</td>
                     <td>
                       <button
-                          className="action-button edit-button"
-                          onClick={() => handleEditMovie(movie.showId)}
-                          style={{
-                            background: "linear-gradient(to bottom, #6ba5e7, #5089d3)",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "8px",
-                            padding: "8px 16px",
-                            cursor: "pointer",
-                            fontWeight: "bold",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-                            width: "100px",  // Fixed width
-                            height: "36px",  // Fixed height
-                            margin: "0 auto" // Center in cell
-                          }}
+                        className="action-button edit-button"
+                        onClick={() => handleEditMovie(movie.showId)}
+                        style={{
+                          background:
+                            "linear-gradient(to bottom, #6ba5e7, #5089d3)",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "8px 16px",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                          width: "100px", // Fixed width
+                          height: "36px", // Fixed height
+                          margin: "0 auto", // Center in cell
+                        }}
                       >
-                        <EditIcon style={{ fontSize: "18px", marginRight: "6px" }} /> Edit
+                        <EditIcon
+                          style={{ fontSize: "18px", marginRight: "6px" }}
+                        />{" "}
+                        Edit
                       </button>
                     </td>
                     <td>
                       <button
-                          className="action-button delete-button"
-                          onClick={() => handleDeleteMovie(movie.showId)}
-                          style={{
-                            background: "linear-gradient(to bottom, #e9807a, #d15a52)",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "8px",
-                            padding: "8px 16px",
-                            cursor: "pointer",
-                            fontWeight: "bold",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-                            width: "100px",  // Fixed width
-                            height: "36px",  // Fixed height
-                            margin: "0 auto" // Center in cell
-                          }}
+                        className="action-button delete-button"
+                        onClick={() => handleDeleteMovie(movie.showId)}
+                        style={{
+                          background:
+                            "linear-gradient(to bottom, #e9807a, #d15a52)",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "8px 16px",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                          width: "100px", // Fixed width
+                          height: "36px", // Fixed height
+                          margin: "0 auto", // Center in cell
+                        }}
                       >
-                        <DeleteIcon style={{ fontSize: "18px", marginRight: "6px" }} /> Delete
+                        <DeleteIcon
+                          style={{ fontSize: "18px", marginRight: "6px" }}
+                        />{" "}
+                        Delete
                       </button>
                     </td>
                   </tr>
